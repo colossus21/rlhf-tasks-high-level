@@ -1,0 +1,49 @@
+Requirement 1:
+The game should have a 6x6 grid of cells.
+Assumption 1:
+Board should have 36 elements with class 'cell'.
+
+Requirement 2:
+Cells can have states: on and off.
+Assumption 2:
+Cells without the 'off' class are considered 'on' else 'off'.
+
+Requirement 3:
+Clicking a cell should toggle it's state and the states of adjacent cells.
+Assumption 3:
+When clicked, cells and its adjacent cells (up, down, left, right) add or remove 'off' class.
+
+Requirement 4:
+The game starts with random patterns of on and off cells.
+Assumption 4:
+Some cells have 'off' class
+
+Requirement 5:
+The game should detect a win condition when all cells are turned off.
+Assumption 5:
+Show an alert with the message "You win!" is displayed when all cells have 'off' class.
+
+Requirement 6:
+Cells on the edges of the grid must not affect non-existent adjacent cells when clicked.
+Assumption 6:
+Clicking cells on the edges does not cause errors and only affects existing adjacent cells.
+
+Requirement 7:
+The game must be implemented using HTML and JavaScript in a single file.
+Assumption 7:
+The game will be contained in an index.html file, with JavaScript code embedded within <script> tags and styles within <style> tags. There should be no reference to external JavaScript files except for CDN.
+
+Requirement 8:
+Each cell must be clickable.
+Assumption 8:
+Each cell has a click event listener attached to it.
+
+Requirement 9:
+The game state must be represented by a boolean array.
+Assumption 9:
+There is an array named 'board' with 36 boolean elements representing the state of each cell.
+
+Requirement 10:
+Cells are square shaped.
+Assumption 10:
+.cell class in CSS should have same width and height.

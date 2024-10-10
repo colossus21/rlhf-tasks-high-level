@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lights Out</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #game {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 2px;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+        }
+
+        .cell {
+            width: 40px;
+            height: 40px;
+            background-color: #007bff; /* Blue for "on" */
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .cell.off {
+            background-color: #ddd; /* Gray for "off" */
+        }
+    </style>
+</head>
+<body>
+
+<div id="game"></div>
+
+<script>
+    const gridSize = 6;
+    const game = document.getElementById('game');
+
+    // Create the grid of cells
+    for (let i = 0; i < gridSize * gridSize; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.addEventListener('click', () => handleClick(i));
+        game.appendChild(cell);
+    }
+
+    // Initialize the game with a random pattern
+    let board = Array(gridSize * gridSize).fill(false); // False represents "off"
+    for (let i = 0; i < gridSize * gridSize; i++) {
+        if (Math.random() < 0.5) { // 50% chance of being "on" initially
+            toggleCell(i);
+        }
+    }
+
+    function handleClick(index) {
+        toggleCell(index);
+        toggleCell(index - gridSize);    // Toggle cell above
+        toggleCell(index + gridSize);    // Toggle cell below
+        toggleCell(index - 1);          // Toggle cell left
+        toggleCell(index + 1);          // Toggle cell right
+
+        checkWin();
+    }
+
+    function toggleCell(index) {
+        if (index >= 0 && index < gridSize * gridSize) {
+            const cell = game.children[index];
+            board[index] = !board[index];
+            cell.classList.toggle('off');
+        }
+    }
+
+
+    function checkWin() {
+        if (board.every(cell => !cell)) { // Check if all cells are "off"
+            alert("You win!");
+            // Optional: Reset the game or show a "Play Again" button.
+        }
+    }
+</script>
+
+</body>
+</html>

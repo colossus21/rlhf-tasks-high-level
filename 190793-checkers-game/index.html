@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>6x6 Checkers</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(6, 50px);
+            grid-template-rows: repeat(6, 50px);
+            border: 2px solid black;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+        }
+        .black {
+            background-color: #b58863;
+        }
+        .white {
+            background-color: #f0d9b5;
+        }
+        .piece {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .red {
+            background-color: red;
+        }
+        .blue {
+            background-color: blue;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="board" id="board"></div>
+
+<script>
+    const board = document.getElementById('board');
+    const size = 6;
+    let cells = [];
+
+    // Initialize the board
+    for (let row = 0; row < size; row++) {
+        for (let col = 0; col < size; col++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.classList.add((row + col) % 2 === 0 ? 'white' : 'black');
+            cell.id = `${row}-${col}`;
+            board.appendChild(cell);
+            cells.push(cell);
+
+            // Initial piece placement
+            if ((row + col) % 2 !== 0 && row < 2) {
+                createPiece(cell, 'red'); // Red pieces at the top
+            } else if ((row + col) % 2 !== 0 && row > size -3) {
+                createPiece(cell, 'blue'); // Blue pieces at the bottom
+            }
+
+            cell.addEventListener('click', handleClick);
+        }
+    }
+
+    function createPiece(cell, color) {
+        const piece = document.createElement('div');
+        piece.classList.add('piece');
+        piece.classList.add(color);
+        cell.appendChild(piece);
+    }
+
+
+    function handleClick(event) {
+        const cell = event.target;
+        console.log("Clicked cell:", cell.id);
+
+        // Basic move example (replace with game logic)
+        if (cell.firstChild && cell.firstChild.classList.contains('red')) { // Example: only move red pieces
+            const row = parseInt(cell.id.split('-')[0]);
+            const col = parseInt(cell.id.split('-')[1]);
+
+            // Check if the next diagonal squares are free and move there. This is VERY basic and needs expanding for full game logic
+            const nextRow = row + 1;
+            const nextColLeft = col - 1;
+            const nextColRight = col + 1;
+
+            if(nextRow < size) {
+                if(nextColLeft >=0 && document.getElementById(`${nextRow}-${nextColLeft}`) && !document.getElementById(`${nextRow}-${nextColLeft}`).firstChild) {
+                    movePiece(cell, document.getElementById(`${nextRow}-${nextColLeft}`));
+                }
+                if (nextColRight < size && document.getElementById(`${nextRow}-${nextColRight}`) && !document.getElementById(`${nextRow}-${nextColRight}`).firstChild) {
+                    movePiece(cell, document.getElementById(`${nextRow}-${nextColRight}`));
+                }
+            }
+
+
+
+
+        }
+    }
+
+    function movePiece(fromCell, toCell) {
+        toCell.appendChild(fromCell.firstChild);
+    }
+
+
+</script>
+
+</body>
+</html>

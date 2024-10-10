@@ -1,0 +1,1 @@
+Can you create a checkers game in a 6x6 board using JavaScript and HTML in a single file?

@@ -1,0 +1,49 @@
+Requirement 1:
+The game board must be 6x6 squares in size.
+Assumption 1:
+The board will be represented by a <div> element using grid template styled with CSS.
+
+Requirement 2:
+The game should start with 6 checker pieces for each player, pieces are placed in dark squares.
+Assumption 2:
+Each player will start with 6 pieces, placed on opposite ends of the board in dark squares.
+
+Requirement 3:
+Players must be able to move their pieces diagonally forward.
+Assumption 3:
+The game logic should allow for diagonal forward moves and prevent backward moves unless the piece is kinged.
+
+Requirement 4:
+The game must support capturing opponent pieces by jumping over them.
+Assumption 4:
+The game logic will detect when a piece can capture an opponent's piece and allow for the capturing move.
+
+Requirement 5:
+The game must implement "kinging" when a piece reaches the opposite end of the board.
+Assumption 5:
+When a piece reaches the last row on the opponent's side, it will be visually distinguished as a king and gain the ability to move backwards.
+
+Requirement 6:
+The game must alternate turns between players.
+Assumption 6:
+The game will keep track of the current player's turn and switch after each valid move.
+
+Requirement 7:
+The game must detect and declare a winner when one player captures all of the opponent's pieces.
+Assumption 7:
+The game will keep a count of each player's remaining pieces and end the game when one player has no pieces left.
+
+Requirement 8:
+The game must provide a reset or new game option.
+Assumption 8:
+There will be a button or mechanism to reset the board to its initial state for a new game.
+
+Requirement 9:
+The game must be playable using mouse clicks for piece selection and movement.
+Assumption 9:
+The game will use JavaScript event listeners to handle mouse clicks on the board squares and pieces.
+
+Requirement 10:
+The game must be implemented using HTML and JavaScript in a single file.
+Assumption 10:
+The game will be contained in an index.html file, with JavaScript code embedded within <script> tags and styles within <style> tags. There should be no reference to external JavaScript files except for CDN.

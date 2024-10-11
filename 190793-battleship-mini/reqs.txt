@@ -1,0 +1,74 @@
+Requirement 1:
+The game must be implemented using HTML and JavaScript in a single file.
+Assumption 1:
+The game will be contained in an index.html file with embedded JavaScript code that can be parsed and tested by jsdom.
+
+Requirement 2:
+The game board must be a 6x6 grid, divided into a 3x3 top portion for AI and a 3x3 bottom portion for the human player.
+Assumption 2:
+The game board will be represented as an HTML table with 6 rows and 6 columns, which can be queried and verified using jsdom.
+
+Requirement 3:
+The game must have two phases: ship placement and ship sinking.
+Assumption 3:
+The game logic will include separate functions for the ship placement phase and the ship sinking phase, which can be unit tested.
+
+Requirement 4:
+Players must be able to place 4 different ships on their respective 3x3 grids during the placement phase.
+Assumption 4:
+The placement phase will allow players to click on their grid cells to position their ships, with event listeners that can be simulated and tested.
+
+Requirement 5:
+Ships must be represented as different shapes on the grid.
+Assumption 5:
+Each ship will occupy a unique pattern of cells on the 3x3 grid, which can be verified by checking the DOM structure.
+
+Requirement 6:
+The AI must automatically place its ships on its 3x3 grid.
+Assumption 6:
+An algorithm will place the AI's ships on the top 3x3 grid, which can be unit tested for correct placement.
+
+Requirement 7:
+Players must take turns attempting to sink each other's ships during the sinking phase.
+Assumption 7:
+The game will alternate between player and AI turns, which can be simulated and tested using Jest's timers.
+
+Requirement 8:
+The game must visually indicate hits and misses on the game board.
+Assumption 8:
+Hit cells will be marked with a specific class or attribute, which can be verified using jsdom queries.
+
+Requirement 9:
+The game must keep track of and display the current player's turn.
+Assumption 9:
+A status element will show the current turn, which can be checked using jsdom.
+
+Requirement 10:
+The game must detect and announce when all ships of a player have been sunk.
+Assumption 10:
+The game will update a win condition variable or display element, which can be asserted in tests.
+
+Requirement 11:
+Players must not be able to attack the same cell twice.
+Assumption 11:
+The game will ignore clicks on cells that have already been attacked, which can be verified through simulated clicks and DOM checks.
+
+Requirement 12:
+The game must provide a way to start a new game after one has ended.
+Assumption 12:
+A "New Game" button will be available, whose click event can be simulated to test game reset functionality.
+
+Requirement 13:
+The game must provide feedback on the outcome of each attack.
+Assumption 13:
+Messages will be displayed in a designated element, which can be checked using jsdom after simulated attacks.
+
+Requirement 14:
+The game must prevent players from placing ships outside their designated 3x3 grid.
+Assumption 14:
+The placement phase will include boundary checks, which can be unit tested with various input scenarios.
+
+Requirement 15:
+The game must prevent players from overlapping their ships during placement.
+Assumption 15:
+The placement phase will check for conflicts, which can be unit tested with different placement attempts.

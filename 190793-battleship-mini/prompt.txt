@@ -1,0 +1,1 @@
+Can you create a battleship game in a 6x6 board, 3x3 top portion for AI, 3x3 bottom portion should be for human player using JavaScript and HTML in a single file. In the first phase, player or ai places 4 different ships in form of shapes and in the second phase, they try to sink each other's ship in alternating turn.

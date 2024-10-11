@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Battleship</title>
+    <style>
+        body { font-family: sans-serif; }
+        table { border-collapse: collapse; margin: 20px auto; }
+        td { width: 30px; height: 30px; border: 1px solid black; text-align: center; cursor: pointer; }
+        .ship { background-color: gray; }
+        .hit { background-color: red; }
+        .miss { background-color: blue; }
+        .ai { background-color: lightgray; }
+    </style>
+</head>
+<body>
+
+<h1>Battleship</h1>
+
+<table>
+    <tbody id="board"></tbody>
+</table>
+
+<p id="message"></p>
+
+<script>
+    const boardSize = 6;
+    const playerAreaStart = 3;
+    const numShips = 4;
+    let playerShips = 0;
+    let aiShips = 0;
+    let playerTurn = true;
+    let gameOver = false;
+
+    const board = [];
+    for (let i = 0; i < boardSize; i++) {
+        board.push(new Array(boardSize).fill(null));
+    }
+
+    const shipShapes = [
+        [[0, 0]], // Single cell ship
+        [[0, 0], [0, 1]], // Two-cell ship (horizontal)
+        [[0, 0], [1, 0]], // Two-cell ship (vertical)
+        [[0, 0], [0, 1], [0, 2]], // Three-cell ship (horizontal)
+    ];
+
+    function createBoard() {
+        const table = document.getElementById('board');
+        for (let i = 0; i < boardSize; i++) {
+            const row = table.insertRow();
+            for (let j = 0; j < boardSize; j++) {
+                const cell = row.insertCell();
+                if (i < playerAreaStart) {
+                    cell.classList.add('ai'); // Visual distinction for AI area
+                } else {
+                    cell.addEventListener('click', handleClick.bind(null, i, j));
+                }
+            }
+        }
+    }
+
+    function placeShips(isPlayer) {
+        let shipsPlaced = 0;
+        while (shipsPlaced < numShips) {
+            const shape = shipShapes[Math.floor(Math.random() * shipShapes.length)];
+            const x = isPlayer ? Math.floor(Math.random() * 3) + playerAreaStart : Math.floor(Math.random() * 3);
+            const y = Math.floor(Math.random() * boardSize);;
+
+
+            let canPlace = true;
+            for (const [dx, dy] of shape) {
+                const newX = x + dx;
+                const newY = y + dy;
+                if (newX < 0 || newX >= boardSize || newY < 0 || newY >= boardSize || board[newX][newY] !== null) {
+                    canPlace = false;
+                    break;
+                }
+            }
+
+            if (canPlace) {
+                for (const [dx, dy] of shape) {
+                    board[x + dx][y + dy] = isPlayer ? 'player' : 'ai';
+                }
+                shipsPlaced++;
+                if (isPlayer) playerShips++; else aiShips++;
+            }
+        }
+
+        if (isPlayer) {
+            updateBoard();
+        }
+    }
+
+
+
+    function handleClick(x, y) {
+        if (!playerTurn || gameOver) return;
+
+        if (board[x][y] === null) {
+            board[x][y] = 'miss';
+            playerTurn = false;
+            updateBoard();
+            aiTurn();
+        } else if (board[x][y] === 'ai') {
+            board[x][y] = 'hit';
+            aiShips--;
+            playerTurn = false;
+            updateBoard();
+            if (aiShips === 0) {
+                gameOver = true;
+                showMessage("You win!");
+            } else {
+                aiTurn();
+            }
+        }
+
+    }
+
+    function aiTurn() {
+        if (gameOver) return;
+
+        let x, y;
+        do {
+            x = Math.floor(Math.random() * 3) + playerAreaStart;
+            y = Math.floor(Math.random() * boardSize);;
+        } while (board[x][y] === 'hit' || board[x][y] === 'miss');
+
+        if (board[x][y] === 'player') {
+            board[x][y] = 'hit';
+            playerShips--;
+            if (playerShips === 0) {
+                gameOver = true;
+                showMessage("AI wins!");
+            }
+        } else {
+            board[x][y] = 'miss';
+        }
+
+
+        playerTurn = true;
+        updateBoard();
+    }
+
+
+    function updateBoard() {
+        const table = document.getElementById('board');
+        for (let i = 0; i < boardSize; i++) {
+            for (let j = 0; j < boardSize; j++) {
+                const cell = table.rows[i].cells[j];
+                cell.classList.remove('ship', 'hit', 'miss');  // Clear previous classes
+                if (i >= playerAreaStart || gameOver) {       // Only reveal if player's area or game over
+                    if (board[i][j] === 'player') {
+                        cell.classList.add('ship');
+                    } else if (board[i][j] === 'ai') {
+                        cell.classList.add('ship');
+                    } else if (board[i][j] === 'hit') {
+                        cell.classList.add('hit');
+                        cell.textContent = 'X'; // Mark hits with 'X'
+                    } else if (board[i][j] === 'miss') {
+                        cell.classList.add('miss');
+                        cell.textContent = 'O'; // Mark misses with 'O'
+                    }
+                }
+
+            }
+        }
+    }
+
+
+
+    function showMessage(message) {
+        document.getElementById('message').textContent = message;
+    }
+
+
+    createBoard();
+    placeShips(true);
+    placeShips(false);
+    updateBoard();
+
+
+</script>
+
+</body>
+</html>

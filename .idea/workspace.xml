@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="94ef8d18-f607-4510-bcc1-62d85bb39a8e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lights-out-game/__tests__/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/lights-out-game/__tests__/test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lights-out-game/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/lights-out-game/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lights-out-game/reqs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lights-out-game/reqs.txt" afterDir="false" />
-    </list>
+    <list default="true" id="94ef8d18-f607-4510-bcc1-62d85bb39a8e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -66,7 +61,7 @@
       <option name="presentableId" value="Default" />
       <updated>1728560090414</updated>
       <workItem from="1728560091496" duration="15736000" />
-      <workItem from="1728635255150" duration="2514000" />
+      <workItem from="1728635255150" duration="3414000" />
     </task>
     <servers />
   </component>

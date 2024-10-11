@@ -17,24 +17,19 @@
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 2px;
-            padding: 10px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
-            background-color: #fff;
+            border: 2px solid #333;
         }
 
         .cell {
-            width: 40px;
-            height: 40px;
-            background-color: #007bff; /* Blue for "on" */
-            border-radius: 5px;
+            width: 50px;
+            height: 50px;
+            background-color: #ddd; /* Off */
+            border: none;
             cursor: pointer;
-            transition: background-color 0.2s;
         }
 
-        .cell.off {
-            background-color: #ddd; /* Gray for "off" */
+        .cell.on {
+            background-color: #ffcc00; /* On */
         }
     </style>
 </head>
@@ -44,49 +39,79 @@
 
 <script>
     const gridSize = 6;
-    const game = document.getElementById('game');
+    const gameDiv = document.getElementById('game');
 
-    // Create the grid of cells
-    for (let i = 0; i < gridSize * gridSize; i++) {
-        const cell = document.createElement('div');
-        cell.classList.add('cell');
-        cell.addEventListener('click', () => handleClick(i));
-        game.appendChild(cell);
-    }
+    let grid = [];
 
-    // Initialize the game with a random pattern
-    let board = Array(gridSize * gridSize).fill(false); // False represents "off"
-    for (let i = 0; i < gridSize * gridSize; i++) {
-        if (Math.random() < 0.5) { // 50% chance of being "on" initially
-            toggleCell(i);
+    // Initialize the grid with random on/off states
+    function initializeGrid() {
+        grid = [];
+        for (let i = 0; i < gridSize; i++) {
+            grid[i] = [];
+            for (let j = 0; j < gridSize; j++) {
+                grid[i][j] = Math.random() < 0.3; // Randomly set about 30% of the lights to be initially on. Adjust this value as desired.
+                createButton(i, j);
+            }
         }
     }
 
-    function handleClick(index) {
-        toggleCell(index);
-        toggleCell(index - gridSize);    // Toggle cell above
-        toggleCell(index + gridSize);    // Toggle cell below
-        toggleCell(index - 1);          // Toggle cell left
-        toggleCell(index + 1);          // Toggle cell right
-
-        checkWin();
+    // Create button element for a cell
+    function createButton(row, col) {
+        const button = document.createElement('button');
+        button.classList.add('cell');
+        if (grid[row][col]) {
+            button.classList.add('on');
+        }
+        button.addEventListener('click', () => handleClick(row, col));
+        gameDiv.appendChild(button);
     }
 
-    function toggleCell(index) {
-        if (index >= 0 && index < gridSize * gridSize) {
-            const cell = game.children[index];
-            board[index] = !board[index];
-            cell.classList.toggle('off');
+    // Handle cell click
+    function handleClick(row, col) {
+        toggleCell(row, col);
+
+        // Toggle adjacent cells
+        toggleCell(row - 1, col);
+        toggleCell(row + 1, col);
+        toggleCell(row, col - 1);
+        toggleCell(row, col + 1);
+
+        // Check if the game is won
+        if (checkWin()) {
+            alert("Congratulations! You won!");
+            initializeGrid(); // Restart the game
         }
     }
 
 
+
+    // Toggle cell state and update button class
+    function toggleCell(row, col) {
+        if (row >= 0 && row < gridSize && col >= 0 && col < gridSize) {
+            grid[row][col] = !grid[row][col];
+            const cellIndex = row * gridSize + col;
+            const cellButton = gameDiv.children[cellIndex];
+            cellButton.classList.toggle('on');
+        }
+    }
+
+    // Check if all lights are off
     function checkWin() {
-        if (board.every(cell => !cell)) { // Check if all cells are "off"
-            alert("You win!");
-            // Optional: Reset the game or show a "Play Again" button.
+        for (let i = 0; i < gridSize; i++) {
+            for (let j = 0; j < gridSize; j++) {
+                if (grid[i][j]) {
+                    return false;
+                }
+            }
         }
+        return true;
     }
+
+
+
+    // Start the game
+    initializeGrid();
+
 </script>
 
 </body>

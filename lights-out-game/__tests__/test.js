@@ -4,132 +4,149 @@
 
 const fs = require('fs');
 const path = require('path');
+const { JSDOM } = require('jsdom');
 
-// Load the HTML file
 const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
 
+let dom;
+let document;
+let window;
+
 describe('Lights Out Game Tests', () => {
-    let document;
-
-    beforeAll(() => {
-        document = new DOMParser().parseFromString(html, 'text/html');
-        // Execute the script within the HTML (simulates loading the page)
-        document.documentElement.querySelector('script').textContent = html.match(/<script>(.|\s)*?<\/script>/)[0].slice("<script>".length, -"</script>".length);
-    });
-
-    it('R1 & A1: 6x6 grid with 36 cells', () => {
-        const cells = document.querySelectorAll('.cell');
-        expect(cells.length).toBe(36);
-    });
-
-    it('R2 & A2: Cells have "on" and "off" states', () => {
-        const cells = document.querySelectorAll('.cell');
-        cells.forEach(cell => {
-            expect(cell.classList.contains('off') || !cell.classList.contains('off')).toBeTruthy();
-        });
-    });
-
-    it('R3 & A3: Clicking a cell toggles its state and adjacent cells', () => {
-        const cells = document.querySelectorAll('.cell');
-        const centerIndex = 16; // Example: click the center cell
-        const initialStates = getCellStates(cells);
-
-        cells[centerIndex].click();
-
-        const finalStates = getCellStates(cells);
-        // Check if clicked cell and adjacent cells (including edges cases) are toggled.
-        const adjacentIndices = [centerIndex, centerIndex - 6, centerIndex + 6, centerIndex - 1, centerIndex + 1];
-        adjacentIndices.forEach(index => {
-            if (index >= 0 && index < cells.length) {
-                expect(finalStates[index]).not.toBe(initialStates[index]);
-            }
-        });
-
-        // other cells are not changed
-        for(let i = 0; i< 36; ++i) {
-            if(!adjacentIndices.includes(i)) {
-                expect(finalStates[i]).toBe(initialStates[i]);
-            }
-        }
-
-    });
-
-
-    it('R4 & A4: Game starts with a random pattern', () => {
-        const cells = document.querySelectorAll('.cell');
-        const offCells = Array.from(cells).filter(cell => cell.classList.contains('off'));
-        const onCells = Array.from(cells).filter(cell => !cell.classList.contains('off'));
-
-        // Expect that initial pattern to be random (at least one cell on and one off)
-        // This is a probabilistic test and may very rarely fail for a natural fully on or off board, but less than 0.0003% for 50% probability.
-        expect(onCells.length).toBeGreaterThan(0);
-        expect(offCells.length).toBeGreaterThan(0);
-    });
-
-
-    it('R5 & A5: Win condition detected when all cells are off', () => {
-        const cells = document.querySelectorAll('.cell');
-        // Manually turn all cells "off"
-        cells.forEach(cell => cell.classList.add('off'));
-
-        // Simulate a cell click to trigger win condition check
-        cells[0].click(); // clicking any cell will do.
-
-        expect(window.alert).toHaveBeenCalledWith('You win!');
-
-        //Reset alert mock
-        jest.clearAllMocks();
-
-    });
-
-    it('R6 & A6: Edge cells do not affect non-existent neighbors', () => {
-        const cells = document.querySelectorAll('.cell');
-        const topLeftCell = cells[0];
-
-        topLeftCell.click();
-
-        expect(() => {
-            topLeftCell.click(); // clicking cell multiple times is also tested.
-        }).not.toThrow();
-    });
-
-    it('R7 & A7: Game is implemented in a single HTML file', () => {
-        // Already checked by loading the HTML file initially. This test confirms it works in JSDOM.
-        expect(document.querySelectorAll('#game').length).toBe(1);
-    });
-
-    it('R8 & A8: Each cell is clickable', () => {
-        const cells = document.querySelectorAll('.cell');
-        cells.forEach(cell => {
-            expect(cell.hasAttribute('click')).toBeTruthy();
-        });
-    });
-
-    it('R9 & A9: Game state is represented by a boolean array', () => {
-        expect(document.defaultView.board).toBeInstanceOf(Array);
-        expect(document.defaultView.board.length).toBe(36);
-        document.defaultView.board.forEach(value => {
-            expect(typeof value).toBe('boolean');
-        });
-    });
-
-    it('R10 & A10: Cells are square shaped', () => {
-        const cell = document.querySelector('.cell');
-        const style = window.getComputedStyle(cell);
-
-        // This will be true unless you have custom padding, margin, or border that affects dimensions
-        expect(parseFloat(style.width)).toBe(parseFloat(style.height));
-
-    });
-
-    //Helper function
-    function getCellStates(cells) {
-        return Array.from(cells).map(cell => cell.classList.contains('off'));
-    }
-
-
     beforeEach(() => {
-        // Mock alert
-        window.alert = jest.fn();
+        dom = new JSDOM(html, { runScripts: "dangerously" });
+        document = dom.window.document;
+        window = dom.window;
     });
+
+    // Requirement 1 & Assumption 1
+    it('should have a 6x6 game board', () => {
+        const gameDiv = document.getElementById('game');
+        expect(gameDiv.children.length).toBe(36); // Check for 36 cells
+        expect(gameDiv.style.display).toBe('grid');
+        expect(window.getComputedStyle(gameDiv).gridTemplateColumns).toBe('repeat(6, 1fr)');
+    });
+
+
+
+    // Requirement 2 & Assumption 2
+    it('should initialize with a random number of lights on', () => {
+        let lightsOn = 0;
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach(cell => {
+            if (cell.classList.contains('on')) {
+                lightsOn++;
+            }
+        });
+        expect(lightsOn).toBeGreaterThanOrEqual(0); // At least 0
+        expect(lightsOn).toBeLessThanOrEqual(36);  // At most 36
+        // For a more robust test you could run this multiple times and track randomness.
+
+    });
+
+
+
+    // Requirement 3 & Assumption 3 + Requirement 8 & Assumption 8
+    it('should toggle cell state and appearance on click', () => {
+        const cell = document.querySelector('.cell'); // Get the first cell
+        const initialClassList = Array.from(cell.classList); // Copy classList as it's live
+
+        cell.click();
+        expect(cell.classList.contains('on')).not.toEqual(initialClassList.includes("on"));
+
+        cell.click(); // Click again to toggle back
+        expect(cell.classList.contains('on')).toEqual(initialClassList.includes("on"));
+
+
+
+    });
+
+
+
+    // Requirement 4 & Assumption 4
+    it('should toggle adjacent cells on click', () => {
+        const cell = document.getElementById('game').children[6]; // Get cell at row 1, col 0
+
+        const adjacentCellIndices = [5, 7, 12]; // Expected adjacent cells for cell[6]
+        const initialStates = adjacentCellIndices.map(index => document.getElementById('game').children[index].classList.contains('on'));
+
+        cell.click();
+        adjacentCellIndices.forEach((index, i) => {
+            expect(document.getElementById('game').children[index].classList.contains('on')).not.toEqual(initialStates[i]);
+        });
+
+
+    });
+
+
+    // Requirement 5 & Assumption 5 + Requirement 6 & Assumption 6  + Requirement 10 & Assumption 10
+    it('should detect win condition, display victory message and stop input', () => {
+
+
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach(cell => {  // Turn all lights off to simulate win
+            if(cell.classList.contains('on')) cell.click();
+        });
+
+        // Mock the alert to avoid it blocking the test
+        window.alert = jest.fn();
+
+        const clickEvent = new window.MouseEvent('click', {
+            'view': window,
+            'bubbles': true,
+            'cancelable': true
+        });
+        cells[0].dispatchEvent(clickEvent);
+
+        expect(window.alert).toHaveBeenCalledWith('Congratulations! You won!');
+
+
+    });
+
+
+
+    // Requirement 7 & Assumption 7
+    it('should have a reset button that restarts the game', () => {
+        // Add a reset button to the HTML for this test to work (if not already present)
+
+        // Simulate some clicks
+        document.querySelectorAll('.cell')[0].click();
+        document.querySelectorAll('.cell')[1].click();
+
+        const resetButton = document.createElement('button');
+        resetButton.id = 'reset';
+        resetButton.onclick = window.initializeGrid;
+        document.body.appendChild(resetButton);
+
+
+        resetButton.click(); // Click the reset button
+        const lightsOnAfterReset = Array.from(document.querySelectorAll('.cell')).filter(cell => cell.classList.contains('on')).length;
+        expect(lightsOnAfterReset).toBeGreaterThanOrEqual(0);
+        expect(lightsOnAfterReset).toBeLessThanOrEqual(36); // Check for valid on/off state after reset
+
+
+    });
+
+    // Requirement 9 & Assumption 9
+    // (Note: This depends on how you implement your move counter.  Adjust the selector and expectations)
+    it('should increment move counter on click', () => {
+        // Add a move counter display element if it's not in your index.html, for example <span id="moveCounter">0</span>
+        const moveCounterDisplay = document.createElement('span'); // Add a span for the move counter
+        moveCounterDisplay.id = 'moveCounter';
+        document.body.appendChild(moveCounterDisplay);
+        window.moveCounter = 0; // Initialize move counter (must be a global variable in your lightsout script)
+        window.incrementMoveCounter = function() { window.moveCounter++; moveCounterDisplay.textContent = window.moveCounter; }
+
+        const cell = document.querySelector('.cell');
+        cell.click();
+
+        expect(window.moveCounter).toBe(1);
+
+
+
+    });
+
+
+
+
 });

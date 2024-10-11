@@ -1,49 +1,51 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests:
+
 Requirement 1:
-The game should have a 6x6 grid of cells.
+The game board must be a 6x6 grid.
 Assumption 1:
-Board should have 36 elements with class 'cell'.
+The HTML will include a container element with 36 child elements representing the individual cells of the game board.
 
 Requirement 2:
-Cells can have states: on and off.
+The game must start with a random number of lights switched on.
 Assumption 2:
-Cells without the 'off' class are considered 'on' else 'off'.
+The JavaScript code will include a function to randomly initialize the game board state when the page loads.
 
 Requirement 3:
-Clicking a cell should toggle it's state and the states of adjacent cells.
+Clicking a cell must toggle its state between on and off.
 Assumption 3:
-When clicked, cells and its adjacent cells (up, down, left, right) add or remove 'off' class.
+The click event handler will include logic to switch the clicked cell's state and update its visual appearance.
 
 Requirement 4:
-The game starts with random patterns of on and off cells.
+Clicking a cell must also toggle the state of adjacent cells (up, down, left, right).
 Assumption 4:
-Some cells have 'off' class
+The click event handler will include logic to identify and toggle the state of neighboring cells.
 
 Requirement 5:
-The game should detect a win condition when all cells are turned off.
+The game must detect when all lights are switched off.
 Assumption 5:
-Show an alert with the message "You win!" is displayed when all cells have 'off' class.
+There will be a function to check the game board state after each move and determine if all lights are off.
 
 Requirement 6:
-Cells on the edges of the grid must not affect non-existent adjacent cells when clicked.
+The game must display a victory message when all lights are switched off.
 Assumption 6:
-Clicking cells on the edges does not cause errors and only affects existing adjacent cells.
+A victory message element will be included in the HTML and shown when the win condition is met.
 
 Requirement 7:
-The game must be implemented using HTML and JavaScript in a single file.
+The game must include a reset button to start a new game.
 Assumption 7:
-The game will be contained in an index.html file, with JavaScript code embedded within <script> tags and styles within <style> tags. There should be no reference to external JavaScript files except for CDN.
+An HTML button element will be included with an onclick event to reset the game board.
 
 Requirement 8:
-Each cell must be clickable.
+The game must visually distinguish between on and off states for each cell.
 Assumption 8:
-Each cell has a click event listener attached to it.
+CSS classes will be used to style the cells differently based on their on/off state.
 
 Requirement 9:
-The game state must be represented by a boolean array.
+The game must include a move counter to track the number of clicks.
 Assumption 9:
-There is an array named 'board' with 36 boolean elements representing the state of each cell.
+A variable will be used to store the move count, and an HTML element will display this count.
 
 Requirement 10:
-Cells are square shaped.
+The game must prevent further input once the victory condition is met.
 Assumption 10:
-.cell class in CSS should have same width and height.
+The click event listeners will be disabled or ignored after the game is won.

@@ -1,0 +1,1 @@
+Create a stickman avatar generator in single file HTML with JavaScript. The user should be able to change background, face, eye, mouth, hat types and colors of each type. The avatar should be drawn in real-time upon change from the dropdown of 3 styles in each type. Place a randomize avatar and export image button underneath.

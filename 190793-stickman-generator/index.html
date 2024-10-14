@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stickman Avatar Generator</title>
+    <style>
+        body { font-family: sans-serif; }
+        canvas { border: 1px solid black; }
+        .controls { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;}
+        .controls > div { display: flex; flex-direction: column; align-items: center; }
+    </style>
+</head>
+<body>
+
+<h1>Stickman Avatar Generator</h1>
+
+<canvas id="avatarCanvas" width="200" height="300"></canvas>
+
+<div class="controls">
+
+    <div>
+        <label for="background">Background:</label>
+        <select id="background">
+            <option value="skyblue">Sky Blue</option>
+            <option value="lightgray">Light Gray</option>
+            <option value="lightgreen">Light Green</option>
+        </select>
+        <input type="color" id="backgroundColor" value="#87CEEB">
+    </div>
+
+    <div>
+        <label for="face">Face:</label>
+        <select id="face">
+            <option value="circle">Circle</option>
+            <option value="square">Square</option>
+            <option value="triangle">Triangle</option>
+        </select>
+        <input type="color" id="faceColor" value="yellow">
+    </div>
+
+    <div>
+        <label for="eyes">Eyes:</label>
+        <select id="eyes">
+            <option value="dots">Dots</option>
+            <option value="lines">Lines</option>
+            <option value="circles">Circles</option>
+        </select>
+        <input type="color" id="eyeColor" value="black">
+    </div>
+
+    <div>
+        <label for="mouth">Mouth:</label>
+        <select id="mouth">
+            <option value="smile">Smile</option>
+            <option value="frown">Frown</option>
+            <option value="line">Line</option>
+        </select>
+        <input type="color" id="mouthColor" value="red">
+    </div>
+
+    <div>
+        <label for="hat">Hat:</label>
+        <select id="hat">
+            <option value="none">None</option>
+            <option value="tophat">Top Hat</option>
+            <option value="baseball">Baseball Cap</option>
+        </select>
+        <input type="color" id="hatColor" value="black">
+    </div>
+
+
+</div>
+
+<button onclick="randomizeAvatar()">Randomize</button>
+<button onclick="exportImage()">Export Image</button>
+
+<script>
+    const canvas = document.getElementById('avatarCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function drawAvatar() {
+// ... (drawing logic from previous examples, updated to use the select values and color inputs)
+    }
+
+    // Call drawAvatar initially and on any input change
+    drawAvatar();
+    document.querySelectorAll('.controls select, .controls input').forEach(el => el.addEventListener('change', drawAvatar));
+
+
+    function randomizeAvatar() {
+        // ... (logic to randomize select options and color inputs)
+        drawAvatar(); // Redraw after randomization
+    }
+
+
+    function exportImage() {
+        const link = document.createElement('a');
+        link.download = 'stickman.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    }
+
+    // ... (rest of the script: drawAvatar function, etc. - adapted to use selects and color inputs)
+</script>
+
+</body>
+</html>

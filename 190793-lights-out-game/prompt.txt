@@ -1,1 +1,1 @@
-Can you create a Lights Out game in a 6x6 board using JavaScript and HTML in a single file?
+Create a Lights Out game in a 6x6 board using JavaScript and HTML in a single file, the game starts with random number of lights is switched on and the goal of the puzzle is to switch all the lights off.

@@ -1,0 +1,66 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests:
+
+Requirement 1:
+The application must be implemented as a single HTML file containing JavaScript code.
+Assumption 1:
+The main HTML file is named index.html and contains all necessary JavaScript code within <script> tags.
+
+Requirement 2:
+The application must provide dropdown menus for selecting different avatar components.
+Assumption 2:
+There are <select> elements with options for background, face, eye, mouth, and hat types.
+
+Requirement 3:
+Each avatar component must have at least three style options.
+Assumption 3:
+Each dropdown menu contains a minimum of three <option> elements.
+
+Requirement 4:
+The application must allow users to change the color of each avatar component.
+Assumption 4:
+There are <input type="color"> elements associated with each avatar component for color selection.
+
+Requirement 5:
+The avatar must be drawn on an HTML canvas element.
+Assumption 5:
+There is a <canvas> element for rendering the avatar.
+
+Requirement 6:
+The avatar must update in real-time when users change any component or color.
+Assumption 6:
+There are event listeners attached to all dropdown menus and color inputs that trigger the avatar redraw function.
+
+Requirement 7:
+The application must include a "Randomize Avatar" button.
+Assumption 7:
+There is a button element with text "Randomize Avatar" and a click event listener that triggers randomization.
+
+Requirement 8:
+The "Randomize Avatar" button must generate a random combination of avatar components and colors.
+Assumption 8:
+The randomize function selects random options from all dropdowns and random colors for all components.
+
+Requirement 9:
+The application must include an "Export Image" button.
+Assumption 9:
+There is a button element with text "Export Image" and a click event listener that triggers image export.
+
+Requirement 10:
+The "Export Image" button must allow users to download the current avatar as an image file.
+Assumption 10:
+The export function converts the canvas content to a data URL and creates a download link for the image.
+
+Requirement 11:
+The application must render a complete stickman face with all selected components.
+Assumption 11:
+The drawing function includes separate methods for rendering each avatar component (background, face, eyes, mouth, hat).
+
+Requirement 12:
+The application must handle invalid or missing selections gracefully.
+Assumption 12:
+The drawing function includes default values or error handling for cases where a component is not selected.
+
+Requirement 13:
+The application must use a consistent coordinate system for placing avatar components.
+Assumption 13:
+All drawing functions use the same reference points (e.g., head center, body top) for positioning components.

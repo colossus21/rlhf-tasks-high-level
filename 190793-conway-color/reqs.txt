@@ -1,0 +1,81 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests:
+
+Requirement 1:
+The application must be implemented as a single HTML file containing HTML, CSS, and JavaScript.
+Assumption 1:
+The game logic, styling, and structure are all contained within a single index.html file.
+
+Requirement 2:
+The game grid must be rendered using HTML elements.
+Assumption 2:
+The grid is created using HTML div elements, with each cell represented by a single div.
+
+Requirement 3:
+The game must provide at least 6 different colors for cells.
+Assumption 3:
+An array of at least 6 color values (e.g., hex codes) is defined in the JavaScript code.
+
+Requirement 4:
+A cell must survive if it has exactly 2 neighbors of the same color.
+Assumption 4:
+The game logic checks the number and color of neighboring cells to determine survival.
+
+Requirement 5:
+An empty cell must become filled if it has exactly 3 colored neighbors.
+Assumption 5:
+The game logic counts colored neighbors for empty cells and fills them when the count is exactly 3.
+
+Requirement 6:
+A newly filled cell must take the color of the majority of its 3 neighbors.
+Assumption 6:
+The game logic determines the most common color among the 3 neighbors when filling a new cell.
+
+Requirement 7:
+The game must have a "Start" button to begin the simulation.
+Assumption 7:
+A button element exists and triggers the simulation when clicked.
+
+Requirement 8:
+The game must have a "Stop" button to pause the simulation.
+Assumption 8:
+A button element exists and halts the simulation when clicked.
+
+Requirement 9:
+The game must have a "Reset" button to clear the grid and stop the simulation.
+Assumption 9:
+A button element exists and resets the game state when clicked.
+
+Requirement 10:
+The game must include a slider to control the speed of the simulation.
+Assumption 10:
+An input element of type "range" exists and affects the simulation speed.
+
+Requirement 11:
+The game must update the grid state based on the rules in a step-wise manner.
+Assumption 11:
+A function exists that calculates the next state of the grid based on the current state and game rules.
+
+Requirement 12:
+The game must visually update the grid to reflect state changes.
+Assumption 12:
+A function exists that updates the HTML elements' colors based on the calculated grid state.
+
+Requirement 13:
+The game must allow users to click on cells to toggle their state before starting the simulation.
+Assumption 13:
+Cell elements have click event listeners that toggle between empty and colored states.
+
+Requirement 14:
+The game must randomly assign one of the 6 colors when a user activates a cell.
+Assumption 14:
+A function exists to randomly select a color from the predefined color array when a cell is activated.
+
+Requirement 15:
+The game must not allow changes to the grid while the simulation is running.
+Assumption 15:
+Cell click events are disabled or ignored when the simulation is in progress.
+
+Requirement 16:
+The game must use requestAnimationFrame for smooth animation of the simulation.
+Assumption 16:
+The simulation update loop uses requestAnimationFrame instead of setInterval for better performance.

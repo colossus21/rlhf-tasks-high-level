@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Colored Game of Life</title>
+    <style>
+        body {
+            font-family: monospace;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+        .controls {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Colored Game of Life</h1>
+
+<canvas id="gameCanvas" width="500" height="500"></canvas>
+
+<div class="controls">
+    <button id="startButton">Start</button>
+    <button id="stopButton">Stop</button>
+    <button id="resetButton">Reset</button>
+    <span>Speed: <input type="range" id="speedSlider" min="1" max="60" value="10"></span>
+</div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const gridSize = 50;
+    const cellSize = canvas.width / gridSize;
+    let grid = createGrid();
+    let running = false;
+    let speed = 10; // frames per second
+
+    const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange', 'cyan'];
+
+
+    function createGrid() {
+        return Array(gridSize).fill(null).map(() => Array(gridSize).fill(null));
+    }
+
+    function drawGrid() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let x = 0; x < gridSize; x++) {
+            for (let y = 0; y < gridSize; y++) {
+                if (grid[x][y]) {
+                    ctx.fillStyle = grid[x][y];
+                    ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                }
+            }
+        }
+    }
+
+    function updateGrid() {
+        const newGrid = createGrid();
+        for (let x = 0; x < gridSize; x++) {
+            for (let y = 0; y < gridSize; y++) {
+                const neighbors = getNeighbors(x, y);
+                const colorCounts = {};
+
+                for (const color of colors) {
+                    colorCounts[color] = 0;
+                }
+
+                neighbors.forEach(neighbor => {
+                    if (neighbor) {
+                        colorCounts[neighbor]++;
+                    }
+                });
+
+
+                const currentColor = grid[x][y];
+
+                if (currentColor) {
+                    if (colorCounts[currentColor] === 2) {
+                        newGrid[x][y] = currentColor;
+                    }
+                } else {
+                    let maxCount = 0;
+                    let majorityColor = null;
+                    for (const color in colorCounts) {
+                        if (colorCounts[color] > maxCount) {
+                            maxCount = colorCounts[color];
+                            majorityColor = color;
+                        } else if (colorCounts[color] === maxCount && maxCount > 0) {
+                            majorityColor = null; // No clear majority
+                        }
+                    }
+                    if (maxCount === 3) {
+                        newGrid[x][y] = majorityColor;
+                    }
+
+                }
+            }
+        }
+        grid = newGrid;
+    }
+
+    function getNeighbors(x, y) {
+        const neighbors = [];
+        for (let i = -1; i <= 1; i++) {
+            for (let j = -1; j <= 1; j++) {
+                if (i === 0 && j === 0) continue;
+                const nx = (x + i + gridSize) % gridSize;
+                const ny = (y + j + gridSize) % gridSize;
+                neighbors.push(grid[nx][ny]);
+            }
+        }
+        return neighbors;
+    }
+
+
+    canvas.addEventListener('click', event => {
+        const x = Math.floor(event.offsetX / cellSize);
+        const y = Math.floor(event.offsetY / cellSize);
+        const currentColorIndex = colors.indexOf(grid[x][y]);
+        const nextColor = colors[(currentColorIndex + 1) % colors.length];
+        grid[x][y] = nextColor;
+        drawGrid();
+    });
+
+    document.getElementById('startButton').addEventListener('click', () => {
+        running = true;
+        tick();
+    });
+
+    document.getElementById('stopButton').addEventListener('click', () => {
+        running = false;
+    });
+
+    document.getElementById('resetButton').addEventListener('click', () => {
+        grid = createGrid();
+        drawGrid();
+    });
+
+
+    document.getElementById('speedSlider').addEventListener('input', (event) => {
+        speed = event.target.value;
+    });
+
+
+    function tick() {
+        if (running) {
+            updateGrid();
+            drawGrid();
+            setTimeout(tick, 1000 / speed);
+        }
+    }
+
+
+    drawGrid();
+
+</script>
+
+</body>
+</html>

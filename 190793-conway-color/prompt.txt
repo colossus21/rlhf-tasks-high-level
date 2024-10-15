@@ -1,0 +1,1 @@
+Create a variation of Conway's Game of Life using colors in a single HTML file. A cell survives if it has exactly 2 neighbors of the same color. An empty cell fills if it has exactly 3 colored neighbors, taking the majority color. Game should have Start/Stop and Reset buttons. A slider should be able to control the speed of simulation. Provide at least 6 colors.

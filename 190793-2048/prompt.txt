@@ -1,0 +1,1 @@
+Create a 6x6 space themed 2048 game using JS and HTML in a single file that uses a space background only using CSS. The player uses arrow keys to move the tiles. When two tiles with the same number touch, they merge into one. Player wins by forming 2048, loses when all cells are filled.

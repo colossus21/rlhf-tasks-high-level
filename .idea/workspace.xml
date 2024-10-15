@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="94ef8d18-f607-4510-bcc1-62d85bb39a8e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/190793-lights-out-game/prompt.txt" beforeDir="false" afterPath="$PROJECT_DIR$/190793-lights-out-game/prompt.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,25 +25,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "E:/Personal Projects/Google/190793-stickman-generator",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Personal Projects/Google/190793-roulette&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Personal Projects\Google\190793-roulette" />
+      <recent name="E:\Personal Projects\Google" />
+      <recent name="E:\Personal Projects\Google\190793-conway-color" />
       <recent name="E:\Personal Projects\Google\190793-stickman-generator" />
       <recent name="E:\Personal Projects\Google\190793-battleship-mini" />
-      <recent name="E:\Personal Projects\Google" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\Personal Projects\Google\190793-checkers-game" />
@@ -68,7 +70,8 @@
       <workItem from="1728560091496" duration="15736000" />
       <workItem from="1728635255150" duration="11636000" />
       <workItem from="1728924909678" duration="632000" />
-      <workItem from="1728925576108" duration="1326000" />
+      <workItem from="1728925576108" duration="5685000" />
+      <workItem from="1728972225121" duration="11657000" />
     </task>
     <servers />
   </component>

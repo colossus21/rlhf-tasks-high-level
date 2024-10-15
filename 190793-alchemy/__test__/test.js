@@ -22,17 +22,6 @@ describe('Alchemy Game Tests', () => {
         window = dom.window;
         document = window.document;
         window.displayElements() // Ensure elements are displayed before each test
-
-        // Fallback in case displayElements doesn't work
-        if (!document.querySelector('.element')) {
-            document.body.innerHTML = `
-            <div class="element">🔥</div>
-            <div class="element">💧</div>
-            <div class="element">🌎</div>
-            <div class="element">💨</div>
-        `;
-        }
-
         window.localStorage.clear() //Clear local storage before each test
     });
 

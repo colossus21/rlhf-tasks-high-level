@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alchemy Game</title>
+    <style>
+        body { font-family: sans-serif; }
+        .element {
+            width: 50px;
+            height: 50px;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            cursor: grab;
+            user-select: none; /* Prevent accidental text selection */
+        }
+        #elements { display: flex; }
+        #combinations { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Alchemy Game</h1>
+
+<div id="elements"></div>
+<div id="combinations"></div>
+
+
+<script>
+    const elements = {
+        "🔥": { name: "Fire", combined: false },
+        "💧": { name: "Water", combined: false },
+        "🌎": { name: "Earth", combined: false },
+        "💨": { name: "Air", combined: false },
+    };
+
+    const combinations = {
+        "🔥💧": "Steam ♨️",
+        "🔥🌎": "Lava 🌋",
+        "💨🌎": "Dust 🌫️",
+        "💧🌎": "Mud 🫙",
+        "🔥💨": "Energy ⚡",
+        "💧⚡": "Life 🌱",
+    };
+
+    const elementsDiv = document.getElementById("elements");
+    const combinationsDiv = document.getElementById("combinations");
+
+    function displayElements() {
+        elementsDiv.innerHTML = "";
+        for (const symbol in elements) {
+            if (!elements[symbol].combined) {
+                const elementDiv = document.createElement("div");
+                elementDiv.className = "element";
+                elementDiv.textContent = symbol;
+                elementDiv.draggable = true;
+
+                elementDiv.ondragstart = (event) => {
+                    event.dataTransfer.setData("text/plain", symbol);
+                };
+
+                elementDiv.ondragover = (event) => {
+                    event.preventDefault();
+                };
+
+                elementDiv.ondrop = (event) => {
+                    event.preventDefault();
+                    const droppedSymbol = event.dataTransfer.getData("text/plain");
+                    combineElements(droppedSymbol, symbol);
+                };
+                elementsDiv.appendChild(elementDiv);
+            }
+        }
+    }
+
+
+
+    function combineElements(symbol1, symbol2) {
+        const combinedSymbols = [symbol1, symbol2].sort().join("");
+        if (combinations[combinedSymbols]) {
+            const newElement = combinations[combinedSymbols];
+            elements[symbol1].combined = true;
+            elements[symbol2].combined = true;
+
+            // Check if the new element is already in the elements list
+            if (!elements[newElement.slice(-2)]) { // Extract the symbol part
+                elements[newElement.slice(-2)] = { name: newElement.slice(0,-3), combined: false};
+            }
+
+
+            combinationsDiv.innerHTML += `<p>${symbol1} + ${symbol2} = ${newElement}</p>`;
+            displayElements();
+        }
+    }
+
+
+    displayElements();
+
+</script>
+
+</body>
+</html>

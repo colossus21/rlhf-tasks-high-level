@@ -1,0 +1,7 @@
+Create an alchemy-based game in JavaScript in a single HTML file in which a player discover elements by dropping 2 elements to be combined into 1. The game should show 4 elements at start: Fire, Water, Earth, and Air. Each element should have a unicode symbol. Here's a list of combinations:
+Fire + Water = Steam
+Fire + Earth = Lava
+Air + Earth = Dust
+Water + Earth = Mud
+Fire + Air = Energy
+Water + Energy = Life

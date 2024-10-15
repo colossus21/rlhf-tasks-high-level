@@ -1,0 +1,71 @@
+Based on the provided prompt, here are 20 requirements and assumptions for the alchemy-based game:
+
+Requirement 1:
+The game must be implemented using HTML, CSS, and JavaScript in a single file.
+Assumption 1:
+The game will be contained in a single HTML file named index.html, with CSS and JavaScript embedded within it.
+
+Requirement 2:
+The game must start with four initial elements: Fire, Water, Earth, and Air.
+Assumption 2:
+These four elements will be displayed on the game screen when the page loads.
+
+Requirement 3:
+Each element must be represented by a unicode symbol.
+Assumption 3:
+The game will use appropriate unicode symbols for Fire (🔥), Water (💧), Earth (🌍), and Air (💨).
+
+Requirement 4:
+Players must be able to drag and drop elements to combine them.
+Assumption 4:
+The game will implement drag and drop functionality using the HTML5 drag and drop API.
+
+Requirement 5:
+The game must support the following combinations: Fire + Water = Steam, Fire + Earth = Lava, Air + Earth = Dust, Water + Earth = Mud, Fire + Air = Energy, Water + Energy = Life.
+Assumption 5:
+These combinations will be defined in the game logic and new elements will be created when valid combinations are made.
+
+Requirement 6:
+The game must display newly created elements when a valid combination is made.
+Assumption 6:
+New elements will appear on the game screen immediately after a successful combination.
+
+Requirement 7:
+The game must not allow invalid combinations of elements.
+Assumption 7:
+When players attempt to combine elements that don't have a defined combination, no new element will be created.
+
+Requirement 8:
+The game must keep track of discovered elements.
+Assumption 8:
+The game will maintain a list or array of discovered elements, updating it as new combinations are made.
+
+Requirement 9:
+The game must allow players to use newly created elements in further combinations.
+Assumption 9:
+New elements like Steam, Lava, Dust, Mud, Energy, and Life can be used as ingredients for future combinations.
+
+Requirement 10:
+The game must provide visual feedback when a successful combination is made.
+Assumption 10:
+A visual effect (e.g., a flash or animation) will occur when two elements successfully combine.
+
+Requirement 11:
+The game must allow players to reset the game to its initial state.
+Assumption 11:
+A reset button will be present, which when clicked, will clear all discovered elements and return to the initial four elements.
+
+Requirement 12:
+The game must save the player's progress.
+Assumption 12:
+The game will use local storage to save the list of discovered elements, persisting progress across page reloads.
+
+Requirement 13:
+The game must load the player's saved progress when the page is loaded.
+Assumption 13:
+On page load, the game will check local storage for saved progress and display all previously discovered elements.
+
+Requirement 14:
+The game must display a count of how many elements have been discovered.
+Assumption 14:
+A counter showing the number of discovered elements will be visible on the game screen.

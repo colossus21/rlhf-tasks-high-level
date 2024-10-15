@@ -1,0 +1,3 @@
+Create a breakout game in a single file HTML with a twist.
+The ball in the game never falls but keeps bouncing around the screen in all directions. The player paddle (follows mouse) must evade the ball from getting collided, otherwise the game is over.
+Player wins when all the blocks are destroyed at the top portion.

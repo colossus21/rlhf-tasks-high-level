@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Murder Mystery Floor Guessing Game</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* Adjust for desired layout */
+            gap: 5px;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        .floor {
+            width: 50px;
+            height: 50px;
+            background-color: lightgray;
+            border: 2px solid gray;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .selected {
+            background-color: yellow;
+            color: white;
+        }
+
+        .correct {
+            background-color: darkred;
+            color: white;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<h1>Find the Murderer!</h1>
+<p>The murderer is hiding on a floor in this hotel.  Can you find them?</p>
+
+<div class="container" id="floor-container">
+</div>
+
+<div id="message"></div>
+
+<script>
+    const numFloors = 25;
+    let murdererFloor;
+    let guesses = 0;
+    const floorContainer = document.getElementById('floor-container');
+    const messageDiv = document.getElementById('message');
+
+
+    function initializeGame() {
+        murdererFloor = Math.floor(Math.random() * numFloors) + 1;
+        guesses = 0;
+        messageDiv.textContent = '';  // Clear any previous messages
+
+        // Create floor elements dynamically
+        floorContainer.innerHTML = ''; // Clear previous floors
+        for (let i = 1; i <= numFloors; i++) {
+            const floorDiv = document.createElement('div');
+            floorDiv.classList.add('floor');
+            floorDiv.textContent = i;
+            floorDiv.addEventListener('click', handleClick);
+            floorContainer.appendChild(floorDiv);
+        }
+    }
+
+
+    function handleClick(event) {
+        const selectedFloor = parseInt(event.target.textContent);
+        guesses++;
+
+
+        if (selectedFloor === murdererFloor) {
+            event.target.classList.add('correct');
+            messageDiv.textContent = `You found the murderer in ${guesses} turns!`;
+
+            // Disable further clicks after finding the murderer
+            const floorDivs = document.querySelectorAll('.floor');
+            floorDivs.forEach(div => div.style.pointerEvents = 'none');
+
+
+        } else {
+            event.target.classList.add('selected');
+            const higherOrLower = selectedFloor < murdererFloor ? 'higher' : 'lower';
+            messageDiv.textContent = `The murderer lives on a floor ${higherOrLower} than floor ${selectedFloor}!`;
+        }
+    }
+
+    initializeGame();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests:
+
+Requirement 1:
+The game must be implemented in a single HTML file using HTML, CSS, and JavaScript.
+Assumption 1:
+The game logic, styling, and structure are all contained within one index.html file.
+
+Requirement 2:
+The game must display 25 boxes representing floors of a hotel.
+Assumption 2:
+There will be 25 clickable div elements in a single column, each representing a floor and containing a number from 1 to 25.
+
+Requirement 3:
+The game must randomly select a floor number between 1 and 25 for the murderer's location.
+Assumption 3:
+JavaScript's Math.random() function will be used to generate a random number between 1 and 25.
+
+Requirement 4:
+Players must be able to click on the boxes to guess the murderer's location.
+Assumption 4:
+Each box will have a click event listener that triggers the guess checking logic.
+
+Requirement 5:
+The game must provide feedback after each guess.
+Assumption 5:
+After each click, the game will update the visual state of the clicked box and display a message to the player.
+
+Requirement 6:
+Correct guesses must turn the box background to dark red.
+Assumption 6:
+When the player clicks the correct box, its background color will be set to a dark red color (e.g., #8B0000).
+
+Requirement 7:
+Incorrect guesses must turn the box background to yellow with white text.
+Assumption 7:
+When the player clicks an incorrect box, its background color will be set to yellow and the text color to white.
+
+Requirement 8:
+The game must display a "higher" or "lower" hint for incorrect guesses.
+Assumption 8:
+The game will compare the guessed floor number with the murderer's floor and display an appropriate message.
+
+Requirement 9:
+The game must keep track of the number of turns taken by the player.
+Assumption 9:
+A variable will be used to count the number of guesses made by the player.
+
+Requirement 10:
+The game must display a win message with the number of turns taken when the correct floor is guessed.
+Assumption 10:
+When the player guesses correctly, a message will be displayed saying "You have found the murderer in N turns!".
+
+Requirement 11:
+The game must prevent further guesses after the correct floor is found.
+Assumption 11:
+After a correct guess, all click event listeners on the boxes will be removed or disabled.
+
+Requirement 12:
+The game must have a way to start a new game after completion.
+Assumption 12:
+There will be a "New Game" button that resets the game state and generates a new random floor for the murderer.
+
+Requirement 13:
+The game must display the range of possible floor numbers (1-25) to the player.
+Assumption 13:
+The game instructions or UI will clearly indicate that the floors range from 1 to 25.
+
+Requirement 14:
+The game must ensure that each floor number is unique and appears only once.
+Assumption 14:
+An array of numbers from 1 to 25 will be used to populate the floor boxes without duplication.

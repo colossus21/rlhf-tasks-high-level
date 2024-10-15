@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Memory Game</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+        }
+
+        #game {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 5px;
+            width: 400px;
+            margin: 20px auto;
+        }
+
+        .card {
+            width: 80px;
+            height: 80px;
+            background-color: #ccc;
+            border: 1px solid #999;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+
+        .flipped {
+            background-color: initial; /* Show the color when flipped */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Memory Game</h1>
+
+<div id="game"></div>
+<p>Mistakes: <span id="mistakes">0</span></p>
+<button id="restart" style="display: none;">Restart</button>
+
+<script>
+    const colors = [
+        'red', 'red', 'blue', 'blue', 'green', 'green', 'yellow', 'yellow',
+        'orange', 'orange', 'purple', 'purple', 'cyan', 'cyan', 'brown', 'brown'
+    ];
+
+    let cards = [];
+    let flippedCards = [];
+    let matchedCards = [];
+    let mistakes = 0;
+    const mistakesElement = document.getElementById('mistakes');
+    const gameBoard = document.getElementById('game');
+    const restartButton = document.getElementById('restart');
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function createCard(color) {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.color = color; // Store the color directly as data attribute
+        card.addEventListener('click', flipCard);
+        return card;
+    }
+
+    function flipCard() {
+        if (flippedCards.length < 2 && !this.classList.contains('flipped') && !matchedCards.includes(this)) {
+            this.classList.add('flipped');
+            this.style.backgroundColor = this.dataset.color;
+            flippedCards.push(this);
+
+            if (flippedCards.length === 2) {
+                setTimeout(checkForMatch, 1000);
+            }
+        }
+    }
+
+    function checkForMatch() {
+        const [card1, card2] = flippedCards;
+
+        if (card1.dataset.color === card2.dataset.color) {
+            matchedCards.push(card1, card2);
+            flippedCards = [];
+
+            if (matchedCards.length === colors.length) {
+                alert('You won!');
+                restartButton.style.display = 'block';
+            }
+
+        } else {
+            card1.classList.remove('flipped');
+            card2.classList.remove('flipped');
+            card1.style.backgroundColor = '#ccc'; // Reset background color
+            card2.style.backgroundColor = '#ccc';
+            flippedCards = [];
+            mistakes++;
+            mistakesElement.textContent = mistakes;
+
+            if (mistakes >= 3) {
+                alert('Game Over! You made too many mistakes.');
+                restartButton.style.display = 'block';
+            }
+        }
+    }
+
+
+    function startGame() {
+        shuffle(colors);
+        gameBoard.innerHTML = ''; // Clear previous game
+        matchedCards = [];
+        mistakes = 0;
+        mistakesElement.textContent = mistakes;
+        restartButton.style.display = 'none';
+
+
+        for (const color of colors) {
+            const card = createCard(color);
+            gameBoard.appendChild(card);
+        }
+    }
+
+    restartButton.addEventListener('click', startGame);
+
+    startGame();
+
+</script>
+
+</body>
+</html>

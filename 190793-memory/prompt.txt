@@ -1,0 +1,1 @@
+Create a 4x4 memory game with 8 pairs of colors in Javascript, provide a single HTML. User can click on any cell to reveal a color, then try to match the color with another cell. Player can only afford 3 mistakes per game. Add a restart button after the game is over.

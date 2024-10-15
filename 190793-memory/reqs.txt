@@ -1,0 +1,76 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests:
+
+Requirement 1:
+The game must be implemented using HTML, CSS, and JavaScript.
+Assumption 1:
+The game logic and UI will be implemented in a single HTML file that includes embedded CSS and JavaScript.
+
+Requirement 2:
+The game board must consist of a 4x4 grid of cells.
+Assumption 2:
+The game board will be represented by a 4x4 table or a set of 16 div elements arranged in a grid layout.
+
+Requirement 3:
+The game must have 8 pairs of colors randomly distributed across the 16 cells.
+Assumption 3:
+An array of 8 color pairs will be shuffled and assigned to the 16 cells at the start of each game.
+
+Requirement 4:
+Cells must start face-down (color hidden) and reveal their color when clicked.
+Assumption 4:
+Cells will have a default background color or pattern when face-down, changing to their assigned color when clicked.
+
+Requirement 5:
+The game must allow the player to reveal only two cells at a time.
+Assumption 5:
+The game logic will track the number of revealed cells and prevent more than two from being visible simultaneously.
+
+Requirement 6:
+The game must check for a match when two cells are revealed.
+Assumption 6:
+When two cells are revealed, their colors will be compared to determine if they match.
+
+Requirement 7:
+Matched pairs must remain face-up for the duration of the game.
+Assumption 7:
+Matched cells will have their click events disabled and remain visually distinct from unmatched cells.
+
+Requirement 8:
+Unmatched pairs must be hidden after a short delay.
+Assumption 8:
+If two revealed cells don't match, they will be flipped face-down after a brief timeout (e.g., 1 second).
+
+Requirement 9:
+The game must track and display the number of mistakes made by the player.
+Assumption 9:
+A variable will keep count of mistakes, and this count will be displayed and updated in the UI.
+
+Requirement 10:
+The game must end when the player makes 3 mistakes.
+Assumption 10:
+The game will check the mistake count after each unsuccessful match and end the game if it reaches 3.
+
+Requirement 11:
+The game must display a "Game Over" message when the player loses.
+Assumption 11:
+A game over message will be shown, and all cells will be revealed when the player reaches 3 mistakes.
+
+Requirement 12:
+The game must end when all pairs are successfully matched.
+Assumption 12:
+The game will track the number of matched pairs and end when all 8 pairs are found.
+
+Requirement 13:
+The game must display a "You Win" message when the player successfully matches all pairs.
+Assumption 13:
+A victory message will be shown when all 8 pairs are matched before reaching 3 mistakes.
+
+Requirement 14:
+The game must include a restart button that appears after the game ends.
+Assumption 14:
+A restart button will be displayed or enabled only after the game reaches a win or lose condition.
+
+Requirement 15:
+The restart button must reset the game board, shuffle colors, and reset the mistake count.
+Assumption 15:
+Clicking the restart button will trigger functions to clear the board, reassign colors, and reset game variables.

@@ -1,0 +1,71 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests:
+
+Requirement 1:
+The game must be implemented in a single HTML file using HTML, CSS, and JavaScript.
+Assumption 1:
+The game logic, styling, and structure are all contained within one index.html file.
+
+Requirement 2:
+The game must spawn circles of different sizes at random intervals.
+Assumption 2:
+The JavaScript code includes a function to generate circles with varying diameters at random time intervals.
+
+Requirement 3:
+The circles must appear at random positions at the top of the screen.
+Assumption 3:
+The spawn function generates random x-coordinates for each circle within the bounds of the game area.
+
+Requirement 4:
+The circles must fall downwards at a constant speed.
+Assumption 4:
+There is an animation or interval function that updates the y-position of each circle at a fixed rate.
+
+Requirement 5:
+The player must be able to slash circles by clicking on them.
+Assumption 5:
+An event listener is attached to each circle element to detect mouse clicks or touch events.
+
+Requirement 6:
+Slashed circles must disappear from the screen.
+Assumption 6:
+When a circle is clicked, its corresponding DOM element is removed from the game area.
+
+Requirement 7:
+The player must earn points for each successfully slashed circle.
+Assumption 7:
+A score variable is incremented each time a circle is clicked, and the score is displayed on the screen.
+
+Requirement 8:
+The game must end when a circle falls below the bottom of the screen without being slashed.
+Assumption 8:
+There is a check in the game loop to detect if any circle's y-position is greater than the game area's height.
+
+Requirement 9:
+The game must display a "Game Over" message when it ends.
+Assumption 9:
+A game over screen or message is shown when the game end condition is met, replacing or overlaying the game area.
+
+Requirement 10:
+The final score must be displayed when the game ends.
+Assumption 10:
+The game over screen includes the player's final score.
+
+Requirement 11:
+A restart button must be provided to allow the player to start a new game.
+Assumption 11:
+A button element with the text "Restart" is present on the game over screen, with an attached click event listener to reset the game state.
+
+Requirement 12:
+The game must have a visible play area with defined boundaries.
+Assumption 12:
+The game area is represented by a div element with a specific width, height, and styling to make it distinct from the rest of the page.
+
+Requirement 13:
+The game must display the current score during gameplay.
+Assumption 13:
+A score display element is present and updated in real-time as the player slashes circles.
+
+Requirement 14:
+The circles must have different colors.
+Assumption 14:
+The circle generation function assigns random colors to each circle created.

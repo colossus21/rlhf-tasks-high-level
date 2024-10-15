@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Roulette Wheel</title>
+    <style>
+        #wheel {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 2px solid black;
+            position: relative; /* Needed for positioning slices */
+            overflow: hidden; /* Hide overflowing slices */
+        }
+
+        .slice {
+            position: absolute;
+            width: 150px; /* Half the wheel's width */
+            height: 300px; /* Full wheel's height */
+            left: 150px; /* Initial position for rotation */
+            top: 0;
+            transform-origin: left center; /* Rotate around left edge */
+        }
+
+        .slice-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(180deg); /* Center and rotate text */
+            width: 100px;
+            text-align: center; /* Ensure text is centered */
+            font-size: 14px; /* Adjust font size as needed */
+            white-space: nowrap; /* Prevent text from wrapping */
+
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<h1>Roulette Wheel</h1>
+
+<textarea id="items" rows="10" cols="30" placeholder="Enter items, one per line"></textarea>
+<button id="spin">Spin the Wheel</button>
+<div id="result"></div>
+
+<div id="wheel"></div>
+
+
+<script>
+    const wheel = document.getElementById('wheel');
+    const itemsTextArea = document.getElementById('items');
+    const spinButton = document.getElementById('spin');
+    const resultDiv = document.getElementById('result');
+    let slices = []; // Array to hold slice elements
+
+    spinButton.addEventListener('click', spinWheel);
+
+    function spinWheel() {
+        if (slices.length === 0) createWheel(); // create wheel if not created yet from entered data
+        const randomIndex = Math.floor(Math.random() * slices.length);
+
+        const deg = 360 / slices.length;
+        const rotateDeg = 360 * 5 + (randomIndex * deg);  //Spin 5 times for effect
+
+
+        wheel.style.transition = 'transform 2s ease-out'; // Add transition
+        wheel.style.transform = `rotate(${rotateDeg}deg)`;
+
+        // Display the result after the animation finishes (2 seconds)
+
+        setTimeout(() => {
+            resultDiv.textContent = `Result: ${slices[randomIndex].textContent}`;
+
+            // Stop spinning animation for next spin
+            wheel.style.transition = 'none';
+            const currentRotation = rotateDeg % 360;
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+        }, 2000);
+
+
+    }
+
+
+    function createWheel() {
+        const items = itemsTextArea.value.trim().split('\n');
+        if (items.length === 0 || (items.length === 1 && items[0] === "")) {
+            resultDiv.textContent = "Please enter at least one item";
+            return;
+        }
+
+        // clear previous slices if creating a new wheel
+        wheel.innerHTML = '';
+        slices = [];
+
+
+        const numItems = items.length;
+        const deg = 360 / numItems;
+        for (let i = 0; i < numItems; i++) {
+            const slice = document.createElement('div');
+            slice.classList.add('slice');
+            const color = getRandomColor(); // Generates a random hex color
+            slice.style.backgroundColor = color;
+            slice.style.transform = `rotate(${i * deg}deg)`;
+
+            const sliceText = document.createElement('div');
+            sliceText.classList.add('slice-text');
+            sliceText.textContent = items[i];
+            slice.appendChild(sliceText);
+            wheel.appendChild(slice);
+            slices.push(sliceText);
+        }
+    }
+
+
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+</script>
+
+</body>
+</html>

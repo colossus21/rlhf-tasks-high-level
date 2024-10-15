@@ -1,0 +1,1 @@
+Create a Roulette wheel widget in Javascript to choose a random option between multiple options in a single HTML file. The widget would have a text area where the user can enter items, one per line. Wheel would be generated based on the item per line. A "Spin the Wheel" button that spins the wheel using the items provided and selects a random item.

@@ -1,0 +1,76 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests:
+
+Requirement 1:
+The application must have a textarea for users to input items.
+Assumption 1:
+There is a textarea element with present in the HTML.
+
+Requirement 2:
+The application must have a button to initiate the wheel spin.
+Assumption 2:
+There is a button element present in the HTML.
+
+Requirement 3:
+The application must display a result after spinning the wheel.
+Assumption 3:
+There is a div element that will contain the spin result.
+
+Requirement 4:
+The application must create a visual representation of a wheel.
+Assumption 4:
+There is a div element that will contain the wheel visualization.
+
+Requirement 5:
+The application must split the input items into separate slices on the wheel.
+Assumption 5:
+There is a function that correctly splits the textarea input by newline characters.
+
+Requirement 6:
+Each slice of the wheel must have a randomly generated background color.
+Assumption 6:
+There is a function that returns a valid hexadecimal color code.
+
+Requirement 7:
+The wheel must rotate when the spin button is clicked.
+Assumption 7:
+There is a function that applies a rotation transform to the wheel element.
+
+Requirement 8:
+The application must display an error message if no items are entered.
+Assumption 8:
+There is a function that checks for empty input and updates the result div accordingly.
+
+Requirement 9:
+The wheel must have the same number of slices as input items.
+Assumption 9:
+The number of slice elements created matches the number of non-empty input lines.
+
+Requirement 10:
+Each slice must display the corresponding input item text.
+Assumption 10:
+Each slice contains a div with relevant class that displays the item text.
+
+Requirement 11:
+The wheel must stop spinning after a set duration.
+Assumption 11:
+There is a function that uses setTimeout to stop the spinning animation after a few seconds.
+
+Requirement 12:
+The application must select a random slice as the winner after spinning.
+Assumption 12:
+There is a function that function uses Math.random to select a winning slice index.
+
+Requirement 13:
+The result of the spin must be displayed after the wheel stops.
+Assumption 13:
+The resultDiv is updated with the winning item text after the spin animation completes.
+
+Requirement 14:
+The wheel must be recreated if new items are entered and the spin button is clicked.
+Assumption 14:
+There is a function that function calls the function to create a wheel if the slices array is empty.
+
+Requirement 15:
+The wheel must have a circular appearance.
+Assumption 15:
+The wheel div has a border-radius of 50% to create a circular shape.

@@ -1,0 +1,1 @@
+Create a graph visualizer app in a single HTML file in which user would be able to create a graph - set nodes and vertices also assign distance/weights. After creating the graph the user can select starting node and goal node then perform any of apply any of these algorithm - A*, BFS, DFS, UCS, Greedy Algorithm. The app should be able to visualize the traversal.

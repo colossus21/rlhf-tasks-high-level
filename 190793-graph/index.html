@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graph Visualizer</title>
+    <style>
+        body { font-family: sans-serif; }
+        #graph-container { width: 600px; height: 400px; border: 1px solid #ccc; position: relative; }
+        .node { position: absolute; width: 20px; height: 20px; background-color: lightblue; border-radius: 50%; text-align: center; line-height: 20px; cursor: pointer; }
+        .edge { position: absolute; stroke: black; stroke-width: 2; pointer-events: none;}
+        .edge-weight { position: absolute; font-size: 12px; background-color: white; padding: 2px; border-radius: 5px; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+<h1>Graph Visualizer</h1>
+
+<div id="graph-container"></div>
+
+<div>
+    <button onclick="addNode()">Add Node</button>
+    <button onclick="addEdge()">Add Edge</button>
+    Start Node: <input type="text" id="startNode">
+    Goal Node: <input type="text" id="goalNode">
+    <button onclick="runAlgorithm('bfs')">BFS</button>
+    <button onclick="runAlgorithm('dfs')">DFS</button>
+    <button onclick="runAlgorithm('a*')">A*</button> <span style="color:red">(Not implemented)</span>
+    <button onclick="runAlgorithm('ucs')">UCS</button> <span style="color:red">(Not implemented)</span>
+    <button onclick="runAlgorithm('greedy')">Greedy</button> <span style="color:red">(Not implemented)</span>
+
+</div>
+
+
+<script>
+    const graphContainer = document.getElementById('graph-container');
+    let nodes = {};
+    let edges = [];
+    let nextNodeId = 0;
+
+    function addNode() {
+        const node = document.createElement('div');
+        node.classList.add('node');
+        node.id = `node-${nextNodeId}`;
+        node.textContent = nextNodeId;
+        node.style.left = (Math.random() * (graphContainer.offsetWidth - 20)) + 'px';
+        node.style.top = (Math.random() * (graphContainer.offsetHeight - 20)) + 'px';
+        graphContainer.appendChild(node);
+        nodes[nextNodeId] = {id: nextNodeId, x: node.offsetLeft, y: node.offsetTop, edges: []};
+        nextNodeId++;
+
+        node.addEventListener('mousedown', (event) => {
+            if(event.button === 0) { // Left mouse button
+                dragNode(node);
+            }
+        });
+    }
+
+
+    function addEdge() {
+        let startNode = prompt("Enter start node ID:");
+        let endNode = prompt("Enter end node ID:");
+        let weight = prompt("Enter edge weight:");
+
+        if (startNode in nodes && endNode in nodes && !isNaN(weight)) {
+            createEdge(parseInt(startNode), parseInt(endNode), parseInt(weight));
+            nodes[parseInt(startNode)].edges.push({ target: parseInt(endNode), weight: parseInt(weight) }); //For Algorithms
+        } else {
+            alert("Invalid node IDs or weight.");
+        }
+    }
+
+    function createEdge(startNodeId, endNodeId, weight) {
+        const startNode = document.getElementById(`node-${startNodeId}`);
+        const endNode = document.getElementById(`node-${endNodeId}`);
+
+        const edge = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        edge.classList.add('edge');
+        edge.setAttribute('x1', startNode.offsetLeft + 10);
+        edge.setAttribute('y1', startNode.offsetTop + 10);
+        edge.setAttribute('x2', endNode.offsetLeft + 10);
+        edge.setAttribute('y2', endNode.offsetTop + 10);
+        graphContainer.appendChild(edge);
+
+        // Add weight label
+        const weightLabel = document.createElement('div');
+        weightLabel.classList.add('edge-weight');
+        weightLabel.textContent = weight;
+        weightLabel.style.left = ((startNode.offsetLeft + endNode.offsetLeft) / 2) + 'px';
+        weightLabel.style.top = ((startNode.offsetTop + endNode.offsetTop) / 2) + 'px';
+        graphContainer.appendChild(weightLabel);
+
+        edges.push({start: startNodeId, end: endNodeId, edgeElement:edge, weightElement: weightLabel, weight: weight});
+    }
+
+
+    function dragNode(node) {
+        let offsetX = node.offsetLeft - event.clientX;
+        let offsetY = node.offsetTop - event.clientY;
+
+        function moveNode(event) {
+            node.style.left = (event.clientX + offsetX) + 'px';
+            node.style.top = (event.clientY + offsetY) + 'px';
+
+            // Update connected edges
+            updateConnectedEdges(parseInt(node.id.split('-')[1]));
+        }
+
+        function stopDrag() {
+            document.removeEventListener('mousemove', moveNode);
+            document.removeEventListener('mouseup', stopDrag);
+        }
+        document.addEventListener('mousemove', moveNode);
+        document.addEventListener('mouseup', stopDrag);
+    }
+
+
+
+    function updateConnectedEdges(nodeId) {
+
+        edges.forEach(edge => {
+            if (edge.start === nodeId || edge.end === nodeId) {
+                const startNode = document.getElementById(`node-${edge.start}`);
+                const endNode = document.getElementById(`node-${edge.end}`);
+                edge.edgeElement.setAttribute('x1', startNode.offsetLeft + 10);
+                edge.edgeElement.setAttribute('y1', startNode.offsetTop + 10);
+                edge.edgeElement.setAttribute('x2', endNode.offsetLeft + 10);
+                edge.edgeElement.setAttribute('y2', endNode.offsetTop + 10);
+
+                edge.weightElement.style.left = ((startNode.offsetLeft + endNode.offsetLeft) / 2) + 'px';
+                edge.weightElement.style.top = ((startNode.offsetTop + endNode.offsetTop) / 2) + 'px';
+            }
+        });
+    }
+
+
+    function runAlgorithm(algorithm) {
+        const startNode = parseInt(document.getElementById('startNode').value);
+        const goalNode = parseInt(document.getElementById('goalNode').value);
+
+        if (isNaN(startNode) || isNaN(goalNode) || !(startNode in nodes) || !(goalNode in nodes)) {
+            alert("Invalid start or goal node.");
+            return;
+        }
+
+        if(algorithm === 'bfs') {
+            bfs(startNode, goalNode);
+        } else if (algorithm === 'dfs'){
+            dfs(startNode, goalNode);
+        }
+        //Add other algorithms here (A*, UCS, Greedy)
+
+
+    }
+
+
+    function bfs(startNode, goalNode) {
+        let queue = [startNode];
+        let visited = new Set();
+        let parent = {};
+
+        while(queue.length > 0) {
+            let currentNode = queue.shift();
+            visited.add(currentNode);
+            document.getElementById(`node-${currentNode}`).style.backgroundColor = "yellow"; //Mark as Visited
+            if(currentNode === goalNode) {
+                //Goal Reached
+                visualizePath(parent, startNode, goalNode);
+                return;
+            }
+
+            for(let neighbor of nodes[currentNode].edges) {
+                if(!visited.has(neighbor.target)) {
+                    parent[neighbor.target] = currentNode;
+                    queue.push(neighbor.target);
+
+                }
+            }
+        }
+
+    }
+
+
+    function dfs(startNode, goalNode) {
+        let stack = [startNode];
+        let visited = new Set();
+        let parent = {};
+
+
+        while (stack.length > 0) {
+            let currentNode = stack.pop();
+
+            if (!visited.has(currentNode)) {
+                visited.add(currentNode);
+                document.getElementById(`node-${currentNode}`).style.backgroundColor = "yellow"; //Mark as visited
+
+                if (currentNode === goalNode) {
+                    visualizePath(parent, startNode, goalNode);
+                    return;
+                }
+
+                for (let neighbor of nodes[currentNode].edges) {
+                    if (!visited.has(neighbor.target)) {
+                        parent[neighbor.target] = currentNode;
+                        stack.push(neighbor.target);
+                    }
+                }
+            }
+        }
+    }
+
+
+    function visualizePath(parent, startNode, goalNode) {
+        let path = [];
+        let current = goalNode;
+        while (current !== startNode) {
+            path.push(current);
+            current = parent[current];
+        }
+        path.push(startNode);
+        path.reverse();
+
+
+        for (let i = 0; i < path.length - 1; i++) {
+            const edge = edges.find(e => (e.start === path[i] && e.end === path[i+1]) || (e.end === path[i] && e.start === path[i+1]));
+            if (edge) {
+                edge.edgeElement.style.stroke = "red"; // Highlight path
+                edge.edgeElement.style.strokeWidth = "4";
+            }
+        }
+
+        for (let i = 0; i < path.length; i++) {
+            document.getElementById(`node-${path[i]}`).style.backgroundColor = "green"; // Highlight path nodes
+
+        }
+
+    }
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

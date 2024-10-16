@@ -1,0 +1,76 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The application must be implemented as a single HTML file containing HTML, CSS, and JavaScript.
+Assumption 1:
+The entire application code will be contained within a single index.html file, with CSS in a <style> tag and JavaScript in a <script> tag.
+
+Requirement 2:
+The app must provide an interface for users to add nodes to the graph.
+Assumption 2:
+There will be an input field and a button with appropriate IDs to add new nodes to the graph.
+
+Requirement 3:
+The app must allow users to create edges between nodes.
+Assumption 3:
+There will be a mechanism (e.g., dropdown menus or input fields) with IDs like "edge-start-node" and "edge-end-node" to select nodes for creating edges.
+
+Requirement 4:
+Users must be able to assign weights or distances to edges.
+Assumption 4:
+There will be an input field with an ID like "edge-weight-input" to specify the weight of an edge when creating it.
+
+Requirement 5:
+Users must be able to select a starting node for the graph traversal.
+Assumption 5:
+There will be a dropdown menu or input field with an ID like "start-node-select" to choose the starting node.
+
+Requirement 6:
+Users must be able to select a goal node for the graph traversal.
+Assumption 6:
+There will be a dropdown menu or input field with an ID like "goal-node-select" to choose the goal node.
+
+Requirement 7:
+The app must provide options to select different graph traversal algorithms (A*, BFS, DFS, UCS, Greedy Algorithm).
+Assumption 7:
+There will be a set of radio buttons or a dropdown menu with an ID like "algorithm-select" to choose the traversal algorithm.
+
+Requirement 8:
+The app must provide a button to start the selected algorithm's traversal.
+Assumption 8:
+There will be a button with an ID like "start-traversal-button" that, when clicked, initiates the selected algorithm's traversal.
+
+Requirement 9:
+The app must display the total cost or distance of the path found by the algorithm.
+Assumption 9:
+There will be an element with an ID like "path-cost-display" that shows the total cost of the path after traversal completion.
+
+Requirement 10:
+The app must allow users to clear the current graph and start over.
+Assumption 10:
+There will be a "Clear Graph" button with an ID like "clear-graph-button" that resets the graph to an empty state.
+
+Requirement 11:
+The app must prevent users from creating invalid graph structures (e.g., edges to non-existent nodes).
+Assumption 11:
+The edge creation functionality will include validation to ensure that both selected nodes exist before adding an edge.
+
+Requirement 12:
+The app must provide visual feedback when an invalid action is attempted (e.g., adding a duplicate node).
+Assumption 12:
+There will be an element with an ID like "error-message" that displays error messages when invalid actions are attempted.
+
+Requirement 13:
+The app must allow users to remove existing nodes from the graph.
+Assumption 13:
+There will be a mechanism (e.g., a "Remove Node" button or a context menu) to delete nodes from the graph, updating the visualization accordingly.
+
+Requirement 14:
+The app must update the list of available nodes when new nodes are added or removed.
+Assumption 14:
+Dropdown menus or selection fields for start node, end node, and edge creation will be dynamically updated when the graph structure changes.
+
+Requirement 15:
+The app must store the graph structure in a format accessible to the traversal algorithms.
+Assumption 15:
+There will be a data structure (e.g., an adjacency list or matrix) that represents the graph and can be accessed and modified by the application's functions.

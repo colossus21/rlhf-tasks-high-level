@@ -1,0 +1,66 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The game must be implemented as a single HTML file containing HTML, CSS, and JavaScript.
+Assumption 1:
+The game is contained within a single index.html file that includes all necessary HTML structure, CSS styling, and JavaScript code.
+
+Requirement 2:
+The game must have a nature theme, using emojis to represent game elements.
+Assumption 2:
+The game uses the following emojis: 🚶🏻‍♀️ for the player, 🌳 for trees (walls), 🪨 for rocks (boxes), and 🕳 for holes (targets).
+
+Requirement 3:
+The game must have at least 3 distinct levels.
+Assumption 3:
+The game includes an array or object containing at least 3 different level layouts.
+
+Requirement 4:
+The game must allow the player to move using arrow keys or WASD keys.
+Assumption 4:
+The game includes event listeners for keydown events to handle player movement.
+
+Requirement 5:
+The player must be able to push rocks.
+Assumption 5:
+The game logic allows the player emoji to move adjacent rock emojis if there's an empty space behind the rock.
+
+Requirement 6:
+The player must not be able to move through trees.
+Assumption 6:
+The game logic prevents the player emoji from moving to positions occupied by tree emojis.
+
+Requirement 7:
+The game must detect when all holes are covered by rocks.
+Assumption 7:
+The game includes a function that checks if all hole positions are occupied by rock emojis after each move.
+
+Requirement 8:
+The game must display a victory message when a level is completed.
+Assumption 8:
+There is a function that shows a victory message or updates a DOM element when all holes are covered.
+
+Requirement 9:
+The game must allow progression to the next level after completing the current level.
+Assumption 9:
+The game includes a mechanism to load the next level layout when the current level is completed.
+
+Requirement 10:
+The game must have a reset button to restart the current level.
+Assumption 10:
+There is a reset button in the HTML that, when clicked, resets the current level to its initial state.
+
+Requirement 11:
+The game must keep track of and display the number of moves made by the player.
+Assumption 11:
+There is a variable that increments with each valid move and updates a DOM element displaying the move count.
+
+Requirement 12:
+The game must prevent invalid moves (e.g., pushing a rock into a tree).
+Assumption 12:
+The game logic includes checks to ensure rocks cannot be pushed into trees or out of bounds.
+
+Requirement 13:
+The game must display the current level number.
+Assumption 13:
+There is a DOM element that shows the current level number and updates when progressing to a new level.

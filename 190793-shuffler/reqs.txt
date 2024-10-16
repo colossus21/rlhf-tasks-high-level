@@ -1,0 +1,76 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The application must be implemented using HTML, CSS, and JavaScript in a single file.
+Assumption 1:
+The application will be contained in a single HTML file named index.html, with CSS and JavaScript embedded within the file.
+
+Requirement 2:
+The application must provide an input area for users to enter player names.
+Assumption 2:
+There will be a textarea element where users can input player names, each separated by a new line.
+
+Requirement 3:
+The application must provide an input field for users to specify the number of teams.
+Assumption 3:
+There will be a number input field allowing users to enter the desired number of teams.
+
+Requirement 4:
+The application must include a "Generate Team" button to initiate team creation.
+Assumption 4:
+A button element with the text "Generate Team" will be present and clickable.
+
+Requirement 5:
+The application must include a "Re-shuffle" button to redistribute players among teams.
+Assumption 5:
+A button element with the text "Re-shuffle" will be present and clickable.
+
+Requirement 6:
+The application must evenly distribute players among the specified number of teams.
+Assumption 6:
+The JavaScript logic will divide players as evenly as possible among the specified number of teams.
+
+Requirement 7:
+The application must place any extra players not evenly distributed into a "Sub" team.
+Assumption 7:
+If there are remaining players after even distribution, they will be assigned to a team labeled "Sub".
+
+Requirement 8:
+The application must display the generated teams with their assigned players.
+Assumption 8:
+The generated teams and their players will be displayed in a readable format on the page after team creation.
+
+Requirement 9:
+The application must validate that at least one player name is entered before generating teams.
+Assumption 9:
+The team generation process will only proceed if the player input area contains at least one non-empty name.
+
+Requirement 10:
+The application must validate that the number of teams specified is at least 1.
+Assumption 10:
+The team generation process will only proceed if the number of teams input is 1 or greater.
+
+Requirement 11:
+The application must clear any previously generated teams when generating new teams.
+Assumption 11:
+The display area for teams will be cleared before showing newly generated teams.
+
+Requirement 12:
+The "Re-shuffle" button must only be clickable after teams have been generated.
+Assumption 12:
+The "Re-shuffle" button will be disabled until the first team generation is completed.
+
+Requirement 13:
+The application must maintain the same number of teams and players when re-shuffling.
+Assumption 13:
+The re-shuffle functionality will use the same input data as the original team generation.
+
+Requirement 14:
+The application must trim whitespace from player names during processing.
+Assumption 14:
+Leading and trailing whitespace will be removed from each player name before team assignment.
+
+Requirement 15:
+The application must handle duplicate player names by treating them as distinct players.
+Assumption 15:
+If multiple identical names are entered, each will be treated as a separate player in the team assignment process.

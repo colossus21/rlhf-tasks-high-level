@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Team Shuffler</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #container {
+            display: flex;
+            gap: 20px; /* Adjust as needed */
+        }
+        .team {
+            border: 1px solid #ccc;
+            padding: 10px;
+            flex: 1; /* Ensures teams take equal width */
+            min-width: 150px; /* Prevents teams from becoming too narrow */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Team Shuffler</h1>
+
+<textarea id="playerNames" placeholder="Enter player names (one per line)"></textarea><br>
+<input type="number" id="numTeams" placeholder="Number of teams" min="1" value="2"><br>
+<button onclick="generateTeams()">Generate Teams</button>
+<button onclick="shuffleTeams()">Re-shuffle</button>
+
+<div id="teamsContainer"></div>
+
+<script>
+    function generateTeams() {
+        const playerNames = document.getElementById('playerNames').value.trim().split('\n');
+        const numTeams = parseInt(document.getElementById('numTeams').value);
+
+        if (playerNames.length === 0 || isNaN(numTeams) || numTeams <= 0) {
+            alert("Please enter valid player names and number of teams.");
+            return;
+        }
+
+        shuffleArray(playerNames); // Shuffle the players
+
+        const teams = [];
+        for (let i = 0; i < numTeams; i++) {
+            teams.push([]);
+        }
+
+        const basePlayersPerTeam = Math.floor(playerNames.length / numTeams);
+        const extraPlayers = playerNames.length % numTeams;
+
+        let playerIndex = 0;
+        for (let i = 0; i < numTeams; i++) {
+            for (let j = 0; j < basePlayersPerTeam; j++) {
+                teams[i].push(playerNames[playerIndex++]);
+            }
+        }
+
+        const subTeam = [];
+        for (let i = 0; i < extraPlayers; i++) {
+            subTeam.push(playerNames[playerIndex++]);
+        }
+
+        displayTeams(teams, subTeam);
+    }
+
+
+    function shuffleTeams() {
+        const playerNamesText = document.getElementById('playerNames').value.trim();
+        const numTeams = parseInt(document.getElementById('numTeams').value);
+        if (playerNamesText) { // Only shuffle if there's existing data
+            document.getElementById('playerNames').value = playerNamesText; //This will trigger the generate teams with existing value and shuffle effect.
+            generateTeams();
+        }
+    }
+
+    function displayTeams(teams, subTeam) {
+        const teamsContainer = document.getElementById('teamsContainer');
+        teamsContainer.innerHTML = ''; // Clear previous teams
+
+
+        const container = document.createElement('div');
+        container.id = 'container';
+        teams.forEach((team, index) => {
+            const teamDiv = document.createElement('div');
+            teamDiv.className = 'team';
+            teamDiv.innerHTML = `<h3>Team ${index + 1}</h3><ul>${team.map(player => `<li>${player}</li>`).join('')}</ul>`;
+            container.appendChild(teamDiv);
+        });
+
+
+        if (subTeam.length > 0) {
+            const subTeamDiv = document.createElement('div');
+            subTeamDiv.className = 'team';
+            subTeamDiv.innerHTML = `<h3>Sub</h3><ul>${subTeam.map(player => `<li>${player}</li>`).join('')}</ul>`;
+            container.appendChild(subTeamDiv);
+        }
+        teamsContainer.appendChild(container);
+    }
+
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+</script>
+
+</body>
+</html>

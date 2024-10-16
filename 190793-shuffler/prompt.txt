@@ -1,0 +1,1 @@
+Create a team shuffler app in a single file HTML in which the user can generate team by putting a list of player names separated by new lines and the number of teams with players evenly distributed. The extra players left after distributions should be placed under another team called "Sub". I am expecting a "Generate Team" and "Re-shuffle" button as well.

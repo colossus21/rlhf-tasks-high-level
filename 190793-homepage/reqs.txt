@@ -1,0 +1,76 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The application must be implemented using a single HTML file.
+Assumption 1:
+The HTML file will contain embedded CSS and JavaScript to create the entire application.
+
+Requirement 2:
+The application must allow users to add new site links as tiles.
+Assumption 2:
+There will be an input field for the site URL and a button to add new tiles.
+
+Requirement 3:
+Each tile must display a title for the linked site.
+Assumption 3:
+There will be an input field for users to enter the title of the site when adding a new tile.
+
+Requirement 4:
+Each tile must have a customizable background color.
+Assumption 4:
+There will be a color picker or input field for users to select or enter a background color for each tile.
+
+Requirement 5:
+The application must display 3 tiles per row.
+Assumption 5:
+The CSS will use a grid or flexbox layout to arrange the tiles in rows of 3.
+
+Requirement 6:
+Users must be able to click on a tile to open the linked site.
+Assumption 6:
+Each tile will be wrapped in an anchor tag (<a>) with the href attribute set to the site's URL.
+
+Requirement 7:
+The application must store the tiles' data in the browser's local storage.
+Assumption 7:
+JavaScript will be used to save and retrieve tile data from local storage.
+
+Requirement 8:
+The application must load saved tiles when the page is opened.
+Assumption 8:
+JavaScript will check for existing tile data in local storage and render tiles on page load.
+
+Requirement 9:
+Users must be able to delete existing tiles.
+Assumption 9:
+Each tile will have a delete button or icon that removes the tile from the display and local storage.
+
+Requirement 10:
+Users must be able to edit the title of existing tiles.
+Assumption 10:
+Each tile will have an edit button or icon that allows users to modify the title.
+
+Requirement 11:
+Users must be able to edit the background color of existing tiles.
+Assumption 11:
+Each tile will have a color picker or input field to change its background color.
+
+Requirement 12:
+The application must prevent the addition of duplicate URLs.
+Assumption 12:
+JavaScript will check if a URL already exists before adding a new tile.
+
+Requirement 13:
+The application must validate URLs before adding them as tiles.
+Assumption 13:
+JavaScript will use a regular expression or built-in URL validation to ensure entered URLs are valid.
+
+Requirement 14:
+The application must limit the length of displayed titles to prevent layout issues.
+Assumption 14:
+JavaScript will truncate long titles and add an ellipsis (...) if they exceed a certain character limit.
+
+Requirement 15:
+The application must have a search functionality to filter tiles.
+Assumption 15:
+An input field will be provided to allow users to search and filter tiles based on their titles.

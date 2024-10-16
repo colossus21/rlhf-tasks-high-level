@@ -1,0 +1,1 @@
+Create a personal home page app in a single HTML. The user should be able to store links to sites as tiles, each site includes a title and a background color. 3 tiles are shown per row and the color of the app should be dark themed.

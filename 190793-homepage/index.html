@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Home Page</title>
+    <style>
+        body {
+            background-color: #1e1e1e; /* Dark background */
+            color: #f0f0f0; /* Light text */
+            font-family: sans-serif;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .tile {
+            width: calc(30% - 20px); /* Adjust for margin/padding */
+            margin: 10px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none; /* Remove underline from links */
+            display: flex;
+            flex-direction: column; /* Align items vertically */
+            justify-content: center; /* Center vertically */
+            transition: transform 0.2s ease; /* Smooth hover effect */
+        }
+
+        .tile:hover {
+            transform: scale(1.05);
+        }
+
+        .tile-title {
+            font-size: 1.2em;
+            margin-bottom: 10px; /* Add space below the title */
+        }
+
+        .tile span { /* Style the link text */
+            color: white; /* Set a default color for contrast */
+            text-decoration: none; /* Ensure no underline */
+
+        }
+        /* Predefined tile colors - easily customizable */
+
+        .red { background-color: #b71c1c; }
+        .blue { background-color: #0d47a1; }
+        .green { background-color: #1b5e20; }
+        .purple { background-color: #4a148c; }
+        .orange { background-color: #e65100; }
+        /* ...add more colors as needed ... */
+
+
+
+    </style>
+</head>
+<body>
+
+<a class="tile red" href="https://www.google.com">
+    <span class="tile-title">Google</span>
+</a>
+<a class="tile blue" href="https://www.youtube.com">
+    <span class="tile-title">YouTube</span>
+</a>
+
+<a class="tile green" href="https://www.github.com">
+    <span class="tile-title">GitHub</span>
+</a>
+
+<a class="tile purple" href="https://www.wikipedia.com">
+    <span class="tile-title">Wikipedia</span>
+</a>
+
+
+<a class="tile orange" href="https://www.reddit.com">
+    <span class="tile-title">Reddit</span>
+</a>
+
+
+</body>
+</html>

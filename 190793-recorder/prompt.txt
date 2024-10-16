@@ -1,0 +1,1 @@
+Create a sound recorder with a centered record button in a single HTML file. Check and request microphone permission if not granted, display error if no permission is provided above the record button with red border. Show the recorded audios beneath it and these should be downloadable in .webm format.

@@ -1,0 +1,61 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The application must be implemented using a single HTML file containing HTML, CSS, and JavaScript.
+Assumption 1:
+The main HTML file is named index.html and contains all necessary HTML structure, CSS styling, and JavaScript code.
+
+Requirement 2:
+The application must have a centered record button.
+Assumption 2:
+There will be a button element positioned in the center of the page using CSS.
+
+Requirement 3:
+The application must display an error message if microphone permission is denied.
+Assumption 3:
+An error message element will be present in the HTML, initially hidden, and will be shown with appropriate text if permission is denied.
+
+Requirement 4:
+The error message must have a red border.
+Assumption 4:
+The error message element will have a CSS style applying a red border.
+
+Requirement 5:
+The application must display a list of recorded audio clips beneath the record button.
+Assumption 5:
+There will be a container element that will be populated with audio elements for each recording.
+
+Requirement 6:
+Each recorded audio clip must be playable within the browser.
+Assumption 6:
+For each recording, an <audio> element will be created with controls enabled, allowing playback within the browser.
+
+Requirement 7:
+Each recorded audio clip must be downloadable in .webm format.
+Assumption 7:
+For each recording, a download link will be created with the "download" attribute set and the href pointing to a Blob URL of the recorded audio in .webm format.
+
+Requirement 8:
+The record button must visually indicate when recording is in progress.
+Assumption 8:
+The record button will change its appearance when recording starts and reverts when recording stops.
+
+Requirement 9:
+The application must provide visual feedback when a recording is successfully created.
+Assumption 9:
+After a recording is stopped, a success message or visual indicator will briefly appear to confirm the recording was created.
+
+Requirement 10:
+The application must not allow multiple recordings to occur simultaneously.
+Assumption 10:
+The record button or recording functionality will be disabled while a recording is in progress.
+
+Requirement 11:
+The application must display the duration of each recorded audio clip.
+Assumption 11:
+The duration of each recording will be calculated and displayed next to each audio element in the recordings list.
+
+Requirement 12:
+The application must allow users to delete individual recordings.
+Assumption 12:
+Each recording in the list will have an associated delete button that removes the recording from the list and any stored data.

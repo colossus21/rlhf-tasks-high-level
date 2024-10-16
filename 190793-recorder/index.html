@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sound Recorder</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #record {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #f00;
+            border: none;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        #errorMsg {
+            color: red;
+            border: 1px solid red;
+            padding: 5px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .audio-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center audio elements */
+            margin-top: 20px;
+        }
+
+        audio {
+            margin: 5px 0; /* Add space between audio elements */
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="errorMsg"></div>
+<button id="record">Record</button>
+
+<div class="audio-container">
+</div>
+
+
+
+<script>
+    const recordButton = document.getElementById('record');
+    const errorMsg = document.getElementById('errorMsg');
+    const audioContainer = document.querySelector('.audio-container');
+    let mediaRecorder;
+    let chunks = [];
+
+    recordButton.addEventListener('click', async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            errorMsg.style.display = 'none'; // Hide error message if previously shown
+            mediaRecorder = new MediaRecorder(stream);
+
+
+            mediaRecorder.ondataavailable = (e) => {
+                chunks.push(e.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'audio/webm' });
+                const audioUrl = URL.createObjectURL(blob);
+                const audio = document.createElement('audio');
+                const downloadLink = document.createElement('a');
+
+                audio.src = audioUrl;
+                audio.controls = true;
+
+                downloadLink.href = audioUrl;
+                downloadLink.download = 'recording.webm';
+                downloadLink.textContent = 'Download';
+
+                const audioDiv = document.createElement('div'); // Container for audio and link
+                audioDiv.appendChild(audio);
+                audioDiv.appendChild(downloadLink);
+
+
+                audioContainer.appendChild(audioDiv);
+
+
+                chunks = [];
+
+            };
+
+            mediaRecorder.start();
+            recordButton.textContent = 'Stop';
+            recordButton.style.backgroundColor = '#0f0';
+
+            recordButton.onclick = () => {
+                mediaRecorder.stop();
+                recordButton.textContent = 'Record';
+                recordButton.style.backgroundColor = '#f00';
+                recordButton.onclick = recordButton.addEventListener('click', async () => {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+                        errorMsg.style.display = 'none';
+                        mediaRecorder = new MediaRecorder(stream);
+
+
+                        mediaRecorder.ondataavailable = (e) => {
+                            chunks.push(e.data);
+                        };
+                        mediaRecorder.start();
+                        recordButton.textContent = 'Stop';
+                        recordButton.style.backgroundColor = '#0f0';
+                    } catch (err) {
+                        errorMsg.style.display = 'block';
+                        errorMsg.textContent = err.message ; // More helpful err msg
+                    }
+                });
+            };
+
+
+        } catch (err) {
+            errorMsg.style.display = 'block';
+            errorMsg.textContent = err.message ; // More helpful err msg
+        }
+    });
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essay Analyzer</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #container {
+            width: 80%;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #analysis {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <input type="file" id="fileInput" accept=".txt">
+    <textarea id="textInput" placeholder="Enter or paste your text here..." rows="10"></textarea>
+    <label><input type="checkbox" id="excludePunctuation"> Exclude Punctuation and Spaces</label>
+    <div id="analysis">
+    </div>
+</div>
+
+<script>
+    const textInput = document.getElementById('textInput');
+    const fileInput = document.getElementById('fileInput');
+    const analysisDiv = document.getElementById('analysis');
+    const excludePunctuationCheckbox = document.getElementById('excludePunctuation');
+
+    function analyzeText(text) {
+        let wordCount = 0;
+        let charCount = 0;
+        let readingTime = 0;
+        let topWords = {};
+
+
+        let processedText = text;
+
+        if (excludePunctuationCheckbox.checked) {
+            processedText = text.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " "); // Removing punctuations and extra spaces.
+            charCount = processedText.replace(/\s/g, '').length;
+            wordCount = processedText.trim().split(/\s+/).length;
+
+
+        } else {
+            charCount = text.length;
+            wordCount = text.trim().split(/\s+/).length; // Splitting by spaces to count words.
+        }
+
+
+        if (wordCount > 0) {
+            readingTime = Math.ceil(wordCount / 200); // Assuming average reading speed of 200 words per minute.
+
+
+            const words = processedText.toLowerCase().split(/\s+/); // split by spaces for word frequency.
+
+            words.forEach(word => {
+                if(word !== "") { // Removing empty strings from counts
+                    topWords[word] = (topWords[word] || 0) + 1;
+                }
+            });
+
+        }
+
+        // Sort words by frequency
+        const sortedWords = Object.entries(topWords).sort(([, a], [, b]) => b - a);
+
+
+
+
+        let analysisHTML = `
+            <p>Word Count: ${wordCount}</p>
+            <p>Character Count: ${charCount}</p>
+            <p>Reading Time: ${readingTime} minute${readingTime > 1 ? 's' : ''}</p>
+        `;
+
+        if(wordCount > 0) {
+
+            analysisHTML += "<p><b>Top 10 Words:</b></p><ul>";
+            sortedWords.slice(0, 10).forEach(([word, count]) => {
+                analysisHTML += `<li>${word}: ${count}</li>`;
+            });
+
+            analysisHTML += "</ul>";
+        }
+
+
+        analysisDiv.innerHTML = analysisHTML;
+
+
+    }
+
+    textInput.addEventListener('input', () => analyzeText(textInput.value));
+
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            textInput.value = e.target.result;
+            analyzeText(e.target.result);
+        };
+        reader.readAsText(file);
+    });
+
+    excludePunctuationCheckbox.addEventListener('change', () => analyzeText(textInput.value));
+
+
+</script>
+
+</body>
+</html>

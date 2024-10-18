@@ -1,0 +1,71 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The application must be implemented using HTML, CSS, and JavaScript in a single file.
+Assumption 1:
+The application will be contained in a single HTML file named index.html. This file will include `<style>` tags for CSS and `<script>` tags for JavaScript. The HTML structure will include input areas for player names and team count, buttons for team generation and reshuffling, and a display area for the generated teams. The CSS will define the layout and appearance of the application elements, while the JavaScript will handle the team generation logic and user interactions.
+
+Requirement 2:
+The application must provide an input area for users to enter player names.
+Assumption 2:
+A `<textarea>` element will be present in the HTML, allowing users to input multiple player names. Each name should be entered on a new line. The textarea will have a descriptive label and placeholder text instructing users on how to input names. The application will handle various input scenarios, including empty lines and whitespace.
+
+Requirement 3:
+The application must provide an input field for users to specify the number of teams.
+Assumption 3:
+An `<input type="number">` field will be included in the HTML, allowing users to enter the desired number of teams. This field will have a minimum value of 1 and will not accept decimal or negative numbers. A label will clearly indicate the purpose of this input. If an invalid value is entered, an error message will be displayed, and team generation will be prevented.
+
+Requirement 4:
+The application must include a "Generate Team" button to initiate team creation.
+Assumption 4:
+A `<button>` element with the text "Generate Team" will be present in the HTML. This button will have a click event listener that triggers the team generation function when clicked. The button will be disabled if the input validation fails (e.g., no names entered or invalid team count).
+
+Requirement 5:
+The application must include a "Re-shuffle" button to redistribute players among teams.
+Assumption 5:
+A `<button>` element with the text "Re-shuffle" will be included in the HTML. This button will initially be disabled and will only become enabled after the first successful team generation. Clicking this button will trigger a function that redistributes the existing players among the same number of teams.
+
+Requirement 6:
+The application must evenly distribute players among the specified number of teams.
+Assumption 6:
+The team generation algorithm will divide the total number of players by the number of teams to determine the base number of players per team. It will then distribute players to each team up to this base number. The algorithm will handle cases where the number of players is not evenly divisible by the number of teams.
+
+Requirement 7:
+The application must place any extra players not evenly distributed into a "Sub" team.
+Assumption 7:
+If there are remaining players after the even distribution, the algorithm will create an additional team labeled "Sub" and assign these players to it. The "Sub" team will only be created if there are extra players; otherwise, it will not appear in the output.
+
+Requirement 8:
+The application must display the generated teams with their assigned players.
+Assumption 8:
+After team generation, the application will create and populate a structured HTML element (e.g., a series of `<div>` elements or a `<table>`) to display the teams. Each team will be clearly labeled, and its assigned players will be listed below the team name. This display will be added to a designated area in the DOM, replacing any previously displayed teams.
+
+Requirement 9:
+The application must validate that at least one player name is entered before generating teams.
+Assumption 9:
+Before proceeding with team generation, the application will check if the textarea for player names contains at least one non-empty string after trimming whitespace. If no valid names are found, an error message will be displayed, and the team generation process will not proceed.
+
+Requirement 10:
+The application must validate that the number of teams specified is at least 1.
+Assumption 10:
+The application will check if the value entered in the team count input is a positive integer greater than or equal to 1. If the value is invalid (e.g., 0, negative, or non-integer), an error message will be displayed, and team generation will not proceed.
+
+Requirement 11:
+The application must clear any previously generated teams when generating new teams.
+Assumption 11:
+Before displaying newly generated teams, the application will clear the content of the element used to display teams. This will be done by setting the innerHTML of the container element to an empty string or removing all child elements, ensuring that old team information is completely removed before new teams are displayed.
+
+Requirement 12:
+The "Re-shuffle" button must only be clickable after teams have been generated.
+Assumption 12:
+The "Re-shuffle" button will have its disabled attribute set to true when the page loads. After the first successful team generation, the disabled attribute will be removed, making the button clickable. If the user changes the input data (player names or team count), the button will be disabled again until a new team generation is performed.
+
+Requirement 13:
+The application must maintain the same number of teams and players when re-shuffling.
+Assumption 13:
+The re-shuffle functionality will store the original list of players and team count. When re-shuffling, it will use this stored data rather than reading from the input fields again.
+
+Requirement 14:
+The application must trim whitespace from player names during processing.
+Assumption 14:
+Before assigning players to teams, the application will process each name string using the `trim()` method to remove leading and trailing whitespace. Empty strings resulting from this trimming will be filtered out and not considered as valid player names.

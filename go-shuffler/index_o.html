@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Shuffler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 80%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 48%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .teams {
+            margin-top: 20px;
+        }
+        .team {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #007BFF;
+            border-radius: 5px;
+        }
+        .team h3 {
+            margin: 0;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Team Shuffler</h2>
+    <textarea id="playerNames" placeholder="Enter player names separated by new lines"></textarea>
+    <input type="number" id="teamCount" placeholder="Enter number of teams" min="1">
+    <div style="display: flex; justify-content: space-between;">
+        <button onclick="generateTeams()">Generate Teams</button>
+        <button onclick="reshuffle()">Re-shuffle</button>
+    </div>
+    <div id="teamsContainer" class="teams"></div>
+</div>
+
+<script>
+    let players = [];
+    let teamCount = 0;
+
+    function getPlayerNames() {
+        const textarea = document.getElementById("playerNames").value.trim();
+        players = textarea.split("\n").map(name => name.trim()).filter(name => name !== "");
+    }
+
+    function generateTeams() {
+        getPlayerNames();
+        teamCount = parseInt(document.getElementById("teamCount").value);
+
+        if (players.length === 0 || isNaN(teamCount) || teamCount < 1) {
+            alert("Please provide valid player names and team count.");
+            return;
+        }
+
+        const teams = Array.from({ length: teamCount }, () => []);
+        shuffleArray(players);
+
+        for (let i = 0; i < players.length; i++) {
+            teams[i % teamCount].push(players[i]);
+        }
+
+        displayTeams(teams);
+    }
+
+    function reshuffle() {
+        if (players.length === 0 || teamCount < 1) {
+            alert("Please generate teams first.");
+            return;
+        }
+
+        const teams = Array.from({ length: teamCount }, () => []);
+        shuffleArray(players);
+
+        for (let i = 0; i < players.length; i++) {
+            teams[i % teamCount].push(players[i]);
+        }
+
+        displayTeams(teams);
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function displayTeams(teams) {
+        const container = document.getElementById("teamsContainer");
+        container.innerHTML = "";
+
+        teams.forEach((team, index) => {
+            const teamDiv = document.createElement("div");
+            teamDiv.classList.add("team");
+            teamDiv.innerHTML = `<h3>Team ${index + 1}</h3><p>${team.join(", ") || "No players"}</p>`;
+            container.appendChild(teamDiv);
+        });
+
+        const leftoverPlayers = players.length % teamCount;
+        if (leftoverPlayers > 0) {
+            const subTeamDiv = document.createElement("div");
+            subTeamDiv.classList.add("team");
+            const startIndex = players.length - leftoverPlayers;
+            const subTeamPlayers = players.slice(startIndex).join(", ");
+            subTeamDiv.innerHTML = `<h3>Sub</h3><p>${subTeamPlayers}</p>`;
+            container.appendChild(subTeamDiv);
+        }
+    }
+</script>
+
+</body>
+</html>

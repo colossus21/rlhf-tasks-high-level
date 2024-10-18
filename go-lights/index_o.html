@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lights Out Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(6, 50px);
+            grid-template-rows: repeat(6, 50px);
+            gap: 5px;
+            margin: 20px auto;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: #444;
+            border: 1px solid #333;
+            cursor: pointer;
+        }
+        .cell.on {
+            background-color: #ffeb3b;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Lights Out</h1>
+<div class="grid" id="gameGrid"></div>
+<div id="message"></div>
+
+<script>
+    const gridSize = 6;
+    const grid = [];
+    const gameGrid = document.getElementById("gameGrid");
+    const message = document.getElementById("message");
+
+    // Create the game board
+    function createBoard() {
+        for (let row = 0; row < gridSize; row++) {
+            const rowArray = [];
+            for (let col = 0; col < gridSize; col++) {
+                const cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.dataset.row = row;
+                cell.dataset.col = col;
+                cell.addEventListener("click", handleCellClick);
+                gameGrid.appendChild(cell);
+                rowArray.push(false); // initially all lights are off
+            }
+            grid.push(rowArray);
+        }
+    }
+
+    // Toggle the light and its neighbors
+    function toggleLights(row, col) {
+        toggleLight(row, col); // toggle clicked cell
+        if (row > 0) toggleLight(row - 1, col); // toggle top neighbor
+        if (row < gridSize - 1) toggleLight(row + 1, col); // toggle bottom neighbor
+        if (col > 0) toggleLight(row, col - 1); // toggle left neighbor
+        if (col < gridSize - 1) toggleLight(row, col + 1); // toggle right neighbor
+    }
+
+    // Toggle a single light
+    function toggleLight(row, col) {
+        grid[row][col] = !grid[row][col];
+        const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+        if (grid[row][col]) {
+            cell.classList.add("on");
+        } else {
+            cell.classList.remove("on");
+        }
+    }
+
+    // Handle cell click event
+    function handleCellClick(event) {
+        const row = parseInt(event.target.dataset.row);
+        const col = parseInt(event.target.dataset.col);
+        toggleLights(row, col);
+        checkWinCondition();
+    }
+
+    // Check if all lights are off
+    function checkWinCondition() {
+        const allOff = grid.every(row => row.every(cell => !cell));
+        if (allOff) {
+            message.textContent = "Congratulations! You've turned off all the lights!";
+        } else {
+            message.textContent = "";
+        }
+    }
+
+    // Initialize the game with random lights turned on
+    function randomizeLights() {
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
+                if (Math.random() > 0.7) { // 30% chance of light being on
+                    toggleLights(row, col);
+                }
+            }
+        }
+    }
+
+    // Initialize the game
+    createBoard();
+    randomizeLights();
+</script>
+
+</body>
+</html>

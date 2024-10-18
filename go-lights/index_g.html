@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lights Out</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(6, 50px);
+            grid-template-rows: repeat(6, 50px);
+            gap: 5px;
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: #ddd;
+            border: 2px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cell.on {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-board" id="game-board"></div>
+
+<script>
+    const board = document.getElementById('game-board');
+    const gridSize = 6;
+    let cells = [];
+
+    // Initialize the game board
+    function init() {
+        cells = [];
+        for (let i = 0; i < gridSize * gridSize; i++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.onclick = () => toggleLight(i);
+            board.appendChild(cell);
+            cells.push(cell);
+        }
+        randomizeLights();
+    }
+
+    // Toggle the light on/off
+    function toggleLight(index) {
+        const row = Math.floor(index / gridSize);
+        const col = index % gridSize;
+
+        toggleCell(row, col);
+        if (row > 0) toggleCell(row - 1, col);
+        if (row < gridSize - 1) toggleCell(row + 1, col);
+        if (col > 0) toggleCell(row, col - 1);
+        if (col < gridSize - 1) toggleCell(row, col + 1);
+
+        checkWin();
+    }
+
+    // Toggle the cell state
+    function toggleCell(row, col) {
+        const index = row * gridSize + col;
+        cells[index].classList.toggle('on');
+    }
+
+    // Randomly turn on lights at the start
+    function randomizeLights() {
+        const numLights = Math.floor(Math.random() * (gridSize * gridSize / 2)) + 1;
+        for (let i = 0; i < numLights; i++) {
+            const randomIndex = Math.floor(Math.random() * (gridSize * gridSize));
+            toggleLight(randomIndex);
+        }
+    }
+
+    // Check if all lights are off
+    function checkWin() {
+        for (let i = 0; i < gridSize * gridSize; i++) {
+            if (cells[i].classList.contains('on')) {
+                return;
+            }
+        }
+        alert('You win!');
+    }
+
+    init();
+</script>
+
+</body>
+</html>

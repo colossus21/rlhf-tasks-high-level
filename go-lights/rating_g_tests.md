@@ -2,13 +2,11 @@
 
 ### Correctness - Rationale
 
-- R8, R9: Incomplete tests. R8 is invalid, it adds a class directly.
-- Test file uses setTimeout a lot rather than using async/await
+- Since, no probability is 50/50 for lights switching on/off initially, there could be a random board which is solvable in one turn.
 
 ### Model A Instruction Following
 
 ### Model A Instruction Following - Rationale
-
 
 ### Model A Code Executablity
 

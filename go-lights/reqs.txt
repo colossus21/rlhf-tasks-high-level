@@ -1,0 +1,51 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The game board must be a 6x6 grid.
+Assumption 1:
+The HTML will include a container element with 36 child elements representing the individual cells of the game board.
+
+Requirement 2:
+The game must start with a random number of lights switched on.
+Assumption 2:
+The JavaScript code will include a function to randomly initialize the game board state when the page loads.
+
+Requirement 3:
+Clicking a cell must toggle its state between on and off.
+Assumption 3:
+The click event handler will include logic to switch the clicked cell's state and update its visual appearance.
+
+Requirement 4:
+Clicking a cell must also toggle the state of adjacent cells (up, down, left, right).
+Assumption 4:
+The click event handler will include logic to identify and toggle the state of neighboring cells.
+
+Requirement 5:
+The game must detect when all lights are switched off.
+Assumption 5:
+There will be a function to check the game board state after each move and determine if all lights are off.
+
+Requirement 6:
+The game must display a victory message when all lights are switched off.
+Assumption 6:
+A victory message element will be included in the HTML and shown when the win condition is met.
+
+Requirement 7:
+The game must include a reset button to start a new game.
+Assumption 7:
+An HTML button element will be included with an onclick event to reset the game board.
+
+Requirement 8:
+The game must visually distinguish between on and off states for each cell.
+Assumption 8:
+CSS classes will be used to style the cells differently based on their on/off state.
+
+Requirement 9:
+The game must include a move counter to track the number of clicks.
+Assumption 9:
+A variable will be used to store the move count, and an HTML element will display this count.
+
+Requirement 10:
+The game must prevent further input once the victory condition is met.
+Assumption 10:
+The click event listeners will be disabled or ignored after the game is won.

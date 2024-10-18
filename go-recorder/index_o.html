@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sound Recorder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        .recorder-container {
+            text-align: center;
+        }
+        #error-message {
+            color: red;
+            border: 1px solid red;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        #record-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #recorded-audios {
+            margin-top: 20px;
+        }
+        .audio-item {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="recorder-container">
+    <div id="error-message"></div>
+    <button id="record-button">Record</button>
+    <div id="recorded-audios"></div>
+</div>
+
+<script>
+    let mediaRecorder;
+    let audioChunks = [];
+    const recordButton = document.getElementById('record-button');
+    const errorMessage = document.getElementById('error-message');
+    const recordedAudios = document.getElementById('recorded-audios');
+
+    // Check for microphone permissions and initialize recorder
+    async function checkMicrophonePermission() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            setupRecorder(stream);
+        } catch (error) {
+            showError("Microphone access is required to record audio.");
+        }
+    }
+
+    // Display an error message
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+    }
+
+    // Hide error message
+    function hideError() {
+        errorMessage.style.display = 'none';
+    }
+
+    // Setup the media recorder
+    function setupRecorder(stream) {
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = event => {
+            audioChunks.push(event.data);
+            if (mediaRecorder.state === "inactive") {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                createDownloadableAudio(audioBlob);
+                audioChunks = [];
+            }
+        };
+
+        recordButton.addEventListener('click', () => {
+            if (mediaRecorder.state === 'inactive') {
+                mediaRecorder.start();
+                recordButton.textContent = 'Stop Recording';
+            } else {
+                mediaRecorder.stop();
+                recordButton.textContent = 'Record';
+            }
+        });
+    }
+
+    // Create downloadable audio element
+    function createDownloadableAudio(audioBlob) {
+        const audioURL = URL.createObjectURL(audioBlob);
+        const audioElement = document.createElement('audio');
+        audioElement.controls = true;
+        audioElement.src = audioURL;
+
+        const downloadLink = document.createElement('a');
+        downloadLink.href = audioURL;
+        downloadLink.download = 'recording.webm';
+        downloadLink.textContent = 'Download';
+
+        const audioItem = document.createElement('div');
+        audioItem.className = 'audio-item';
+        audioItem.appendChild(audioElement);
+        audioItem.appendChild(downloadLink);
+
+        recordedAudios.appendChild(audioItem);
+    }
+
+    // Initialize recorder on page load
+    checkMicrophonePermission();
+</script>
+
+</body>
+</html>

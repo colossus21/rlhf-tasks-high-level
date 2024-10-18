@@ -1,0 +1,61 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The application must be implemented using a single HTML file containing HTML, CSS, and JavaScript.
+Assumption 1:
+The application will be contained in a single file named index.html. This file will include the complete HTML structure within the <body> tag, CSS styles within <style> tags in the <head>, and JavaScript code within <script> tags at the end of the <body>. The HTML will define the layout for the record button, error messages, and the recordings list.
+
+Requirement 2:
+The application must have a centered record button.
+Assumption 2:
+A <button> element with a unique id (e.g., "recordButton") will be created in the HTML. CSS flexbox or grid will be used to center this button both horizontally and vertically within its container. The button will have appropriate padding and styling to make it easily clickable, and will include either text ("Record") or an icon indicating its purpose. The button's appearance will change to indicate when it's being hovered over or clicked.
+
+Requirement 3:
+The application must display an error message if microphone permission is denied.
+Assumption 3:
+An error message container (e.g., a <div> with id "errorMessage") will be present in the HTML, initially hidden using CSS (display: none). When the application detects that microphone permission has been denied, it will populate this container with an appropriate error message and make it visible. The JavaScript will handle the permission request using the navigator.mediaDevices.getUserMedia() API and catch any errors related to permission denial.
+
+Requirement 4:
+The error message must have a red border.
+Assumption 4:
+The error message container will have CSS styles that include a red border (e.g., border: 2px solid red). Additional styles such as padding, background color, and text color will be applied to make the error message stand out visually. The message will be positioned prominently on the page, possibly near the record button, to ensure it's noticeable to the user.
+
+Requirement 5:
+The application must display a list of recorded audio clips beneath the record button.
+Assumption 5:
+A container element (e.g., a <div> with id "recordingsList") will be present in the HTML, positioned below the record button. This container will initially be empty. For each recording, the JavaScript will create and append a new element (e.g., a <div>) to this container, containing the audio player, download link, duration display, and delete button for that recording. The list will be styled to have clear separation between recordings and to scroll if it exceeds a certain height.
+
+Requirement 6:
+Each recorded audio clip must be playable within the browser.
+Assumption 6:
+For each recording, an <audio> element will be created with the controls attribute set to true. The src of this element will be set to a Blob URL created from the recorded audio data. The audio element will be styled consistently across different browsers to ensure a uniform look. A play/pause button, seek bar, and volume control will be visible and functional for each recording.
+
+Requirement 7:
+Each recorded audio clip must be downloadable in .webm format.
+Assumption 7:
+Alongside each audio element, an <a> tag will be created to serve as a download link. This link will have its download attribute set to a filename ending in .webm (e.g., "recording1.webm"). The href attribute will be set to a Blob URL of the recording in WebM format. The link will be styled as a button or icon to clearly indicate its purpose. The JavaScript will handle the conversion of the recorded audio to WebM format if necessary.
+
+Requirement 8:
+The record button must visually indicate when recording is in progress.
+Assumption 8:
+The record button will have two distinct visual states: inactive and recording. When recording starts, the button's appearance will change (e.g., color change, animation, or icon change) to clearly indicate that recording is in progress. CSS transitions or animations will be used to smoothly switch between these states. The JavaScript will toggle a class on the button element to trigger these visual changes when recording starts and stops.
+
+Requirement 9:
+The application must provide visual feedback when a recording is successfully created.
+Assumption 9:
+When a recording is successfully completed, a brief visual feedback will be displayed. This could be a temporary overlay message, a flash of color, or an animation near the recordings list. The feedback will be prominent enough to be noticeable but should disappear after a short duration (e.g., 2 seconds) to avoid disrupting the user experience. CSS animations will be used to fade in and out this feedback element.
+
+Requirement 10:
+The application must not allow multiple recordings to occur simultaneously.
+Assumption 10:
+The JavaScript code will implement a state management system to track whether a recording is in progress. When recording starts, it will disable the record button or ignore further clicks until the current recording is stopped. This state will be reset when recording ends, re-enabling the record functionality. Visual cues (such as changing the button to a "disabled" state) will indicate to the user that starting a new recording is not possible while one is in progress.
+
+Requirement 11:
+The application must display the duration of each recorded audio clip.
+Assumption 11:
+For each recording, the JavaScript will calculate the duration when the recording is stopped. This duration will be displayed next to the audio player for that recording, formatted as minutes and seconds (e.g., "2:34"). The duration element will be styled to be easily readable and consistently positioned for all recordings. If the audio metadata changes (e.g., due to editing), the displayed duration will be updated accordingly.
+
+Requirement 12:
+The application must allow users to delete individual recordings.
+Assumption 12:
+Each recording in the list will have an associated delete button or icon. This button will be positioned consistently for all recordings, possibly to the right of the audio player. When clicked, it will trigger a JavaScript function that removes the recording's element from the DOM, deletes any associated Blob URLs to free up memory, and updates any internal data structures tracking the recordings. A confirmation dialog may be shown before deletion to prevent accidental removal of recordings.

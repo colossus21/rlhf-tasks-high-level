@@ -3,7 +3,7 @@
 ### Correctness - Rationale
 
 - Game won't spawn tiles every move
-- 
+- Event handlers won't work to move the tiles
 
 ### Instruction Following
 

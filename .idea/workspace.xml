@@ -5,6 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="94ef8d18-f607-4510-bcc1-62d85bb39a8e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/go-battleship-mini/__test__/test_g.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go-battleship-mini/__test__/test_o.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go-battleship-mini/battleship-g.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go-battleship-mini/battleship-o.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go-battleship-mini/index_g.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go-battleship-mini/index_o.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go-battleship-mini/jest.setup.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go-battleship-mini/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go-battleship-mini/prompt.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go-battleship-mini/rating_g.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go-battleship-mini/rating_o.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go-battleship-mini/reqs.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -24,28 +36,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/Personal Projects/Google/190793-roulette&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;E:\\Tools\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "E:/Personal Projects/Google/go-battleship-mini",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "E:\\Tools\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Personal Projects\Google\go-battleship-mini" />
       <recent name="E:\Personal Projects\Google\190793-roulette" />
       <recent name="E:\Personal Projects\Google" />
       <recent name="E:\Personal Projects\Google\190793-conway-color" />
       <recent name="E:\Personal Projects\Google\190793-stickman-generator" />
-      <recent name="E:\Personal Projects\Google\190793-battleship-mini" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\Personal Projects\Google\190793-checkers-game" />
@@ -72,7 +84,9 @@
       <workItem from="1728924909678" duration="632000" />
       <workItem from="1728925576108" duration="5685000" />
       <workItem from="1728972225121" duration="29175000" />
-      <workItem from="1729060955743" duration="9948000" />
+      <workItem from="1729060955743" duration="10420000" />
+      <workItem from="1729156990446" duration="1510000" />
+      <workItem from="1729243678309" duration="7557000" />
     </task>
     <servers />
   </component>

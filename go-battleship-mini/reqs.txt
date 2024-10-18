@@ -1,0 +1,76 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The game must be implemented using HTML and JavaScript in a single file.
+Assumption 1:
+The game will be contained in a single HTML (i.e., index.html) file with embedded JavaScript.
+
+Requirement 2:
+The game board must be a 6x6 grid, divided into a 6x3 top portion for AI and a 6x3 bottom portion for the human player.
+Assumption 2:
+The game board will be represented as an HTML table or a series of `<div>` elements arranged in a grid layout. Each cell will have a unique identifier allowing for easy targeting in JavaScript. The AI and player areas will be visually distinct, possibly through different background colors or borders.
+
+Requirement 3:
+The game must have two phases: ship placement and ship sinking.
+Assumption 3:
+A variable in the JavaScript code will keep track of the current game phase. The user interface will change based on the current phase, showing different controls and information. During the placement phase, ship selection and rotation controls will be visible. These will be hidden during the sinking phase, replaced by a turn indicator and attack feedback display.
+
+Requirement 4:
+Players must be able to place 4 different ships on their respective 6x3 grids during the placement phase.
+Assumption 4:
+The game will provide a selection of 4 ship types, each with a unique shape. Players will be able to select a ship, rotate it if needed, and place it on their grid by clicking or dragging. The placement will be validated to ensure it fits within the 6x3 grid and doesn't overlap with other ships. If an invalid placement is attempted, an error message will be displayed, and the player will need to adjust the placement.
+
+Requirement 5:
+Ships must be represented as different shapes on the grid.
+Assumption 5:
+Each ship type will occupy a unique pattern of cells on the 6x3 grid. For example, one ship might be L-shaped, another might be a 2x1 rectangle, etc. These shapes will be represented visually on the grid, either through CSS styling or by updating the content of the grid cells. The shapes should be distinct enough to be easily recognizable by the player.
+
+Requirement 6:
+The AI must automatically place its ships on its 6x3 grid.
+Assumption 6:
+The game will include a function to automatically place the AI's ships. This function will use a randomization algorithm to determine ship positions and orientations. The AI placement will follow the same rules as player placement, ensuring ships fit within the grid and do not overlap. The AI's ship positions will not be visible to the player.
+
+Requirement 7:
+Players must take turns attempting to sink each other's ships during the sinking phase.
+Assumption 7:
+The game will implement a turn-based system, alternating between player and AI turns. During the player's turn, they will be able to select a cell on the AI's grid to attack. The AI will use an algorithm to select its attack on the player's grid during its turn. The game will prevent actions during the opponent's turn and provide clear visual indication of whose turn it is.
+
+Requirement 8:
+The game must visually indicate hits and misses on the game board.
+Assumption 8:
+After each attack, the targeted cell will be visually updated to show the result. Hits will be marked with one distinct symbol or color (e.g., a red X), while misses will be marked with another (e.g., a blue dot). These indicators will be applied to the appropriate cells on the game board, providing a clear history of all attacks made during the game.
+
+Requirement 9:
+The game must keep track of and display the current player's turn.
+Assumption 9:
+A designated area of the user interface, such as a text element or a highlighted player name, will clearly indicate whose turn it is. This display will be updated at the start of each turn. The game logic will ensure that only the current player can take actions during their turn.
+
+Requirement 10:
+The game must detect and announce when all ships of a player have been sunk.
+Assumption 10:
+The game will maintain a count of remaining ship segments for each player. After each successful hit, this count will be decremented. When a player's count reaches zero, the game will trigger an end-game state, displaying a victory message for the winning player and offering an option to start a new game.
+
+Requirement 11:
+Players must not be able to attack the same cell twice.
+Assumption 11:
+The game will maintain a record of all cells that have been attacked. Before processing an attack, it will check if the selected cell has already been targeted. If so, the attack will be prevented, and the player will be prompted to choose a different cell. This check will apply to both player and AI attacks.
+
+Requirement 12:
+The game must provide a way to start a new game after one has ended.
+Assumption 12:
+A "New Game" button will be displayed when the game ends. Clicking this button will reset all game state variables, clear the board of all ships and attack markers, and return the game to the ship placement phase. The button will be prominently placed and clearly labeled to ensure players can easily start a new game.
+
+Requirement 13:
+The game must provide feedback on the outcome of each attack.
+Assumption 13:
+After each attack, a message will be displayed in a designated area of the user interface. This message will indicate whether the attack was a hit or a miss, and in the case of a hit, which type of ship was struck (e.g., "Hit! You struck the opponent's L-shaped ship!"). The message will be displayed for a sufficient duration to be read before the next turn begins.
+
+Requirement 14:
+The game must prevent players from placing ships outside their designated 6x3 grid.
+Assumption 14:
+During the placement phase, the game will implement boundary checking. When a player attempts to place a ship, the game will calculate whether any part of the ship extends beyond the 6x3 grid. If so, the placement will be rejected, and an error message will be displayed explaining that ships must be fully within the grid. The player will then need to adjust their placement before proceeding.
+
+Requirement 15:
+The game must prevent players from overlapping their ships during placement.
+Assumption 15:
+The game will maintain a record of which cells are occupied by ships during the placement phase. When a player attempts to place a ship, the game will check if any of the cells required for the new ship are already occupied. If an overlap is detected, the placement will be rejected, and an error message will inform the player that ships cannot overlap. The player will need to choose a different position or orientation for the ship.

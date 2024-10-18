@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Battleship</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        td {
+            width: 30px;
+            height: 30px;
+            border: 1px solid black;
+            text-align: center;
+            cursor: pointer;
+        }
+        .ship {
+            background-color: gray;
+        }
+        .hit {
+            background-color: red;
+        }
+        .miss {
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Battleship</h1>
+
+<div id="board"></div>
+
+<script>
+    const boardSize = 6;
+    const playerBoard = Array(boardSize).fill(null).map(() => Array(boardSize).fill(0));
+    const aiBoard = Array(boardSize).fill(null).map(() => Array(boardSize).fill(0));
+    const ships = [
+        { name: 'Carrier', length: 5 },
+        { name: 'Battleship', length: 4 },
+        { name: 'Cruiser', length: 3 },
+        { name: 'Submarine', length: 3 },
+        { name: 'Destroyer', length: 2 }
+    ];
+    let playerShipsPlaced = 0;
+    let aiShipsPlaced = 0;
+    let playerTurn = true;
+
+    // Create the game board
+    const boardDiv = document.getElementById('board');
+    const table = document.createElement('table');
+    for (let i = 0; i < boardSize; i++) {
+        const row = document.createElement('tr');
+        for (let j = 0; j < boardSize; j++) {
+            const cell = document.createElement('td');
+            cell.id = `cell-${i}-${j}`;
+            if (i < boardSize / 2) {
+                cell.classList.add('ai');
+            } else {
+                cell.classList.add('player');
+                cell.addEventListener('click', () => handleClick(i, j));
+            }
+            row.appendChild(cell);
+        }
+        table.appendChild(row);
+    }
+    boardDiv.appendChild(table);
+
+    // Place ships randomly for AI
+    while (aiShipsPlaced < ships.length) {
+        const ship = ships[aiShipsPlaced];
+        const isHorizontal = Math.random() < 0.5;
+        let x, y;
+        if (isHorizontal) {
+            x = Math.floor(Math.random() * (boardSize - ship.length + 1));
+            y = Math.floor(Math.random() * (boardSize / 2));
+        } else {
+            x = Math.floor(Math.random() * (boardSize));
+            y = Math.floor(Math.random() * (boardSize / 2 - ship.length + 1));
+        }
+        if (canPlaceShip(aiBoard, ship, x, y, isHorizontal)) {
+            placeShip(aiBoard, ship, x, y, isHorizontal);
+            aiShipsPlaced++;
+        }
+    }
+
+    // Function to check if a ship can be placed
+    function canPlaceShip(board, ship, x, y, isHorizontal) {
+        for (let i = 0; i < ship.length; i++) {
+            const newX = isHorizontal ? x + i : x;
+            const newY = isHorizontal ? y : y + i;
+            if (newX < 0 || newX >= boardSize || newY < 0 || newY >= boardSize / 2 || board[newY][newX] !== 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Function to place a ship on the board
+    function placeShip(board, ship, x, y, isHorizontal) {
+        for (let i = 0; i < ship.length; i++) {
+            const newX = isHorizontal ? x + i : x;
+            const newY = isHorizontal ? y : y + i;
+            board[newY][newX] = 1;
+            // Uncomment the line below to reveal AI ships during placement for testing
+            // document.getElementById(`cell-${newY}-${newX}`).classList.add('ship');
+        }
+    }
+
+    // Handle cell click for player
+    function handleClick(i, j) {
+        if (playerTurn && playerShipsPlaced < ships.length) {
+            // Place ships
+            const ship = ships[playerShipsPlaced];
+            const isHorizontal = Math.random() < 0.5; // Placeholder for player choice of orientation
+            if (canPlaceShip(playerBoard, ship, j, i, isHorizontal)) {
+                placeShip(playerBoard, ship, j, i, isHorizontal);
+                playerShipsPlaced++;
+                document.getElementById(`cell-${i}-${j}`).classList.add('ship');
+                if (playerShipsPlaced === ships.length) {
+                    playerTurn = false;
+                    aiTurn();
+                }
+            }
+        } else if (playerTurn && i < boardSize / 2) {
+            // Attack AI
+            attack(aiBoard, i, j);
+        }
+    }
+
+    // AI's turn to attack
+    function aiTurn() {
+        let x, y;
+        do {
+            x = Math.floor(Math.random() * boardSize);
+            y = Math.floor(Math.random() * (boardSize / 2) + (boardSize / 2));
+        } while (playerBoard[y][x] === 2 || playerBoard[y][x] === 3);
+        attack(playerBoard, y, x);
+    }
+
+    // Function to handle an attack
+    function attack(board, i, j) {
+        const cell = document.getElementById(`cell-${i}-${j}`);
+        if (board[i][j] === 1) {
+            cell.classList.add('hit');
+            board[i][j] = 2;
+            checkWin();
+        } else if (board[i][j] === 0) {
+            cell.classList.add('miss');
+            board[i][j] = 3;
+            playerTurn = !playerTurn;
+            if (!playerTurn) {
+                setTimeout(aiTurn, 1000); // Delay AI turn for better UX
+            }
+        }
+    }
+
+    // Function to check for a win
+    function checkWin() {
+        let playerShipsRemaining = ships.reduce((sum, ship) => sum + ship.length, 0);
+        let aiShipsRemaining = playerShipsRemaining;
+        for (let i = 0; i < boardSize; i++) {
+            for (let j = 0; j < boardSize; j++) {
+                if (i < boardSize / 2 && aiBoard[i][j] === 2) {
+                    aiShipsRemaining--;
+                } else if (i >= boardSize / 2 && playerBoard[i][j] === 2) {
+                    playerShipsRemaining--;
+                }
+            }
+        }
+        if (aiShipsRemaining === 0) {
+            alert('You win!');
+        } else if (playerShipsRemaining === 0) {
+            alert('AI wins!');
+        }
+    }
+</script>
+
+</body>
+</html>

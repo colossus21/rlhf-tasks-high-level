@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battleship Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #gameBoard {
+            display: grid;
+            grid-template-columns: repeat(6, 50px);
+            grid-template-rows: repeat(6, 50px);
+            gap: 2px;
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: lightblue;
+            text-align: center;
+            line-height: 50px;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+
+        .player, .ai {
+            background-color: lightgray;
+        }
+
+        .ship {
+            background-color: navy;
+        }
+
+        .hit {
+            background-color: red;
+        }
+
+        .miss {
+            background-color: lightyellow;
+        }
+
+        #message {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Battleship Game</h1>
+
+<div id="gameBoard"></div>
+
+<div id="message">Place your ships on the bottom portion!</div>
+
+<script>
+    const gameBoard = document.getElementById('gameBoard');
+    const message = document.getElementById('message');
+    const playerBoard = Array(6).fill(null).map(() => Array(6).fill(null));
+    const aiBoard = Array(6).fill(null).map(() => Array(6).fill(null));
+    let playerShips = 0;
+    let aiShips = 0;
+    let currentTurn = 'player';
+    let isPlacingShips = true;
+    let isGameOver = false;
+
+    function createBoard() {
+        for (let i = 0; i < 6; i++) {
+            for (let j = 0; j < 6; j++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.dataset.row = i;
+                cell.dataset.col = j;
+                gameBoard.appendChild(cell);
+
+                if (i < 3) {
+                    cell.classList.add('ai');
+                } else {
+                    cell.classList.add('player');
+                    cell.addEventListener('click', placeShip);
+                }
+            }
+        }
+    }
+
+    function placeShip(e) {
+        if (!isPlacingShips) return;
+
+        const row = parseInt(e.target.dataset.row);
+        const col = parseInt(e.target.dataset.col);
+
+        if (row < 3 || playerBoard[row][col] === 'ship') {
+            message.textContent = 'Invalid spot! Place your ships on the bottom.';
+            return;
+        }
+
+        playerBoard[row][col] = 'ship';
+        e.target.classList.add('ship');
+        playerShips++;
+
+        if (playerShips === 4) {
+            message.textContent = 'Ships placed! Now AI will place its ships.';
+            isPlacingShips = false;
+            setTimeout(() => {
+                placeAiShips();
+            }, 1000);
+        }
+    }
+
+    function placeAiShips() {
+        while (aiShips < 4) {
+            const row = Math.floor(Math.random() * 3);
+            const col = Math.floor(Math.random() * 6);
+            if (!aiBoard[row][col]) {
+                aiBoard[row][col] = 'ship';
+                aiShips++;
+            }
+        }
+
+        message.textContent = 'AI has placed its ships. Start attacking the AI by clicking the top cells!';
+        currentTurn = 'player';
+        document.querySelectorAll('.ai').forEach(cell => cell.addEventListener('click', attackAi));
+    }
+
+    function attackAi(e) {
+        if (isGameOver || currentTurn !== 'player') return;
+
+        const row = parseInt(e.target.dataset.row);
+        const col = parseInt(e.target.dataset.col);
+
+        if (aiBoard[row][col] === 'ship') {
+            e.target.classList.add('hit');
+            aiBoard[row][col] = 'hit';
+            checkWin('player');
+        } else {
+            e.target.classList.add('miss');
+            aiBoard[row][col] = 'miss';
+        }
+
+        currentTurn = 'ai';
+        message.textContent = 'AI is taking its turn...';
+        setTimeout(aiTurn, 1000);
+    }
+
+    function aiTurn() {
+        if (isGameOver) return;
+
+        let row, col;
+
+        do {
+            row = Math.floor(Math.random() * 3) + 3;  // AI attacks player board
+            col = Math.floor(Math.random() * 6);
+        } while (playerBoard[row][col] === 'hit' || playerBoard[row][col] === 'miss');
+
+        const cell = document.querySelector(`.cell[data-row='${row}'][data-col='${col}']`);
+
+        if (playerBoard[row][col] === 'ship') {
+            cell.classList.add('hit');
+            playerBoard[row][col] = 'hit';
+            checkWin('ai');
+        } else {
+            cell.classList.add('miss');
+            playerBoard[row][col] = 'miss';
+        }
+
+        currentTurn = 'player';
+        message.textContent = 'Your turn! Attack the AI.';
+    }
+
+    function checkWin(player) {
+        const allShipsSunk = (board) => board.flat().filter(cell => cell === 'ship').length === 0;
+
+        if (player === 'player' && allShipsSunk(aiBoard)) {
+            message.textContent = 'You win! All AI ships have been sunk.';
+            isGameOver = true;
+        } else if (player === 'ai' && allShipsSunk(playerBoard)) {
+            message.textContent = 'AI wins! All your ships have been sunk.';
+            isGameOver = true;
+        }
+    }
+
+    createBoard();
+</script>
+
+</body>
+</html>

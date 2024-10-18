@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>2048 - Space Edition</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            background-image: url("https://wallpaperaccess.com/full/1209593.jpg"); /* Replace with your space background image URL */
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            font-family: sans-serif;
+            color: white;
+        }
+
+        #game-container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-gap: 10px;
+        }
+
+        .grid-cell {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            transition: all 0.1s ease-in-out;
+        }
+
+        .grid-cell.x2 { background-color: #eee4da; color: #776e65; }
+        .grid-cell.x4 { background-color: #ede0c8; color: #776e65; }
+        .grid-cell.x8 { background-color: #f2b179; color: #f9f6f2; }
+        .grid-cell.x16 { background-color: #f59563; color: #f9f6f2; }
+        .grid-cell.x32 { background-color: #f67c5f; color: #f9f6f2; }
+        .grid-cell.x64 { background-color: #f65e3b; color: #f9f6f2; }
+        .grid-cell.x128 { background-color: #edcf72; color: #f9f6f2; }
+        .grid-cell.x256 { background-color: #edcc61; color: #f9f6f2; }
+        .grid-cell.x512 { background-color: #edc850; color: #f9f6f2; }
+        .grid-cell.x1024 { background-color: #edc53f; color: #f9f6f2; }
+        .grid-cell.x2048 { background-color: #edc22e; color: #f9f6f2; }
+
+        .game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-size: 36px;
+            color: white;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="game-container">
+    <div class="grid-container"></div>
+    <div class="game-over">
+        <p>Game Over!</p>
+        <button onclick="newGame()">New Game</button>
+    </div>
+</div>
+
+<script>
+    const gridContainer = document.querySelector('.grid-container');
+    const gameOverContainer = document.querySelector('.game-over');
+    const gridSize = 6;
+    let grid = [];
+    let score = 0;
+
+    // Initialize the game grid
+    function initGrid() {
+        grid = [];
+        for (let i = 0; i < gridSize * gridSize; i++) {
+            grid[i] = 0;
+            const cell = document.createElement('div');
+            cell.classList.add('grid-cell');
+            gridContainer.appendChild(cell);
+        }
+        addRandomTile();
+        addRandomTile();
+        updateGrid();
+    }
+
+    // Add a new tile (2 or 4) to a random empty cell
+    function addRandomTile() {
+        const emptyCells = grid.reduce((acc, val, idx) => (val === 0 ? acc.concat(idx) : acc), []);
+        if (emptyCells.length > 0) {
+            const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            grid[randomIndex] = Math.random() < 0.9 ? 2 : 4;
+        }
+    }
+
+    // Update the grid display
+    function updateGrid() {
+        const cells = document.querySelectorAll('.grid-cell');
+        for (let i = 0; i < gridSize * gridSize; i++) {
+            const cell = cells[i];
+            cell.textContent = grid[i] === 0 ? '' : grid[i];
+            cell.className = 'grid-cell'; // Reset class
+            if (grid[i] !== 0) {
+                cell.classList.add(`x${grid[i]}`);
+            }
+        }
+    }
+
+    // Move the tiles in a given direction
+    function move(direction) {
+        let moved = false;
+        switch (direction) {
+            case 'up':
+                for (let col = 0; col < gridSize; col++) {
+                    for (let row = 1; row < gridSize; row++) {
+                        const currentIdx = row * gridSize + col;
+                        if (grid[currentIdx] !== 0) {
+                            let newRow = row;
+                            while (newRow > 0 && grid[(newRow - 1) * gridSize + col] === 0) {
+                                newRow--;
+                            }
+                            if (newRow !== row) {
+                                grid[newRow * gridSize + col] = grid[currentIdx];
+                                grid[currentIdx] = 0;
+                                moved = true;
+                            }
+                        }
+                    }
+                }
+                break;
+
+            case 'down':
+                for (let col = 0; col < gridSize; col++) {
+                    for (let row = gridSize - 2; row >= 0; row--) {
+                        const currentIdx = row * gridSize + col;
+                        if (grid[currentIdx] !== 0) {
+                            let newRow = row;
+                            while (newRow < gridSize - 1 && grid[(newRow + 1) * gridSize + col] === 0) {
+                                newRow++;
+                            }
+                            if (newRow !== row) {
+                                grid[newRow * gridSize + col] = grid[currentIdx];
+                                grid[currentIdx] = 0;
+                                moved = true;
+                            }
+                        }
+                    }
+                }
+                break;
+
+            case 'left':
+                for (let row = 0; row < gridSize; row++) {
+                    for (let col = 1; col < gridSize; col++) {
+                        const currentIdx = row * gridSize + col;
+                        if (grid[currentIdx] !== 0) {
+                            let newCol = col;
+                            while (newCol > 0 && grid[row * gridSize + newCol - 1] === 0) {
+                                newCol--;
+                            }
+                            if (newCol !== col) {
+                                grid[row * gridSize + newCol] = grid[currentIdx];
+                                grid[currentIdx] = 0;
+                                moved = true;
+                            }
+                        }
+                    }
+                }
+                break;
+
+            case 'right':
+                for (let row = 0; row < gridSize; row++) {
+                    for (let col = gridSize - 2; col >= 0; col--) {
+                        const currentIdx = row * gridSize + col;
+                        if (grid[currentIdx] !== 0) {
+                            let newCol = col;
+                            while (newCol < gridSize - 1 && grid[row * gridSize + newCol + 1] === 0) {
+                                newCol++;
+                            }
+                            if (newCol !== col) {
+                                grid[row * gridSize + newCol] = grid[currentIdx];
+                                grid[currentIdx] = 0;
+                                moved = true;
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+
+        return moved;
+    }
+
+    // Merge tiles in a given direction
+    function merge(direction) {
+        let merged = false;
+        switch (direction) {
+            case 'up':
+                for (let col = 0; col < gridSize; col++) {
+                    for (let row = 1; row < gridSize; row++) {
+                        const currentIdx = row * gridSize + col;
+                        if (grid[currentIdx] !== 0 && grid[currentIdx] === grid[(row - 1) * gridSize + col]) {
+                            grid[(row - 1) * gridSize + col] *= 2;
+                            grid[currentIdx] = 0;
+                            score += grid[(row - 1) * gridSize + col];
+                            merged = true;
+                        }
+                    }
+                }
+                break;
+
+            case 'down':
+                for (let col = 0; col < gridSize; col++) {
+                    for (let row = gridSize - 2; row >= 0; row--) {
+                        const currentIdx = row * gridSize + col;
+                        if (grid[currentIdx] !== 0 && grid[currentIdx] === grid[(row + 1) * gridSize + col]) {
+                            grid[(row + 1) * gridSize + col] *= 2;
+                            grid[currentIdx] = 0;
+                            score += grid[(row + 1) * gridSize + col];
+                            merged = true;
+                        }
+                    }
+                }
+                break;
+
+            case 'left':
+                for (let row = 0; row < gridSize; row++) {
+                    for (let col = 1; col < gridSize; col++) {
+                        const currentIdx = row * gridSize + col;
+                        if (grid[currentIdx] !== 0 && grid[currentIdx] === grid[row * gridSize + col - 1]) {
+                            grid[row * gridSize + col - 1] *= 2;
+                            grid[currentIdx] = 0;
+                            score += grid[row * gridSize + col - 1];
+                            merged = true;
+                        }
+                    }
+                }
+                break;
+
+            case 'right':
+                for (let row = 0; row < gridSize; row++) {
+                    for (let col = gridSize - 2; col >= 0; col--) {
+                        const currentIdx = row * gridSize + col;
+                        if (grid[currentIdx] !== 0 && grid[currentIdx] === grid[row * gridSize + col + 1]) {
+                            grid[row * gridSize + col + 1] *= 2;
+                            grid[currentIdx] = 0;
+                            score += grid[row * gridSize + col + 1];
+                            merged = true;
+                        }
+                    }
+                }
+                break;
+        }
+
+        return merged;
+    }
+
+    // Check if the game is over (no more moves possible)
+    function isGameOver() {
+        if (grid.includes(0)) {
+            return false; // There are empty cells
+        }
+
+        // Check for possible merges in all directions
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
+                const currentIdx = row * gridSize + col;
+                if (
+                    (row > 0 && grid[currentIdx] === grid[(row - 1) * gridSize + col]) ||
+                    (row < gridSize - 1 && grid[currentIdx] === grid[(row + 1) * gridSize + col]) ||
+                    (col > 0 && grid[currentIdx] === grid[row * gridSize + col - 1]) ||
+                    (col < gridSize - 1 && grid[currentIdx] === grid[row * gridSize + col + 1])
+                ) {
+                    return false; // A merge is possible
+                }
+            }
+        }
+
+        return true; // No more moves possible
+    }
+
+    // Handle user input (arrow keys)
+    function handleKeyDown(event) {
+        let moved = false;
+        switch (event.key) {
+            case 'ArrowUp': moved = move('up'); break;
+            case 'ArrowDown': moved = move('down'); break;
+            case 'ArrowLeft': moved = move('left'); break;
+            case 'ArrowRight': moved = move('right'); break;
+        }
+
+        if (moved) {
+            merge(event.key.replace('Arrow', '').toLowerCase());
+            move(event.key.replace('Arrow', '').toLowerCase());
+            addRandomTile();
+            updateGrid();
+
+            if (isGameOver()) {
+                gameOverContainer.style.display = 'flex';
+            }
+        }
+    }
+
+    // Start a new game
+    function newGame() {
+        gameOverContainer.style.display = 'none';
+        gridContainer.innerHTML = ''; // Clear the grid
+        score = 0;
+        initGrid();
+    }
+
+    // Event listeners
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Initialize the game
+    initGrid();
+</script>
+</body>
+</html>

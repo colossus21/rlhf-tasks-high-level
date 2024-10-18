@@ -5,18 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="94ef8d18-f607-4510-bcc1-62d85bb39a8e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/go-battleship-mini/__test__/test_g.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go-battleship-mini/__test__/test_o.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go-battleship-mini/battleship-g.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go-battleship-mini/battleship-o.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go-battleship-mini/index_g.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go-battleship-mini/index_o.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go-battleship-mini/jest.setup.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go-battleship-mini/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go-battleship-mini/prompt.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go-battleship-mini/rating_g.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go-battleship-mini/rating_o.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go-battleship-mini/reqs.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,7 +74,7 @@
       <workItem from="1728972225121" duration="29175000" />
       <workItem from="1729060955743" duration="10420000" />
       <workItem from="1729156990446" duration="1510000" />
-      <workItem from="1729243678309" duration="7557000" />
+      <workItem from="1729243678309" duration="13791000" />
     </task>
     <servers />
   </component>

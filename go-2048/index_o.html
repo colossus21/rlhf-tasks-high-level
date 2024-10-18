@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space-Themed 2048</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            background-image: url('https://www.publicdomainpictures.net/pictures/40000/velka/space-background-1335779435NoP.jpg');
+            background-size: cover;
+        }
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(6, 100px);
+            grid-template-rows: repeat(6, 100px);
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .tile {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            border-radius: 10px;
+            color: #333;
+            transition: all 0.2s ease-in-out;
+        }
+        .tile[data-value="2"] { background-color: #eee4da; }
+        .tile[data-value="4"] { background-color: #ece0c8; }
+        .tile[data-value="8"] { background-color: #f2b179; }
+        .tile[data-value="16"] { background-color: #f59563; }
+        .tile[data-value="32"] { background-color: #f67c5f; }
+        .tile[data-value="64"] { background-color: #f65e3b; }
+        .tile[data-value="128"] { background-color: #edcf72; }
+        .tile[data-value="256"] { background-color: #edcc61; }
+        .tile[data-value="512"] { background-color: #edc850; }
+        .tile[data-value="1024"] { background-color: #edc53f; }
+        .tile[data-value="2048"] { background-color: #edc22e; color: #fff; }
+    </style>
+</head>
+<body>
+
+<div class="game-container" id="game-container"></div>
+
+<script>
+    const gridSize = 6;
+    const target = 2048;
+    let gameBoard = [];
+    const container = document.getElementById('game-container');
+
+    // Initialize game board
+    function initBoard() {
+        gameBoard = Array.from({ length: gridSize }, () => Array(gridSize).fill(0));
+        addTile();
+        addTile();
+        renderBoard();
+    }
+
+    // Render the game board
+    function renderBoard() {
+        container.innerHTML = '';
+        gameBoard.forEach(row => {
+            row.forEach(tile => {
+                const tileDiv = document.createElement('div');
+                tileDiv.classList.add('tile');
+                tileDiv.dataset.value = tile;
+                if (tile !== 0) tileDiv.textContent = tile;
+                container.appendChild(tileDiv);
+            });
+        });
+    }
+
+    // Add a new tile to the board
+    function addTile() {
+        let emptyTiles = [];
+        for (let i = 0; i < gridSize; i++) {
+            for (let j = 0; j < gridSize; j++) {
+                if (gameBoard[i][j] === 0) emptyTiles.push({ x: i, y: j });
+            }
+        }
+        if (emptyTiles.length === 0) return;
+
+        const { x, y } = emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
+        gameBoard[x][y] = Math.random() > 0.1 ? 2 : 4;
+    }
+
+    // Move tiles in the specified direction
+    function move(direction) {
+        let moved = false;
+        for (let i = 0; i < gridSize; i++) {
+            let row = gameBoard[i].filter(val => val);
+            if (direction === 'right' || direction === 'down') row.reverse();
+
+            for (let j = 0; j < row.length - 1; j++) {
+                if (row[j] === row[j + 1]) {
+                    row[j] *= 2;
+                    row[j + 1] = 0;
+                    moved = true;
+                }
+            }
+
+            row = row.filter(val => val);
+            while (row.length < gridSize) row.push(0);
+            if (direction === 'right' || direction === 'down') row.reverse();
+            if (direction === 'down') {
+                for (let x = 0; x < gridSize; x++) {
+                    gameBoard[x][i] = row[x];
+                }
+            } else {
+                gameBoard[i] = row;
+            }
+            if (gameBoard[i].join() !== row.join()) moved = true;
+        }
+        if (moved) {
+            addTile();
+            renderBoard();
+            if (checkWin()) alert('You win!');
+            if (checkLose()) alert('Game over!');
+        }
+    }
+
+    // Check if the player has won
+    function checkWin() {
+        for (let i = 0; i < gridSize; i++) {
+            for (let j = 0; j < gridSize; j++) {
+                if (gameBoard[i][j] === target) return true;
+            }
+        }
+        return false;
+    }
+
+    // Check if the player has lost
+    function checkLose() {
+        for (let i = 0; i < gridSize; i++) {
+            for (let j = 0; j < gridSize; j++) {
+                if (gameBoard[i][j] === 0) return false;
+                if (i > 0 && gameBoard[i][j] === gameBoard[i - 1][j]) return false;
+                if (i < gridSize - 1 && gameBoard[i][j] === gameBoard[i + 1][j]) return false;
+                if (j > 0 && gameBoard[i][j] === gameBoard[i][j - 1]) return false;
+                if (j < gridSize - 1 && gameBoard[i][j] === gameBoard[i][j + 1]) return false;
+            }
+        }
+        return true;
+    }
+
+    // Arrow key controls
+    document.addEventListener('keydown', (e) => {
+        switch (e.key) {
+            case 'ArrowUp':
+                move('up');
+                break;
+            case 'ArrowDown':
+                move('down');
+                break;
+            case 'ArrowLeft':
+                move('left');
+                break;
+            case 'ArrowRight':
+                move('right');
+                break;
+        }
+    });
+
+    initBoard();
+</script>
+
+</body>
+</html>

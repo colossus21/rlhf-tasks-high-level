@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floor Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .hotel {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 600px;
+        }
+
+        .floor {
+            width: 40px;
+            height: 40px;
+            margin: 2px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: grey;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: 1px solid #333;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .floor:hover {
+            background-color: lightgrey;
+        }
+
+        .game-status {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .found {
+            background-color: darkred;
+            color: white;
+        }
+
+        .hint {
+            background-color: yellow;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <div class="hotel" id="hotel"></div>
+    <div class="game-status" id="gameStatus">Find the murderer!</div>
+</div>
+
+<script>
+    const hotel = document.getElementById('hotel');
+    const gameStatus = document.getElementById('gameStatus');
+    const totalFloors = 25;
+    const murdererFloor = Math.floor(Math.random() * totalFloors) + 1;
+    let guessCount = 0;
+
+    // Create hotel floors
+    for (let i = 1; i <= totalFloors; i++) {
+        const floorDiv = document.createElement('div');
+        floorDiv.className = 'floor';
+        floorDiv.textContent = i;
+        floorDiv.addEventListener('click', () => makeGuess(i, floorDiv));
+        hotel.appendChild(floorDiv);
+    }
+
+    function makeGuess(floor, floorDiv) {
+        guessCount++;
+        if (floor === murdererFloor) {
+            floorDiv.classList.add('found');
+            gameStatus.textContent = `You have found the murderer in ${guessCount} turns!`;
+            disableFloors();
+        } else {
+            floorDiv.classList.add('hint');
+            if (floor < murdererFloor) {
+                gameStatus.textContent = "The murderer lives on a higher floor!";
+            } else {
+                gameStatus.textContent = "The murderer lives on a lower floor!";
+            }
+        }
+    }
+
+    function disableFloors() {
+        const allFloors = document.querySelectorAll('.floor');
+        allFloors.forEach(floor => floor.style.pointerEvents = 'none');
+    }
+</script>
+
+</body>
+</html>

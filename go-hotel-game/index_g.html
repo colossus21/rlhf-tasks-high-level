@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Murder Mystery Hotel</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .hotel {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 columns */
+            gap: 5px;
+        }
+        .floor {
+            width: 50px;
+            height: 50px;
+            background-color: lightgray;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Murder Mystery Hotel</h1>
+<p>A murderer is hiding in one of the floors. Can you find them?</p>
+
+<div class="hotel" id="hotel"></div>
+
+<p id="message"></p>
+
+<script>
+    const numFloors = 25;
+    let murdererFloor;
+    let numGuesses = 0;
+
+    // Create hotel floors
+    const hotel = document.getElementById('hotel');
+    for (let i = 1; i <= numFloors; i++) {
+        const floor = document.createElement('div');
+        floor.classList.add('floor');
+        floor.textContent = i;
+        floor.addEventListener('click', () => checkGuess(i));
+        hotel.appendChild(floor);
+    }
+
+    // Select random murderer floor
+    function setMurdererFloor() {
+        murdererFloor = Math.floor(Math.random() * numFloors) + 1;
+    }
+
+    // Check player's guess
+    function checkGuess(floor) {
+        numGuesses++;
+        const message = document.getElementById('message');
+        if (floor === murdererFloor) {
+            message.textContent = `You have found the murderer in ${numGuesses} turns!`;
+            document.querySelectorAll('.floor')[floor - 1].style.backgroundColor = 'darkred';
+        } else {
+            document.querySelectorAll('.floor')[floor - 1].style.backgroundColor = 'yellow';
+            document.querySelectorAll('.floor')[floor - 1].style.color = 'white';
+            message.textContent = `The murderer lives on the floor ${floor < murdererFloor ? 'higher' : 'lower'} than ${floor}!`;
+        }
+    }
+
+    // Start game
+    setMurdererFloor();
+</script>
+
+</body>
+</html>

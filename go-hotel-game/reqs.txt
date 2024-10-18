@@ -1,0 +1,71 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The game must be implemented in a single HTML file using HTML, CSS, and JavaScript.
+Assumption 1:
+The game will be contained in a single HTML file. This file will include the HTML structure, CSS styles (within <style> tags), and JavaScript code (within <script> tags).
+
+Requirement 2:
+The game must display 25 boxes representing floors of a hotel.
+Assumption 2:
+The HTML will include a container element to hold 25 child elements, each representing a floor. These floor elements may be generated dynamically using JavaScript or defined statically in the HTML. Each floor element will have a unique identifier and display its floor number. CSS will be used to arrange these floors in a single column, with appropriate styling to visually separate them.
+
+Requirement 3:
+The game must randomly select a floor number between 1 and 25 for the murderer's location.
+Assumption 3:
+When the game starts or resets, a function (e.g., selectMurdererFloor) will use JavaScript's random number generation to select an integer between 1 and 25. This number will be stored and kept hidden from the player. The function will ensure that a new random floor is selected for each game.
+
+Requirement 4:
+Players must be able to click on the boxes to guess the murderer's location.
+Assumption 4:
+An event listener will be attached to handle clicks on floor elements. When a floor is clicked, a function (e.g., handleGuess) will be called to process the guess. This function will compare the clicked floor number with the murderer's location and trigger appropriate feedback.
+
+Requirement 5:
+The game must provide feedback after each guess.
+Assumption 5:
+The HTML will include an element for displaying feedback messages to the player. After each guess, this element will be updated with appropriate text feedback. Additionally, the appearance of the clicked floor will change to provide visual feedback.
+
+Requirement 6:
+Correct guesses must turn the box background to dark red.
+Assumption 6:
+When the correct floor is guessed, its appearance will change to have a dark red background. This may be achieved by adding a CSS class or directly modifying the element's style.
+
+Requirement 7:
+Incorrect guesses must turn the box background to yellow with white text.
+Assumption 7:
+For incorrect guesses, the clicked floor's appearance will change to have a yellow background with white text. This will be implemented similarly to the correct guess styling.
+
+Requirement 8:
+The game must display a "higher" or "lower" hint for incorrect guesses.
+Assumption 8:
+The guess handling function will compare the guessed floor with the murderer's location to determine whether to display a "higher" or "lower" hint. This hint will be included in the feedback message displayed to the player.
+
+Requirement 9:
+The game must keep track of the number of turns taken by the player.
+Assumption 9:
+A variable will be used to count the number of valid guesses made. This count will be incremented with each guess and displayed to the player, updating after each turn.
+
+Requirement 10:
+The game must display a win message with the number of turns taken when the correct floor is guessed.
+Assumption 10:
+When the correct floor is guessed, the feedback area will be updated with a win message that includes the total number of turns taken. This message will be styled to stand out from regular feedback.
+
+Requirement 11:
+The game must prevent further guesses after the correct floor is found.
+Assumption 11:
+Once the game is won, a mechanism will be implemented to ignore further click events on the floors. This may involve setting a game state flag or removing event listeners.
+
+Requirement 12:
+The game must have a way to start a new game after completion.
+Assumption 12:
+A "New Game" button will be included in the HTML. When clicked, this button will trigger a function to reset the game state, including selecting a new murderer's location, resetting the turn count, and clearing all guessed floor styles.
+
+Requirement 13:
+The game must display the range of possible floor numbers (1-25) to the player.
+Assumption 13:
+The game instructions, clearly stating the floor range of 1-25, will be displayed in the game interface. This information will be positioned and styled to be easily noticeable by the player.
+
+Requirement 14:
+The game must ensure that each floor number is unique and appears only once.
+Assumption 14:
+The game logic will implement a mechanism to assign unique numbers from 1 to 25 to each floor element. This may involve creating an array of numbers, potentially shuffling it, and then assigning the numbers to the floors.

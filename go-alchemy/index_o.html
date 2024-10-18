@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alchemy Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .element {
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: 2px solid #333;
+            border-radius: 5px;
+            font-size: 18px;
+            background-color: #fff;
+        }
+        .elements-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Alchemy Game</h1>
+<p>Combine two elements to discover new ones!</p>
+<h2>Available Elements</h2>
+<div class="elements-container" id="elements-container"></div>
+<h2>Selected Elements</h2>
+<p id="selected-elements">None</p>
+
+<script>
+    const initialElements = [
+        { name: 'Fire', symbol: '🔥' },
+        { name: 'Water', symbol: '💧' },
+        { name: 'Earth', symbol: '🌍' },
+        { name: 'Air', symbol: '💨' }
+    ];
+
+    const combinations = {
+        'Fire+Water': { name: 'Steam', symbol: '💨' },
+        'Fire+Earth': { name: 'Lava', symbol: '🌋' },
+        'Air+Earth': { name: 'Dust', symbol: '🌪️' },
+        'Water+Earth': { name: 'Mud', symbol: '🪵' },
+        'Fire+Air': { name: 'Energy', symbol: '⚡' },
+        'Water+Energy': { name: 'Life', symbol: '🌱' }
+    };
+
+    let availableElements = [...initialElements];
+    let selectedElements = [];
+
+    const elementsContainer = document.getElementById('elements-container');
+    const selectedElementsDisplay = document.getElementById('selected-elements');
+
+    function updateElements() {
+        elementsContainer.innerHTML = '';
+        availableElements.forEach(element => {
+            const el = document.createElement('div');
+            el.className = 'element';
+            el.textContent = `${element.name} ${element.symbol}`;
+            el.addEventListener('click', () => selectElement(element));
+            elementsContainer.appendChild(el);
+        });
+    }
+
+    function selectElement(element) {
+        if (selectedElements.length < 2) {
+            selectedElements.push(element);
+            selectedElementsDisplay.textContent = selectedElements.map(el => el.name).join(' + ');
+            if (selectedElements.length === 2) {
+                combineElements();
+            }
+        }
+    }
+
+    function combineElements() {
+        const [first, second] = selectedElements;
+        const combinationKey1 = `${first.name}+${second.name}`;
+        const combinationKey2 = `${second.name}+${first.name}`;
+
+        const newElement = combinations[combinationKey1] || combinations[combinationKey2];
+
+        if (newElement && !availableElements.some(el => el.name === newElement.name)) {
+            availableElements.push(newElement);
+            alert(`You discovered: ${newElement.name} ${newElement.symbol}`);
+        } else {
+            alert('This combination did not produce anything new.');
+        }
+
+        selectedElements = [];
+        selectedElementsDisplay.textContent = 'None';
+        updateElements();
+    }
+
+    updateElements();
+</script>
+
+</body>
+</html>

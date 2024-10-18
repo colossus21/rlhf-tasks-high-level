@@ -1,0 +1,71 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The game must be implemented using HTML, CSS, and JavaScript in a single file.
+Assumption 1:
+The game will be contained in a single HTML file named index.html. This file will include `<style>` tags for CSS and `<script>` tags for JavaScript. The HTML structure will include a main game area, a discovered elements list, and necessary control buttons. The CSS will define the layout and appearance of game elements, while the JavaScript will handle game logic and user interactions.
+
+Requirement 2:
+The game must start with four initial elements: Fire, Water, Earth, and Air.
+Assumption 2:
+When the page loads, four distinct interactive elements representing Fire, Water, Earth, and Air will be displayed in the main game area. These elements will be created dynamically using JavaScript and added to the DOM. Each element will be draggable and have a unique identifier for game logic purposes.
+
+Requirement 3:
+Each element must be represented by a unicode symbol.
+Assumption 3:
+The game will use Unicode symbols to visually represent each element. Fire will be represented by 🔥 (U+1F525), Water by 💧 (U+1F4A7), Earth by 🌍 (U+1F30D), and Air by 💨 (U+1F4A8). These symbols will be stored in a JavaScript object or array for easy reference and will be applied to the elements' content or background.
+
+Requirement 4:
+Players must be able to drag and drop elements to combine them.
+Assumption 4:
+The game will implement drag and drop functionality using the HTML5 drag and drop API. Each element will have event listeners for 'dragstart', 'dragover', and 'drop' events. When an element is dropped onto another, the game will check if the combination is valid. The dragged element will follow the cursor, and visual cues will indicate valid drop targets.
+
+Requirement 5:
+The game must support the following combinations: Fire + Water = Steam, Fire + Earth = Lava, Air + Earth = Dust, Water + Earth = Mud, Fire + Air = Energy, Water + Energy = Life.
+Assumption 5:
+A JavaScript object or array will store valid combinations and their results. When elements are combined, the game will check this data structure to determine if the combination is valid and what new element should be created. If a combination is not found in this structure, it will be considered invalid.
+
+Requirement 6:
+The game must display newly created elements when a valid combination is made.
+Assumption 6:
+When a valid combination occurs, the game will create a new element object with appropriate properties (symbol, name, ID). This new element will be immediately added to the game area using DOM manipulation. The new element will inherit all interactive properties of the original elements, including being draggable for future combinations.
+
+Requirement 7:
+The game must not allow invalid combinations of elements.
+Assumption 7:
+Before creating a new element, the game will check if the combination exists in the valid combinations data structure. If the combination is not found, the drag and drop action will be cancelled, the elements will return to their original positions, and a user-friendly error message will be displayed briefly to inform the player that the combination is invalid.
+
+Requirement 8:
+The game must keep track of discovered elements.
+Assumption 8:
+The game will maintain an array or object to store all discovered elements. Each time a new element is created, it will be added to this data structure. This structure will be used to populate the discovered elements list in the UI and to check for duplicate discoveries.
+
+Requirement 9:
+The game must allow players to use newly created elements in further combinations.
+Assumption 9:
+All elements, including newly created ones, will have the same drag and drop functionality as the initial elements. The game logic for checking combinations will treat all elements equally, allowing for the possibility of creating complex elements through multiple combinations.
+
+Requirement 10:
+The game must provide visual feedback when a successful combination is made.
+Assumption 10:
+When a valid combination occurs, the game will trigger a visual effect using CSS animations. This could include a brief color change, a size change, or a particle effect emanating from the point of combination. The effect will be noticeable but not disruptive to gameplay. Additionally, a sound effect may play to provide auditory feedback.
+
+Requirement 11:
+The game must allow players to reset the game to its initial state.
+Assumption 11:
+A clearly labeled "Reset" button will be present in the UI. When clicked, this button will trigger a function that clears the discovered elements array, removes all created elements from the game area, and restores only the initial four elements. A confirmation dialog will appear before resetting to prevent accidental progress loss.
+
+Requirement 12:
+The game must save the player's progress.
+Assumption 12:
+The game will use the browser's localStorage API to persist the player's progress. After each successful combination, the game will update a JSON string in localStorage with the current state of discovered elements. This data will include element names, symbols, and any other relevant properties.
+
+Requirement 13:
+The game must load the player's saved progress when the page is loaded.
+Assumption 13:
+When the page loads, the game will check localStorage for saved progress data. If found, it will parse the JSON string and use it to reconstruct the game state, including recreating all discovered elements and updating the UI accordingly. If no saved data is found, the game will initialize with the default four elements.
+
+Requirement 14:
+The game must display a count of how many elements have been discovered.
+Assumption 14:
+The UI will include a prominently displayed counter showing the number of unique elements discovered. This counter will be updated whenever a new element is created. The counter will be a part of the main game view, possibly near the discovered elements list, and will be styled to be easily noticeable without obstructing gameplay.

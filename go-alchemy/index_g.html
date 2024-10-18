@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Alchemy Game</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .element {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 1px solid black;
+            text-align: center;
+            line-height: 50px;
+            margin: 10px;
+            cursor: grab;
+        }
+        .element.dragging {
+            opacity: 0.5;
+        }
+        #workspace {
+            width: 200px;
+            height: 200px;
+            border: 2px dashed black;
+            margin: 20px auto;
+        }
+        #discovered {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Simple Alchemy Game</h1>
+
+<div id="elements">
+    <div class="element" id="fire" draggable="true">🔥</div>
+    <div class="element" id="water" draggable="true">💧</div>
+    <div class="element" id="earth" draggable="true">🌍</div>
+    <div class="element" id="air" draggable="true">💨</div>
+</div>
+
+<div id="workspace"></div>
+
+<h2>Discovered Elements:</h2>
+<div id="discovered"></div>
+
+<script>
+    const elements = {
+        fire: { symbol: "🔥", name: "Fire" },
+        water: { symbol: "💧", name: "Water" },
+        earth: { symbol: "🌍", name: "Earth" },
+        air: { symbol: "💨", name: "Air" }
+    };
+
+    const combinations = {
+        "fire+water": { symbol: "♨️", name: "Steam" },
+        "fire+earth": { symbol: "🌋", name: "Lava" },
+        "air+earth": { symbol: "🌫️", name: "Dust" },
+        "water+earth": { symbol: "🪹", name: "Mud" },
+        "fire+air": { symbol: "⚡", name: "Energy" },
+        "water+energy": { symbol: "🌱", name: "Life" }
+    };
+
+    const workspace = document.getElementById('workspace');
+    const discovered = document.getElementById('discovered');
+
+    let element1 = null;
+    let element2 = null;
+
+    // Drag and drop functionality
+    document.querySelectorAll('.element').forEach(element => {
+        element.addEventListener('dragstart', dragStart);
+        element.addEventListener('dragend', dragEnd);
+    });
+
+    workspace.addEventListener('dragover', dragOver);
+    workspace.addEventListener('drop', drop);
+
+    function dragStart(event) {
+        event.dataTransfer.setData('text', event.target.id);
+        event.target.classList.add('dragging');
+    }
+
+    function dragEnd(event) {
+        event.target.classList.remove('dragging');
+    }
+
+    function dragOver(event) {
+        event.preventDefault();
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        const elementId = event.dataTransfer.getData('text');
+        const element = document.getElementById(elementId);
+
+        if (!element1) {
+            element1 = element;
+        } else if (!element2 && element !== element1) {
+            element2 = element;
+            combineElements();
+        }
+    }
+
+    function combineElements() {
+        const key1 = element1.id;
+        const key2 = element2.id;
+        const combinationKey = [key1, key2].sort().join('+');
+
+        if (combinations[combinationKey]) {
+            const newElement = combinations[combinationKey];
+            displayElement(newElement);
+
+            // Remove combined elements from the main list
+            element1.remove();
+            element2.remove();
+
+            delete combinations[combinationKey]; // Prevent creating the same element twice
+        } else {
+            // Invalid combination, reset selection
+            element1 = null;
+            element2 = null;
+        }
+    }
+
+    function displayElement(element) {
+        const div = document.createElement('div');
+        div.classList.add('element');
+        div.textContent = element.symbol;
+        div.innerHTML += `<br>${element.name}`;
+        discovered.appendChild(div);
+    }
+</script>
+
+</body>
+</html>

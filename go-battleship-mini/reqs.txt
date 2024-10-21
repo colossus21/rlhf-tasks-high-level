@@ -69,8 +69,3 @@ Requirement 14:
 The game must prevent players from placing ships outside their designated 6x3 grid.
 Assumption 14:
 During the placement phase, the game will implement boundary checking. When a player attempts to place a ship, the game will calculate whether any part of the ship extends beyond the 6x3 grid. If so, the placement will be rejected, and an error message will be displayed explaining that ships must be fully within the grid. The player will then need to adjust their placement before proceeding.
-
-Requirement 15:
-The game must prevent players from overlapping their ships during placement.
-Assumption 15:
-The game will maintain a record of which cells are occupied by ships during the placement phase. When a player attempts to place a ship, the game will check if any of the cells required for the new ship are already occupied. If an overlap is detected, the placement will be rejected, and an error message will inform the player that ships cannot overlap. The player will need to choose a different position or orientation for the ship.

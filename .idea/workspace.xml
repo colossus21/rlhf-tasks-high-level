@@ -6,8 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="94ef8d18-f607-4510-bcc1-62d85bb39a8e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go-lights/rating_g_tests.md" beforeDir="false" afterPath="$PROJECT_DIR$/go-lights/rating_g_tests.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go-battleship-mini/__tests__/test_g.js" beforeDir="false" afterPath="$PROJECT_DIR$/go-battleship-mini/__tests__/test_g.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go-battleship-mini/__tests__/test_o.js" beforeDir="false" afterPath="$PROJECT_DIR$/go-battleship-mini/__tests__/test_o.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go-battleship-mini/reqs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/go-battleship-mini/reqs.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go-hotel-game/rating_g.md" beforeDir="false" afterPath="$PROJECT_DIR$/go-hotel-game/rating_g.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go-hotel-game/rating_g_tests.md" beforeDir="false" afterPath="$PROJECT_DIR$/go-hotel-game/rating_g_tests.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go-hotel-game/rating_o_tests.md" beforeDir="false" afterPath="$PROJECT_DIR$/go-hotel-game/rating_o_tests.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +81,9 @@
       <workItem from="1729060955743" duration="10420000" />
       <workItem from="1729156990446" duration="1510000" />
       <workItem from="1729243678309" duration="26374000" />
-      <workItem from="1729273544822" duration="3545000" />
+      <workItem from="1729273544822" duration="4639000" />
+      <workItem from="1729280698594" duration="1143000" />
+      <workItem from="1729535927699" duration="103000" />
     </task>
     <servers />
   </component>

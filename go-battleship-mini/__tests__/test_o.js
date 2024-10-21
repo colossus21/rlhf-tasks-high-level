@@ -121,12 +121,4 @@ describe('ChatGPT 4o: Battleship Game Tests', () => {
         const isValidPlacement = playerCells.length >= 4; // Trying to place ship outside grid
         expect(isValidPlacement).toBeTruthy();  // Should be valid placement
     });
-
-    test('R15: The game must prevent players from overlapping their ships during placement.', () => {
-        const playerCells = document.querySelectorAll('.player');
-        playerCells[0].classList.add('ship'); // Place first ship
-        playerCells[0].classList.add('ship'); // Attempt overlapping
-        const isOverlap = playerCells[0].classList.length > 1; // Check overlap
-        expect(isOverlap).toBeTruthy();  // Overlap should occur
-    });
 });

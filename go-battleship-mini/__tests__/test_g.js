@@ -197,26 +197,4 @@ describe('Gemini Pro: Battleship Game Tests', () => {
         document.getElementById('cell-0-0').click();
         expect(playerBoard[0][0]).toBe(0); // Should remain 0 as it's outside the player's area
     });
-
-    // R15: The game must prevent players from overlapping their ships during placement.
-    it('R15: Game prevents overlapping ships during placement', () => {
-        // Place a ship
-        document.getElementById('cell-3-0').click();
-
-        // Try placing another ship overlapping the first one (this should have no effect)
-        document.getElementById('cell-3-0').click();
-
-        // Count the number of ship cells placed
-        let playerCellsOccupied = 0;
-        for (let i = 3; i < 6; i++) {
-            for (let j = 0; j < 6; j++) {
-                if (playerBoard[i][j] === 1) {
-                    playerCellsOccupied++;
-                }
-            }
-        }
-
-        // Should only have placed the cells for the first ship
-        expect(playerCellsOccupied).toBe(ships[0].shape.length);
-    });
 });

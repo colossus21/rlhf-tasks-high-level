@@ -33,7 +33,7 @@ describe('Breakout Game', () => {
 
     // R1 - Verify the game is implemented in a single HTML file
     test('R1: Game should exist in a single HTML file', () => {
-        const bodyContent = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
+        const bodyContent = fs.readFileSync(path.resolve(__dirname, '../index_o.html'), 'utf8');
         expect(bodyContent).toContain('<html>');
         expect(bodyContent).toContain('<style>');
         expect(bodyContent).toContain('<script>');

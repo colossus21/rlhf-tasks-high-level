@@ -1,0 +1,71 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The application must provide a text input area for users to write or paste their essay.
+Assumption 1:
+There will be a <textarea> element with an appropriate ID for users to input their text.
+
+Requirement 2:
+The application must allow users to upload a text file containing an essay.
+Assumption 2:
+There will be an <input type="file"> element that accepts .txt files, with an event listener to read and display the file contents in the text area.
+
+Requirement 3:
+The application must display a summary section below the text input area.
+Assumption 3:
+There will be a <div> element with an appropriate ID positioned below the text input area to show the analysis results.
+
+Requirement 4:
+The summary must include a word count of the input text.
+Assumption 4:
+The application will split the input text by whitespace and count the resulting array length to determine the word count.
+
+Requirement 5:
+The summary must include a character count of the input text.
+Assumption 5:
+The application will use the length property of the input string to determine the character count.
+
+Requirement 6:
+The summary must include an estimated reading time for the input text.
+Assumption 6:
+The application will use a simple algorithm to calculate the estimated reading time in minutes.
+
+Requirement 7:
+The summary must update in real-time as the user types or modifies the text in the input area.
+Assumption 7:
+An event listener for the 'input' event will be attached to the text area to trigger the summary update function.
+
+Requirement 8:
+The application must provide an option to exclude punctuation and spaces from the character count.
+Assumption 8:
+There will be a checkbox input with an appropriate ID that, when checked, will trigger a recalculation of the character count excluding punctuation and spaces.
+
+Requirement 9:
+The application must display the top 10 most frequently used words in the input text.
+Assumption 9:
+The application will create an object to store word frequencies, sort it by frequency, and display the top 10 words and their counts.
+
+Requirement 10:
+The application must handle empty input gracefully, displaying appropriate messages or zero counts.
+Assumption 10:
+The summary update function will check for empty input and display "0" or "N/A" for counts and reading time when appropriate.
+
+Requirement 11:
+The application must sanitize input to prevent XSS attacks when displaying the summary.
+Assumption 11:
+The application will use appropriate methods (e.g., textContent instead of innerHTML) when updating the summary to prevent script injection.
+
+Requirement 12:
+The application must round the estimated reading time to the nearest minute.
+Assumption 12:
+The calculated reading time will be rounded using Math.round() before being displayed.
+
+Requirement 13:
+The application must treat hyphenated words as single words in the word count.
+Assumption 13:
+The word counting algorithm will consider hyphenated words as single words.
+
+Requirement 14:
+The application must ignore common English words (stop words) in the top 10 words list.
+Assumption 14:
+The application will maintain a list of common stop words (e.g., "the", "a", "an") and exclude them when calculating the top 10 words.

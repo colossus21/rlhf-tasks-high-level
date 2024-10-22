@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Essay Analyzer</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #container {
+            width: 50%;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <h1>Essay Analyzer</h1>
+    <textarea id="essay" rows="10" cols="50"></textarea>
+    <br>
+    <input type="checkbox" id="excludePunctuation"> Exclude Punctuation and Spaces
+</div>
+
+<div id="result"></div>
+
+<script>
+    const essayText = document.getElementById('essay');
+    const resultDiv = document.getElementById('result');
+    const excludePunctuationCheckbox = document.getElementById('excludePunctuation');
+
+    essayText.addEventListener('input', updateAnalysis);
+    excludePunctuationCheckbox.addEventListener('change', updateAnalysis);
+
+    function updateAnalysis() {
+        const text = essayText.value;
+        const excludePunctuation = excludePunctuationCheckbox.checked;
+
+        const wordCount = countWords(text, excludePunctuation);
+        const charCount = countCharacters(text, excludePunctuation);
+        const readingTime = calculateReadingTime(wordCount);
+        const topWords = getTopWords(text, excludePunctuation);
+
+        let resultHTML = `
+    <h2>Analysis Result</h2>
+    <p>Word Count: ${wordCount}</p>
+    <p>Character Count: ${charCount}</p>
+    <p>Reading Time: ${readingTime}</p>
+    <h3>Top 10 Words:</h3>
+    <ul>
+  `;
+        topWords.forEach(([word, count]) => {
+            resultHTML += `<li>${word}: ${count}</li>`;
+        });
+        resultHTML += `</ul>`;
+
+        resultDiv.innerHTML = resultHTML;
+    }
+
+    function countWords(text, excludePunctuation) {
+        if (excludePunctuation) {
+            text = text.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, ' ');
+        }
+        const words = text.trim().split(/\s+/);
+        return words.length === 1 && words[0] === "" ? 0 : words.length;
+    }
+
+    function countCharacters(text, excludePunctuation) {
+        if (excludePunctuation) {
+            text = text.replace(/[^a-zA-Z0-9]/g, '');
+        }
+        return text.length;
+    }
+
+    function calculateReadingTime(wordCount) {
+        // Assuming an average reading speed of 200 words per minute
+        const readingTimeMinutes = Math.ceil(wordCount / 200);
+        return `${readingTimeMinutes} minute${readingTimeMinutes > 1 ? 's' : ''}`;
+    }
+
+    function getTopWords(text, excludePunctuation) {
+        if (excludePunctuation) {
+            text = text.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, ' ');
+        }
+        const words = text.toLowerCase().split(/\s+/);
+        const wordCounts = {};
+        for (const word of words) {
+            wordCounts[word] = (wordCounts[word] || 0) + 1;
+        }
+        const sortedWords = Object.entries(wordCounts).sort(([, countA], [, countB]) => countB - countA);
+        return sortedWords.slice(0, 10);
+    }
+</script>
+
+</body>
+</html>

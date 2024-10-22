@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essay Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .summary {
+            margin-top: 10px;
+        }
+        .summary-item {
+            margin: 5px 0;
+        }
+        label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<h1>Essay Analyzer</h1>
+<textarea id="essayInput" placeholder="Type or paste your essay here..."></textarea>
+
+<label for="excludePunctuation">
+    <input type="checkbox" id="excludePunctuation"> Exclude punctuation and spaces for counting
+</label>
+
+<div class="summary">
+    <h2>Summary</h2>
+    <div class="summary-item" id="wordCount">Word Count: 0</div>
+    <div class="summary-item" id="charCount">Character Count: 0</div>
+    <div class="summary-item" id="readingTime">Estimated Reading Time: 0 min</div>
+    <div class="summary-item" id="topWords">Top 10 Words:</div>
+</div>
+
+<script>
+    const textarea = document.getElementById('essayInput');
+    const wordCountElem = document.getElementById('wordCount');
+    const charCountElem = document.getElementById('charCount');
+    const readingTimeElem = document.getElementById('readingTime');
+    const topWordsElem = document.getElementById('topWords');
+    const excludePunctuationCheckbox = document.getElementById('excludePunctuation');
+
+    const updateSummary = () => {
+        let text = textarea.value;
+        const excludePunctuation = excludePunctuationCheckbox.checked;
+
+        if (excludePunctuation) {
+            text = text.replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+        }
+
+        const wordArray = text.match(/\b\w+\b/g) || [];
+        const wordCount = wordArray.length;
+        const charCount = text.replace(/\s/g, '').length;
+        const readingTime = Math.ceil(wordCount / 200); // Average reading speed: 200 words per minute
+
+        const wordFrequency = {};
+        wordArray.forEach(word => {
+            word = word.toLowerCase();
+            wordFrequency[word] = (wordFrequency[word] || 0) + 1;
+        });
+
+        const sortedWords = Object.entries(wordFrequency).sort((a, b) => b[1] - a[1]);
+        const topWords = sortedWords.slice(0, 10).map(([word, count]) => `${word}: ${count}`).join(', ');
+
+        wordCountElem.textContent = `Word Count: ${wordCount}`;
+        charCountElem.textContent = `Character Count: ${charCount}`;
+        readingTimeElem.textContent = `Estimated Reading Time: ${readingTime} min`;
+        topWordsElem.textContent = `Top 10 Words: ${topWords || 'None'}`;
+    };
+
+    textarea.addEventListener('input', updateSummary);
+    excludePunctuationCheckbox.addEventListener('change', updateSummary);
+</script>
+</body>
+</html>

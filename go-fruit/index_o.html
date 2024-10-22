@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shape Ninja Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        canvas {
+            background-color: #333;
+            display: block;
+        }
+        #score, #game-over {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+        }
+        #restart-btn {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 10px 20px;
+            background-color: #ff6347;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #fff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+<div id="score">Score: 0</div>
+<button id="restart-btn">Restart Game</button>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreDisplay = document.getElementById('score');
+    const restartBtn = document.getElementById('restart-btn');
+    let shapes = [];
+    let score = 0;
+    let gameOver = false;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Shape class
+    class Shape {
+        constructor(x, y, radius, speed) {
+            this.x = x;
+            this.y = y;
+            this.radius = radius;
+            this.speed = speed;
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        update() {
+            this.y += this.speed;
+            this.draw();
+        }
+
+        isOutOfScreen() {
+            return this.y - this.radius > canvas.height;
+        }
+
+        isClicked(mouseX, mouseY) {
+            const dist = Math.hypot(mouseX - this.x, mouseY - this.y);
+            return dist < this.radius;
+        }
+    }
+
+    // Generate random shapes at random intervals
+    function spawnShape() {
+        const radius = Math.random() * 30 + 20;
+        const x = Math.random() * (canvas.width - radius * 2) + radius;
+        const speed = Math.random() * 3 + 1;
+        shapes.push(new Shape(x, 0, radius, speed));
+    }
+
+    // Game over and restart logic
+    function endGame() {
+        gameOver = true;
+        scoreDisplay.innerHTML = `Game Over! Final Score: ${score}`;
+        restartBtn.style.display = 'block';
+    }
+
+    function restartGame() {
+        shapes = [];
+        score = 0;
+        gameOver = false;
+        scoreDisplay.innerHTML = `Score: 0`;
+        restartBtn.style.display = 'none';
+        animate();
+    }
+
+    // Handle click to "slash" shapes
+    canvas.addEventListener('click', (e) => {
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        shapes = shapes.filter((shape) => {
+            if (shape.isClicked(mouseX, mouseY)) {
+                score++;
+                scoreDisplay.innerHTML = `Score: ${score}`;
+                return false;
+            }
+            return true;
+        });
+    });
+
+    // Restart button functionality
+    restartBtn.addEventListener('click', restartGame);
+
+    // Animation loop
+    function animate() {
+        if (gameOver) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        shapes.forEach((shape, index) => {
+            shape.update();
+            if (shape.isOutOfScreen()) {
+                endGame();
+            }
+        });
+
+        requestAnimationFrame(animate);
+    }
+
+    // Spawn shapes every 1-2 seconds
+    setInterval(() => {
+        if (!gameOver) {
+            spawnShape();
+        }
+    }, Math.random() * 1000 + 1000);
+
+    animate();
+</script>
+</body>
+</html>

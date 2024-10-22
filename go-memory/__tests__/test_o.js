@@ -10,11 +10,6 @@ const html = fs.readFileSync(path.resolve(__dirname, '../index_o.html'), 'utf8')
 document.body.innerHTML = html;
 
 describe('ChatGPT 4o: Memory Game Tests', () => {
-    beforeEach(() => {
-        document.body.innerHTML = html; // Reload the HTML
-        createBoard(); // Re-initialize game state, if necessary
-    });
-
     // Load the necessary DOM elements
     const gameBoard = document.getElementById('gameBoard');
     const restartButton = document.getElementById('restartButton');

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shape Ninja</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+
+        #game-container {
+            width: 500px;
+            height: 400px;
+            margin: 50px auto;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #000;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+        }
+
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 30px;
+            display: none;
+        }
+
+        #restart {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            display: none;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container"></div>
+<div id="score">Score: 0</div>
+<div id="game-over">Game Over</div>
+<button id="restart">Restart</button>
+
+<script>
+    const gameContainer = document.getElementById('game-container');
+    const scoreDisplay = document.getElementById('score');
+    const gameOverDisplay = document.getElementById('game-over');
+    const restartButton = document.getElementById('restart');
+
+    let score = 0;
+    let gameOver = false;
+
+    function createShape() {
+        if (gameOver) return;
+
+        const shape = document.createElement('div');
+        shape.classList.add('shape');
+
+        const size = Math.random() * 50 + 20; // Size between 20px and 70px
+        shape.style.width = `${size}px`;
+        shape.style.height = `${size}px`;
+
+        const x = Math.random() * (gameContainer.offsetWidth - size);
+        shape.style.left = `${x}px`;
+        shape.style.top = '-100px'; // Start above the container
+
+        const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        shape.style.backgroundColor = color;
+
+        gameContainer.appendChild(shape);
+
+        let y = 0;
+        const speed = Math.random() * 3 + 1; // Speed between 1px and 4px per frame
+
+        const animation = setInterval(() => {
+            y += speed;
+            shape.style.top = `${y}px`;
+
+            if (y > gameContainer.offsetHeight) {
+                clearInterval(animation);
+                shape.remove();
+                gameOver = true;
+                gameOverDisplay.style.display = 'block';
+                restartButton.style.display = 'block';
+            }
+        }, 10);
+
+        shape.addEventListener('click', () => {
+            clearInterval(animation);
+            shape.remove();
+            score++;
+            scoreDisplay.textContent = `Score: ${score}`;
+        });
+    }
+
+    setInterval(createShape, 1000); // Create a new shape every second
+
+    restartButton.addEventListener('click', () => {
+        gameOver = false;
+        score = 0;
+        scoreDisplay.textContent = `Score: ${score}`;
+        gameOverDisplay.style.display = 'none';
+        restartButton.style.display = 'none';
+
+        // Remove any remaining shapes
+        const shapes = document.querySelectorAll('.shape');
+        shapes.forEach(shape => shape.remove());
+    });
+</script>
+
+</body>
+</html>

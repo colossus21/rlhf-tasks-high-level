@@ -1,6 +1,7 @@
 ### Correctness	
 
 ### Correctness - Rationale
+- R12: Color sets greater than 1 does not validate color distribution
 
 ### Model A Instruction Following
 

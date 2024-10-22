@@ -1,0 +1,61 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The game must be implemented in a single HTML file using HTML, CSS, and JavaScript.
+Assumption 1:
+The game's HTML, CSS, and JavaScript code will all be contained within a single index.html file.
+
+Requirement 2:
+The game must have a canvas element for rendering the game graphics.
+Assumption 2:
+The HTML file will include a <canvas> element with appropriate width and height attributes.
+
+Requirement 3:
+The game must have a ball that continuously bounces around the screen in all directions.
+Assumption 3:
+The ball's position will be updated every frame using JavaScript, and it will change direction upon hitting the canvas boundaries.
+
+Requirement 4:
+The game must have a player-controlled paddle that follows the mouse movement.
+Assumption 4:
+The paddle's x-position will be updated based on the mouse's x-position within the canvas, using a mousemove event listener.
+
+Requirement 5:
+The game must have a set of blocks at the top of the screen that can be destroyed by the ball.
+Assumption 5:
+An array of block objects will be created and rendered at the top of the canvas, each with properties for position, size, and visibility.
+
+Requirement 6:
+The game must end when the ball collides with the player's paddle.
+Assumption 6:
+Collision detection between the ball and paddle will trigger a game over state.
+
+Requirement 7:
+The player must win the game when all blocks are destroyed.
+Assumption 7:
+A win condition will be checked each time a block is destroyed, ending the game when no blocks remain.
+
+Requirement 8:
+The game must display the current score (number of blocks destroyed).
+Assumption 8:
+A score variable will be maintained and displayed on the canvas, updating when blocks are destroyed.
+
+Requirement 9:
+The game must have a "Game Over" screen when the player loses.
+Assumption 9:
+A game over state will display a message on the canvas when the ball collides with the paddle.
+
+Requirement 10:
+The game must have a "You Win" screen when the player destroys all blocks.
+Assumption 10:
+A win state will display a victory message on the canvas when all blocks are destroyed.
+
+Requirement 11:
+The game must have a restart functionality after game over or winning.
+Assumption 11:
+A restart function will reset all game variables and redraw the initial game state.
+
+Requirement 12:
+When blocks are destroyed, the score shall increase.
+Assumption 12:
+Increment the score by 1 for each block destroyed.

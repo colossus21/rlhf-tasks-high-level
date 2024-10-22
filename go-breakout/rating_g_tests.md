@@ -1,8 +1,6 @@
 ### Correctness	
 
 ### Correctness - Rationale
-- R4: Manually adds circle instead of using createCircle
-- Merging the tests was not required
 
 ### Model A Instruction Following
 

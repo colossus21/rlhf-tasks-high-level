@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breakout Twist</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222;
+        }
+        canvas {
+            background-color: #333;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Canvas dimensions
+    canvas.width = 800;
+    canvas.height = 600;
+
+    // Game variables
+    let ballX = canvas.width / 2;
+    let ballY = canvas.height / 2;
+    let ballSpeedX = 3;
+    let ballSpeedY = 3;
+    const ballRadius = 10;
+
+    const paddleWidth = 100;
+    const paddleHeight = 10;
+    let paddleX = (canvas.width - paddleWidth) / 2;
+
+    const blockRowCount = 3;
+    const blockColumnCount = 5;
+    const blockWidth = 120;
+    const blockHeight = 30;
+    const blockPadding = 10;
+    const blockOffsetTop = 30;
+    const blockOffsetLeft = 30;
+
+    // Player status
+    let gameOver = false;
+    let win = false;
+
+    // Create blocks
+    const blocks = [];
+    for (let col = 0; col < blockColumnCount; col++) {
+        blocks[col] = [];
+        for (let row = 0; row < blockRowCount; row++) {
+            blocks[col][row] = { x: 0, y: 0, status: 1 };
+        }
+    }
+
+    // Draw ball
+    function drawBall() {
+        ctx.beginPath();
+        ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+        ctx.fillStyle = '#00f';
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    // Draw paddle
+    function drawPaddle() {
+        ctx.beginPath();
+        ctx.rect(paddleX, canvas.height - paddleHeight - 10, paddleWidth, paddleHeight);
+        ctx.fillStyle = '#f00';
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    // Draw blocks
+    function drawBlocks() {
+        for (let col = 0; col < blockColumnCount; col++) {
+            for (let row = 0; row < blockRowCount; row++) {
+                if (blocks[col][row].status === 1) {
+                    const blockX = col * (blockWidth + blockPadding) + blockOffsetLeft;
+                    const blockY = row * (blockHeight + blockPadding) + blockOffsetTop;
+                    blocks[col][row].x = blockX;
+                    blocks[col][row].y = blockY;
+                    ctx.beginPath();
+                    ctx.rect(blockX, blockY, blockWidth, blockHeight);
+                    ctx.fillStyle = '#0f0';
+                    ctx.fill();
+                    ctx.closePath();
+                }
+            }
+        }
+    }
+
+    // Collision detection with blocks
+    function collisionDetection() {
+        for (let col = 0; col < blockColumnCount; col++) {
+            for (let row = 0; row < blockRowCount; row++) {
+                const block = blocks[col][row];
+                if (block.status === 1) {
+                    if (
+                        ballX > block.x &&
+                        ballX < block.x + blockWidth &&
+                        ballY > block.y &&
+                        ballY < block.y + blockHeight
+                    ) {
+                        ballSpeedY = -ballSpeedY;
+                        block.status = 0;
+                        checkWinCondition();
+                    }
+                }
+            }
+        }
+    }
+
+    // Check if player wins
+    function checkWinCondition() {
+        let remainingBlocks = 0;
+        for (let col = 0; col < blockColumnCount; col++) {
+            for (let row = 0; row < blockRowCount; row++) {
+                if (blocks[col][row].status === 1) {
+                    remainingBlocks++;
+                }
+            }
+        }
+        if (remainingBlocks === 0) {
+            win = true;
+            gameOver = true;
+        }
+    }
+
+    // Update game elements
+    function update() {
+        if (!gameOver) {
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
+
+            // Ball-wall collision
+            if (ballX + ballRadius > canvas.width || ballX - ballRadius < 0) {
+                ballSpeedX = -ballSpeedX;
+            }
+            if (ballY + ballRadius > canvas.height || ballY - ballRadius < 0) {
+                ballSpeedY = -ballSpeedY;
+            }
+
+            // Ball-paddle collision (game over condition)
+            if (
+                ballY + ballRadius > canvas.height - paddleHeight - 10 &&
+                ballX > paddleX &&
+                ballX < paddleX + paddleWidth
+            ) {
+                gameOver = true;
+            }
+
+            collisionDetection();
+        }
+    }
+
+    // Render game elements
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBall();
+        drawPaddle();
+        drawBlocks();
+
+        if (gameOver) {
+            ctx.font = '24px Arial';
+            ctx.fillStyle = '#fff';
+            ctx.textAlign = 'center';
+            if (win) {
+                ctx.fillText('You Win!', canvas.width / 2, canvas.height / 2);
+            } else {
+                ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2);
+            }
+            return;
+        }
+
+        update();
+        requestAnimationFrame(render);
+    }
+
+    // Mouse movement controls the paddle
+    document.addEventListener('mousemove', (e) => {
+        const relativeX = e.clientX - canvas.offsetLeft;
+        if (relativeX > 0 && relativeX < canvas.width) {
+            paddleX = relativeX - paddleWidth / 2;
+        }
+    });
+
+    // Start the game
+    render();
+</script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4x4 Memory Game</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 100px);
+            grid-template-rows: repeat(4, 100px);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .hidden {
+            background-color: #ccc;
+        }
+
+        .matched {
+            background-color: transparent;
+            pointer-events: none;
+        }
+
+        .game-info {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-info">
+    Mistakes: <span id="mistakes">0</span> / 3
+</div>
+<div class="game-board" id="gameBoard"></div>
+<div class="result-message" id="resultMessage" style="font-size: 24px; margin-bottom: 20px;"></div>
+<button id="restartButton" style="display: none;">Restart</button>
+
+<script>
+    const colors = [
+        'red', 'blue', 'green', 'yellow',
+        'purple', 'orange', 'pink', 'brown'
+    ];
+
+    let boardColors = [];
+    let firstSelection = null;
+    let secondSelection = null;
+    let mistakes = 0;
+    let pairsMatched = 0;
+    const maxMistakes = 3;
+
+    const gameBoard = document.getElementById('gameBoard');
+    const mistakesDisplay = document.getElementById('mistakes');
+    const resultMessage = document.getElementById('resultMessage');
+    const restartButton = document.getElementById('restartButton');
+
+    function createBoard() {
+        // Clear previous board and reset variables
+        gameBoard.innerHTML = '';
+        boardColors = [];
+        mistakes = 0;
+        pairsMatched = 0;
+        mistakesDisplay.textContent = mistakes;
+        resultMessage.textContent = '';
+        restartButton.style.display = 'none';
+        firstSelection = null;
+        secondSelection = null;
+
+        // Create color pairs and shuffle them
+        const colorPairs = [...colors, ...colors];
+        shuffleArray(colorPairs);
+
+        // Create a 4x4 grid
+        for (let i = 0; i < 16; i++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell', 'hidden');
+            cell.dataset.color = colorPairs[i];
+            cell.addEventListener('click', handleCellClick);
+            gameBoard.appendChild(cell);
+        }
+    }
+
+    function handleCellClick(event) {
+        const clickedCell = event.target;
+
+        // If two selections are already made or the cell is already matched, ignore the click
+        if (firstSelection && secondSelection || clickedCell.classList.contains('matched')) {
+            return;
+        }
+
+        // Reveal the color
+        clickedCell.style.backgroundColor = clickedCell.dataset.color;
+        clickedCell.classList.remove('hidden');
+
+        if (!firstSelection) {
+            // First selection
+            firstSelection = clickedCell;
+        } else {
+            // Second selection
+            secondSelection = clickedCell;
+
+            // Check if they match
+            if (firstSelection.dataset.color === secondSelection.dataset.color) {
+                firstSelection.classList.add('matched');
+                secondSelection.classList.add('matched');
+                pairsMatched += 1;
+                resetSelections();
+
+                // Check if all pairs are matched
+                if (pairsMatched === 8) {
+                    gameOver('You Win!');
+                }
+            } else {
+                // If they don't match, count it as a mistake
+                mistakes += 1;
+                mistakesDisplay.textContent = mistakes;
+
+                // Hide the cells after a short delay
+                setTimeout(() => {
+                    firstSelection.style.backgroundColor = '#ccc';
+                    secondSelection.style.backgroundColor = '#ccc';
+                    resetSelections();
+                }, 1000);
+
+                // Check if mistakes have reached the maximum limit
+                if (mistakes >= maxMistakes) {
+                    gameOver('Game Over');
+                }
+            }
+        }
+    }
+
+    function resetSelections() {
+        firstSelection = null;
+        secondSelection = null;
+    }
+
+    function gameOver(message) {
+        resultMessage.textContent = message;
+        restartButton.style.display = 'block';
+        document.querySelectorAll('.cell').forEach(cell => {
+            cell.style.pointerEvents = 'none';
+        });
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    restartButton.addEventListener('click', createBoard);
+
+    // Initialize the game board
+    createBoard();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nature Themed Sokoban</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #d0f0c0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #game {
+            display: grid;
+            grid-template-columns: repeat(5, 60px);
+            grid-gap: 5px;
+            background-color: #8fcf7d;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .cell {
+            width: 60px;
+            height: 60px;
+            font-size: 2rem;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game"></div>
+
+<script>
+    const levels = [
+        [
+            ["🌲", "🌲", "🌲", "🌲", "🌲"],
+            ["🌲", "😀", "🪨", "🕳️", "🌲"],
+            ["🌲", "🌲", "🌲", "🌲", "🌲"]
+        ],
+        [
+            ["🌲", "🌲", "🌲", "🌲", "🌲"],
+            ["🌲", "🕳️", "🪨", "😀", "🌲"],
+            ["🌲", "🌲", "🌲", "🌲", "🌲"]
+        ],
+        [
+            ["🌲", "🌲", "🌲", "🌲", "🌲"],
+            ["🌲", "😀", "🕳️", "🌲", "🌲"],
+            ["🌲", "🪨", "🌲", "🌲", "🌲"]
+        ]
+    ];
+
+    let currentLevel = 0;
+    let playerPosition = { x: 1, y: 1 };
+    const gameContainer = document.getElementById('game');
+
+    function drawLevel() {
+        gameContainer.innerHTML = '';
+        const level = levels[currentLevel];
+
+        for (let y = 0; y < level.length; y++) {
+            for (let x = 0; x < level[y].length; x++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.innerHTML = level[y][x];
+                gameContainer.appendChild(cell);
+            }
+        }
+    }
+
+    function movePlayer(dx, dy) {
+        const newX = playerPosition.x + dx;
+        const newY = playerPosition.y + dy;
+        const level = levels[currentLevel];
+
+        const targetCell = level[newY][newX];
+        if (targetCell === "🌲") return; // tree blocks movement
+        if (targetCell === " ") return;  // empty space
+        if (targetCell === "🪨") {
+            const nextX = newX + dx;
+            const nextY = newY + dy;
+            const nextCell = level[nextY][nextX];
+            if (nextCell === " " || nextCell === "🕳️") {
+                // Move rock
+                level[newY][newX] = "😀";
+                level[nextY][nextX] = "🪨";
+                level[playerPosition.y][playerPosition.x] = " ";
+                playerPosition = { x: newX, y: newY };
+            }
+        } else {
+            // Move player
+            level[newY][newX] = "😀";
+            level[playerPosition.y][playerPosition.x] = " ";
+            playerPosition = { x: newX, y: newY };
+        }
+
+        drawLevel();
+
+        if (checkWin()) {
+            currentLevel++;
+            if (currentLevel < levels.length) {
+                playerPosition = { x: 1, y: 1 };
+                drawLevel();
+            } else {
+                alert("You win all levels!");
+            }
+        }
+    }
+
+    function checkWin() {
+        return !levels[currentLevel].flat().includes("🕳️");
+    }
+
+    window.addEventListener('keydown', (e) => {
+        switch (e.key) {
+            case "ArrowUp":
+                movePlayer(0, -1);
+                break;
+            case "ArrowDown":
+                movePlayer(0, 1);
+                break;
+            case "ArrowLeft":
+                movePlayer(-1, 0);
+                break;
+            case "ArrowRight":
+                movePlayer(1, 0);
+                break;
+        }
+    });
+
+    drawLevel();
+</script>
+
+</body>
+</html>

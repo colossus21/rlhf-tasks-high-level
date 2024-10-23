@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nature Sokoban</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: monospace;
+            background-color: #e0f0d0; /* Light green background */
+        }
+        table {
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        td {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            border: 1px solid #a0a0a0; /* Light gray border */
+        }
+        .player {
+            color: #f08000; /* Orange player */
+        }
+        .tree {
+            color: #008000; /* Green tree */
+        }
+        .rock {
+            color: #808080; /* Gray rock */
+        }
+        .hole {
+            color: #a05000; /* Brown hole */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Nature Sokoban</h1>
+
+<p>Push the rocks 🪨 into the holes 🕳️! Use the arrow keys to move the player 🦊.</p>
+
+<table id="gameBoard"></table>
+
+<p>Level: <span id="levelNum">1</span></p>
+<button onclick="resetLevel()">Reset Level</button>
+
+<script>
+    const levels = [
+        // Level 1
+        {
+            board: [
+                "           ",
+                "  🌳🌳🌳    ",
+                "  🌳  🌳    ",
+                "  🌳 🪨🌳    ",
+                "  🌳  🌳    ",
+                "  🌳🦊🕳️🌳    ",
+                "  🌳🌳🌳    ",
+                "           "
+            ],
+            player: { row: 5, col: 3 },
+            rocks: [{ row: 3, col: 3 }],
+            holes: [{ row: 5, col: 4 }],
+        },
+        // Level 2
+        {
+            board: [
+                "           ",
+                "  🌳🌳🌳    ",
+                "  🌳  🌳    ",
+                "  🌳 🪨🌳    ",
+                "  🌳 🕳️🌳    ",
+                "  🌳🦊🪨🌳    ",
+                "  🌳🌳🌳    ",
+                "           "
+            ],
+            player: { row: 5, col: 3 },
+            rocks: [{ row: 3, col: 3 }, { row: 5, col: 4 }],
+            holes: [{ row: 4, col: 3 }, { row: 5, col: 4 }],
+        },
+        // Level 3
+        {
+            board: [
+                "           ",
+                "  🌳🌳🌳🌳  ",
+                "  🌳    🌳  ",
+                "  🌳 🪨🕳️🌳  ",
+                "  🌳 🕳️🪨🌳  ",
+                "  🌳🦊  🌳  ",
+                "  🌳🌳🌳🌳  ",
+                "           "
+            ],
+            player: { row: 5, col: 3 },
+            rocks: [{ row: 3, col: 3 }, { row: 4, col: 4 }],
+            holes: [{ row: 3, col: 4 }, { row: 4, col: 3 }],
+        },
+    ];
+
+    let currentLevel = 0;
+    let player = { ...levels[currentLevel].player };
+    let rocks = levels[currentLevel].rocks.map(rock => ({ ...rock }));
+    let holes = levels[currentLevel].holes.map(hole => ({ ...hole }));
+
+    function drawBoard() {
+        const board = levels[currentLevel].board;
+        const gameBoard = document.getElementById("gameBoard");
+        gameBoard.innerHTML = "";
+
+        for (let row = 0; row < board.length; row++) {
+            const tr = gameBoard.insertRow();
+            for (let col = 0; col < board[row].length; col++) {
+                const td = tr.insertCell();
+                let cellContent = board[row][col];
+                if (row === player.row && col === player.col) {
+                    cellContent = "<span class='player'>🦊</span>";
+                } else {
+                    rocks.forEach(rock => {
+                        if (rock.row === row && rock.col === col) {
+                            cellContent = "<span class='rock'>🪨</span>";
+                        }
+                    });
+                    holes.forEach(hole => {
+                        if (hole.row === row && hole.col === col) {
+                            cellContent = "<span class='hole'>🕳️</span>";
+                        }
+                    });
+                    if (cellContent === "🌳") {
+                        cellContent = "<span class='tree'>🌳</span>";
+                    }
+                }
+                td.innerHTML = cellContent;
+            }
+        }
+    }
+
+    function checkWin() {
+        for (let i = 0; i < holes.length; i++) {
+            let rockFound = false;
+            for (let j = 0; j < rocks.length; j++) {
+                if (rocks[j].row === holes[i].row && rocks[j].col === holes[i].col) {
+                    rockFound = true;
+                    break;
+                }
+            }
+            if (!rockFound) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function movePlayer(rowOffset, colOffset) {
+        const newRow = player.row + rowOffset;
+        const newCol = player.col + colOffset;
+
+        // Check for wall collision
+        if (levels[currentLevel].board[newRow][newCol] === "🌳") {
+            return;
+        }
+
+        // Check for rock collision
+        let rockIndex = rocks.findIndex(rock => rock.row === newRow && rock.col === newCol);
+        if (rockIndex !== -1) {
+            const rockNewRow = newRow + rowOffset;
+            const rockNewCol = newCol + colOffset;
+
+            // Check if rock can be moved
+            if (levels[currentLevel].board[rockNewRow][rockNewCol] === "🌳" ||
+                rocks.some(otherRock => otherRock !== rocks[rockIndex] && otherRock.row === rockNewRow && otherRock.col === rockNewCol)) {
+                return;
+            }
+
+            // Move the rock
+            rocks[rockIndex].row = rockNewRow;
+            rocks[rockIndex].col = rockNewCol;
+        }
+
+        // Move the player
+        player.row = newRow;
+        player.col = newCol;
+
+        drawBoard();
+
+        if (checkWin()) {
+            if (currentLevel < levels.length - 1) {
+                alert("Level complete! Moving to the next level.");
+                currentLevel++;
+                loadLevel();
+            } else {
+                alert("Congratulations! You have completed all levels!");
+            }
+        }
+    }
+
+    function loadLevel() {
+        player = { ...levels[currentLevel].player };
+        rocks = levels[currentLevel].rocks.map(rock => ({ ...rock }));
+        holes = levels[currentLevel].holes.map(hole => ({ ...hole }));
+        document.getElementById("levelNum").textContent = currentLevel + 1;
+        drawBoard();
+    }
+
+    function resetLevel() {
+        loadLevel();
+    }
+
+    document.addEventListener('keydown', (event) => {
+        switch (event.key) {
+            case "ArrowUp":
+                movePlayer(-1, 0);
+                break;
+            case "ArrowDown":
+                movePlayer(1, 0);
+                break;
+            case "ArrowLeft":
+                movePlayer(0, -1);
+                break;
+            case "ArrowRight":
+                movePlayer(0, 1);
+                break;
+        }
+    });
+
+    loadLevel();
+</script>
+
+</body>
+</html>

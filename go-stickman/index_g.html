@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stickman Avatar Generator</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Stickman Avatar Generator</h1>
+
+<div>
+    <label for="background">Background:</label>
+    <select id="background">
+        <option value="white">White</option>
+        <option value="lightblue">Light Blue</option>
+        <option value="lightgreen">Light Green</option>
+    </select>
+    <label for="backgroundColor">Color:</label>
+    <input type="color" id="backgroundColor" value="#ffffff">
+</div>
+
+<div>
+    <label for="face">Face:</label>
+    <select id="face">
+        <option value="circle">Circle</option>
+        <option value="square">Square</option>
+        <option value="triangle">Triangle</option>
+    </select>
+    <label for="faceColor">Color:</label>
+    <input type="color" id="faceColor" value="#ffff00">
+</div>
+
+<div>
+    <label for="eyes">Eyes:</label>
+    <select id="eyes">
+        <option value="dots">Dots</option>
+        <option value="lines">Lines</option>
+        <option value="circles">Circles</option>
+    </select>
+    <label for="eyesColor">Color:</label>
+    <input type="color" id="eyesColor" value="#000000">
+</div>
+
+<div>
+    <label for="mouth">Mouth:</label>
+    <select id="mouth">
+        <option value="smile">Smile</option>
+        <option value="frown">Frown</option>
+        <option value="line">Line</option>
+    </select>
+    <label for="mouthColor">Color:</label>
+    <input type="color" id="mouthColor" value="#ff0000">
+</div>
+
+<div>
+    <label for="hat">Hat:</label>
+    <select id="hat">
+        <option value="none">None</option>
+        <option value="cap">Cap</option>
+        <option value="tophat">Top Hat</option>
+    </select>
+    <label for="hatColor">Color:</label>
+    <input type="color" id="hatColor" value="#0000ff">
+</div>
+
+<button onclick="randomizeAvatar()">Randomize Avatar</button>
+<button onclick="exportImage()">Export Image</button>
+
+<canvas id="canvas" width="200" height="300"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function drawAvatar() {
+        const background = document.getElementById('background').value;
+        const backgroundColor = document.getElementById('backgroundColor').value;
+        const face = document.getElementById('face').value;
+        const faceColor = document.getElementById('faceColor').value;
+        const eyes = document.getElementById('eyes').value;
+        const eyesColor = document.getElementById('eyesColor').value;
+        const mouth = document.getElementById('mouth').value;
+        const mouthColor = document.getElementById('mouthColor').value;
+        const hat = document.getElementById('hat').value;
+        const hatColor = document.getElementById('hatColor').value;
+
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw background
+        ctx.fillStyle = backgroundColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw head
+        ctx.fillStyle = faceColor;
+        switch (face) {
+            case 'circle':
+                ctx.beginPath();
+                ctx.arc(100, 100, 50, 0, 2 * Math.PI);
+                ctx.fill();
+                break;
+            case 'square':
+                ctx.fillRect(50, 50, 100, 100);
+                break;
+            case 'triangle':
+                ctx.beginPath();
+                ctx.moveTo(100, 50);
+                ctx.lineTo(50, 150);
+                ctx.lineTo(150, 150);
+                ctx.closePath();
+                ctx.fill();
+                break;
+        }
+
+        // Draw eyes
+        ctx.fillStyle = eyesColor;
+        switch (eyes) {
+            case 'dots':
+                ctx.beginPath();
+                ctx.arc(75, 75, 5, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(125, 75, 5, 0, 2 * Math.PI);
+                ctx.fill();
+                break;
+            case 'lines':
+                ctx.beginPath();
+                ctx.moveTo(70, 75);
+                ctx.lineTo(80, 75);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(120, 75);
+                ctx.lineTo(130, 75);
+                ctx.stroke();
+                break;
+            case 'circles':
+                ctx.beginPath();
+                ctx.arc(75, 75, 10, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(125, 75, 10, 0, 2 * Math.PI);
+                ctx.fill();
+                break;
+        }
+
+        // Draw mouth
+        ctx.fillStyle = mouthColor;
+        switch (mouth) {
+            case 'smile':
+                ctx.beginPath();
+                ctx.arc(100, 125, 20, 0, Math.PI);
+                ctx.fill();
+                break;
+            case 'frown':
+                ctx.beginPath();
+                ctx.arc(100, 125, 20, Math.PI, 2 * Math.PI);
+                ctx.fill();
+                break;
+            case 'line':
+                ctx.beginPath();
+                ctx.moveTo(75, 125);
+                ctx.lineTo(125, 125);
+                ctx.stroke();
+                break;
+        }
+
+        // Draw hat
+        ctx.fillStyle = hatColor;
+        switch (hat) {
+            case 'cap':
+                ctx.beginPath();
+                ctx.moveTo(50, 50);
+                ctx.lineTo(150, 50);
+                ctx.lineTo(100, 20);
+                ctx.closePath();
+                ctx.fill();
+                break;
+            case 'tophat':
+                ctx.fillRect(60, 20, 80, 30);
+                ctx.fillRect(50, 50, 100, 10);
+                break;
+        }
+    }
+
+    function randomizeAvatar() {
+        const backgrounds = ['white', 'lightblue', 'lightgreen'];
+        const faces = ['circle', 'square', 'triangle'];
+        const eyes = ['dots', 'lines', 'circles'];
+        const mouths = ['smile', 'frown', 'line'];
+        const hats = ['none', 'cap', 'tophat'];
+
+        document.getElementById('background').value = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+        document.getElementById('backgroundColor').value = '#' + Math.floor(Math.random()*16777215).toString(16);
+        document.getElementById('face').value = faces[Math.floor(Math.random() * faces.length)];
+        document.getElementById('faceColor').value = '#' + Math.floor(Math.random()*16777215).toString(16);
+        document.getElementById('eyes').value = eyes[Math.floor(Math.random() * eyes.length)];
+        document.getElementById('eyesColor').value = '#' + Math.floor(Math.random()*16777215).toString(16);
+        document.getElementById('mouth').value = mouths[Math.floor(Math.random() * mouths.length)];
+        document.getElementById('mouthColor').value = '#' + Math.floor(Math.random()*16777215).toString(16);
+        document.getElementById('hat').value = hats[Math.floor(Math.random() * hats.length)];
+        document.getElementById('hatColor').value = '#' + Math.floor(Math.random()*16777215).toString(16);
+
+        drawAvatar();
+    }
+
+    function exportImage() {
+        const link = document.createElement('a');
+        link.download = 'stickman-avatar.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
+
+    // Event listeners for changes
+    document.getElementById('background').addEventListener('change', drawAvatar);
+    document.getElementById('backgroundColor').addEventListener('input', drawAvatar);
+    document.getElementById('face').addEventListener('change', drawAvatar);
+    document.getElementById('faceColor').addEventListener('input', drawAvatar);
+    document.getElementById('eyes').addEventListener('change', drawAvatar);
+    document.getElementById('eyesColor').addEventListener('input', drawAvatar);
+    document.getElementById('mouth').addEventListener('change', drawAvatar);
+    document.getElementById('mouthColor').addEventListener('input', drawAvatar);
+    document.getElementById('hat').addEventListener('change', drawAvatar);
+    document.getElementById('hatColor').addEventListener('input', drawAvatar);
+
+    // Initial drawing
+    drawAvatar();
+</script>
+
+</body>
+</html>

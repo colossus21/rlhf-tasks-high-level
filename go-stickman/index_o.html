@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stickman Avatar Generator</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .control-group {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Stickman Avatar Generator</h1>
+<canvas id="avatarCanvas" width="300" height="400"></canvas>
+
+<div class="controls">
+    <div class="control-group">
+        <label for="backgroundColor">Background Color:</label>
+        <input type="color" id="backgroundColor" value="#FFFFFF">
+    </div>
+
+    <div class="control-group">
+        <label for="faceType">Face Type:</label>
+        <select id="faceType">
+            <option value="round">Round</option>
+            <option value="square">Square</option>
+            <option value="oval">Oval</option>
+        </select>
+        <label for="faceColor">Face Color:</label>
+        <input type="color" id="faceColor" value="#FFD700">
+    </div>
+
+    <div class="control-group">
+        <label for="eyeType">Eye Type:</label>
+        <select id="eyeType">
+            <option value="dots">Dots</option>
+            <option value="lines">Lines</option>
+            <option value="circles">Circles</option>
+        </select>
+        <label for="eyeColor">Eye Color:</label>
+        <input type="color" id="eyeColor" value="#000000">
+    </div>
+
+    <div class="control-group">
+        <label for="mouthType">Mouth Type:</label>
+        <select id="mouthType">
+            <option value="smile">Smile</option>
+            <option value="neutral">Neutral</option>
+            <option value="frown">Frown</option>
+        </select>
+        <label for="mouthColor">Mouth Color:</label>
+        <input type="color" id="mouthColor" value="#FF0000">
+    </div>
+
+    <div class="control-group">
+        <label for="hatType">Hat Type:</label>
+        <select id="hatType">
+            <option value="none">None</option>
+            <option value="cap">Cap</option>
+            <option value="crown">Crown</option>
+            <option value="beanie">Beanie</option>
+        </select>
+        <label for="hatColor">Hat Color:</label>
+        <input type="color" id="hatColor" value="#00FF00">
+    </div>
+
+    <button id="randomizeBtn">Randomize Avatar</button>
+    <button id="exportBtn">Export Image</button>
+</div>
+
+<script>
+    const canvas = document.getElementById("avatarCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const controls = {
+        backgroundColor: document.getElementById("backgroundColor"),
+        faceType: document.getElementById("faceType"),
+        faceColor: document.getElementById("faceColor"),
+        eyeType: document.getElementById("eyeType"),
+        eyeColor: document.getElementById("eyeColor"),
+        mouthType: document.getElementById("mouthType"),
+        mouthColor: document.getElementById("mouthColor"),
+        hatType: document.getElementById("hatType"),
+        hatColor: document.getElementById("hatColor"),
+        randomizeBtn: document.getElementById("randomizeBtn"),
+        exportBtn: document.getElementById("exportBtn")
+    };
+
+    function drawAvatar() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Background
+        ctx.fillStyle = controls.backgroundColor.value;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Face
+        ctx.fillStyle = controls.faceColor.value;
+        if (controls.faceType.value === "round") {
+            ctx.beginPath();
+            ctx.arc(150, 150, 50, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (controls.faceType.value === "square") {
+            ctx.fillRect(100, 100, 100, 100);
+        } else if (controls.faceType.value === "oval") {
+            ctx.beginPath();
+            ctx.ellipse(150, 150, 50, 70, 0, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Draw Eyes
+        ctx.fillStyle = controls.eyeColor.value;
+        if (controls.eyeType.value === "dots") {
+            ctx.beginPath();
+            ctx.arc(130, 130, 5, 0, Math.PI * 2);
+            ctx.arc(170, 130, 5, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (controls.eyeType.value === "lines") {
+            ctx.fillRect(120, 125, 20, 5);
+            ctx.fillRect(160, 125, 20, 5);
+        } else if (controls.eyeType.value === "circles") {
+            ctx.beginPath();
+            ctx.arc(130, 130, 10, 0, Math.PI * 2);
+            ctx.arc(170, 130, 10, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Draw Mouth
+        ctx.strokeStyle = controls.mouthColor.value;
+        ctx.lineWidth = 3;
+        if (controls.mouthType.value === "smile") {
+            ctx.beginPath();
+            ctx.arc(150, 160, 20, 0, Math.PI, false);
+            ctx.stroke();
+        } else if (controls.mouthType.value === "neutral") {
+            ctx.beginPath();
+            ctx.moveTo(130, 160);
+            ctx.lineTo(170, 160);
+            ctx.stroke();
+        } else if (controls.mouthType.value === "frown") {
+            ctx.beginPath();
+            ctx.arc(150, 180, 20, 0, Math.PI, true);
+            ctx.stroke();
+        }
+
+        // Draw Hat
+        ctx.fillStyle = controls.hatColor.value;
+        if (controls.hatType.value === "cap") {
+            ctx.fillRect(120, 70, 60, 30);
+        } else if (controls.hatType.value === "crown") {
+            ctx.beginPath();
+            ctx.moveTo(120, 100);
+            ctx.lineTo(135, 70);
+            ctx.lineTo(150, 100);
+            ctx.lineTo(165, 70);
+            ctx.lineTo(180, 100);
+            ctx.closePath();
+            ctx.fill();
+        } else if (controls.hatType.value === "beanie") {
+            ctx.beginPath();
+            ctx.arc(150, 100, 40, Math.PI, 0);
+            ctx.fill();
+        }
+    }
+
+    function randomizeAvatar() {
+        const randomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+
+        controls.backgroundColor.value = randomColor();
+        controls.faceColor.value = randomColor();
+        controls.eyeColor.value = randomColor();
+        controls.mouthColor.value = randomColor();
+        controls.hatColor.value = randomColor();
+
+        const randomOption = (selectElement) => {
+            const options = selectElement.options;
+            selectElement.selectedIndex = Math.floor(Math.random() * options.length);
+        };
+
+        randomOption(controls.faceType);
+        randomOption(controls.eyeType);
+        randomOption(controls.mouthType);
+        randomOption(controls.hatType);
+
+        drawAvatar();
+    }
+
+    function exportImage() {
+        const link = document.createElement('a');
+        link.download = 'stickman_avatar.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    }
+
+    controls.randomizeBtn.addEventListener("click", randomizeAvatar);
+    controls.exportBtn.addEventListener("click", exportImage);
+
+    document.querySelectorAll('input, select').forEach(el => {
+        el.addEventListener('input', drawAvatar);
+    });
+
+    // Initial draw
+    drawAvatar();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gobble-Tac-Toe</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+            margin: 20px auto;
+            border: 2px solid #333;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .piece {
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            position: absolute;
+        }
+        .X {
+            background-color: #f00;
+            color: #fff;
+        }
+        .O {
+            background-color: #00f;
+            color: #fff;
+        }
+        .S {
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+        }
+        .M {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+        }
+        .L {
+            width: 70px;
+            height: 70px;
+            font-size: 32px;
+        }
+        #pieces {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .piece-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Gobble-Tac-Toe</h1>
+
+<div id="board"></div>
+
+<div id="pieces">
+    <div class="piece-container">
+        <h2>Player X</h2>
+        <div class="piece X S" draggable="true">X</div>
+        <div class="piece X S" draggable="true">X</div>
+        <div class="piece X M" draggable="true">X</div>
+        <div class="piece X M" draggable="true">X</div>
+        <div class="piece X L" draggable="true">X</div>
+        <div class="piece X L" draggable="true">X</div>
+    </div>
+    <div class="piece-container">
+        <h2>Player O</h2>
+        <div class="piece O S" draggable="true">O</div>
+        <div class="piece O S" draggable="true">O</div>
+        <div class="piece O M" draggable="true">O</div>
+        <div class="piece O M" draggable="true">O</div>
+        <div class="piece O L" draggable="true">O</div>
+        <div class="piece O L" draggable="true">O</div>
+    </div>
+</div>
+
+<script>
+    const board = document.getElementById('board');
+    const cells = [];
+    let currentPlayer = 'X';
+
+    // Create board cells
+    for (let i = 0; i < 9; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.id = i;
+        cells.push(cell);
+        board.appendChild(cell);
+
+        cell.addEventListener('dragover', (event) => {
+            event.preventDefault();
+        });
+
+        cell.addEventListener('drop', (event) => {
+            event.preventDefault();
+            const pieceId = event.dataTransfer.getData('text');
+            const piece = document.getElementById(pieceId);
+            const existingPiece = cell.querySelector('.piece');
+
+            if (existingPiece) {
+                // Gobble logic
+                const existingSize = existingPiece.classList[2];
+                const newSize = piece.classList[2];
+                if (newSize > existingSize) {
+                    cell.removeChild(existingPiece);
+                    cell.appendChild(piece);
+                }
+            } else {
+                cell.appendChild(piece);
+            }
+
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        });
+    }
+
+    // Make pieces draggable
+    const pieces = document.querySelectorAll('.piece');
+    pieces.forEach(piece => {
+        piece.addEventListener('dragstart', (event) => {
+            event.dataTransfer.setData('text', event.target.id);
+        });
+    });
+</script>
+
+</body>
+</html>

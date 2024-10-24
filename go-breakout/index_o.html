@@ -3,199 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Breakout Twist</title>
+    <title>Colorful Game of Life</title>
     <style>
         body {
-            margin: 0;
-            overflow: hidden;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
-            background-color: #222;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
         }
-        canvas {
-            background-color: #333;
-            display: block;
+        #grid {
+            display: grid;
+            gap: 1px;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+        }
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px;
+        }
+        input[type="range"] {
+            margin: 5px;
         }
     </style>
 </head>
 <body>
-<canvas id="gameCanvas"></canvas>
+
+<h1>Colorful Game of Life</h1>
+
+<div class="control-panel">
+    <button id="startStop">Start</button>
+    <button id="reset">Reset</button>
+    <label for="speed">Speed: </label>
+    <input type="range" id="speed" min="50" max="1000" value="300">
+</div>
+
+<div id="grid"></div>
+
 <script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
+    const gridSize = 30;
+    const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+    const emptyColor = '#ffffff';
+    let grid = [];
+    let interval;
+    let running = false;
+    let speed = 300;
 
-    // Canvas dimensions
-    canvas.width = 800;
-    canvas.height = 600;
+    // Initialize grid
+    const gridElement = document.getElementById('grid');
+    gridElement.style.gridTemplateColumns = `repeat(${gridSize}, 20px)`;
+    gridElement.style.gridTemplateRows = `repeat(${gridSize}, 20px)`;
 
-    // Game variables
-    let ballX = canvas.width / 2;
-    let ballY = canvas.height / 2;
-    let ballSpeedX = 3;
-    let ballSpeedY = 3;
-    const ballRadius = 10;
+    for (let i = 0; i < gridSize; i++) {
+        grid[i] = [];
+        for (let j = 0; j < gridSize; j++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.dataset.x = i;
+            cell.dataset.y = j;
+            cell.style.backgroundColor = emptyColor;
+            gridElement.appendChild(cell);
+            grid[i][j] = cell;
 
-    const paddleWidth = 100;
-    const paddleHeight = 10;
-    let paddleX = (canvas.width - paddleWidth) / 2;
-
-    const blockRowCount = 3;
-    const blockColumnCount = 5;
-    const blockWidth = 120;
-    const blockHeight = 30;
-    const blockPadding = 10;
-    const blockOffsetTop = 30;
-    const blockOffsetLeft = 30;
-
-    // Player status
-    let gameOver = false;
-    let win = false;
-
-    // Create blocks
-    const blocks = [];
-    for (let col = 0; col < blockColumnCount; col++) {
-        blocks[col] = [];
-        for (let row = 0; row < blockRowCount; row++) {
-            blocks[col][row] = { x: 0, y: 0, status: 1 };
+            cell.addEventListener('click', () => {
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                cell.style.backgroundColor = color;
+            });
         }
     }
 
-    // Draw ball
-    function drawBall() {
-        ctx.beginPath();
-        ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
-        ctx.fillStyle = '#00f';
-        ctx.fill();
-        ctx.closePath();
-    }
+    function getNeighbors(x, y) {
+        const neighbors = [];
+        const directions = [
+            [-1, -1], [-1, 0], [-1, 1],
+            [0, -1],          [0, 1],
+            [1, -1], [1, 0], [1, 1],
+        ];
 
-    // Draw paddle
-    function drawPaddle() {
-        ctx.beginPath();
-        ctx.rect(paddleX, canvas.height - paddleHeight - 10, paddleWidth, paddleHeight);
-        ctx.fillStyle = '#f00';
-        ctx.fill();
-        ctx.closePath();
-    }
-
-    // Draw blocks
-    function drawBlocks() {
-        for (let col = 0; col < blockColumnCount; col++) {
-            for (let row = 0; row < blockRowCount; row++) {
-                if (blocks[col][row].status === 1) {
-                    const blockX = col * (blockWidth + blockPadding) + blockOffsetLeft;
-                    const blockY = row * (blockHeight + blockPadding) + blockOffsetTop;
-                    blocks[col][row].x = blockX;
-                    blocks[col][row].y = blockY;
-                    ctx.beginPath();
-                    ctx.rect(blockX, blockY, blockWidth, blockHeight);
-                    ctx.fillStyle = '#0f0';
-                    ctx.fill();
-                    ctx.closePath();
-                }
+        directions.forEach(([dx, dy]) => {
+            const newX = x + dx;
+            const newY = y + dy;
+            if (newX >= 0 && newY >= 0 && newX < gridSize && newY < gridSize) {
+                neighbors.push(grid[newX][newY]);
             }
-        }
+        });
+
+        return neighbors;
     }
 
-    // Collision detection with blocks
-    function collisionDetection() {
-        for (let col = 0; col < blockColumnCount; col++) {
-            for (let row = 0; row < blockRowCount; row++) {
-                const block = blocks[col][row];
-                if (block.status === 1) {
-                    if (
-                        ballX > block.x &&
-                        ballX < block.x + blockWidth &&
-                        ballY > block.y &&
-                        ballY < block.y + blockHeight
-                    ) {
-                        ballSpeedY = -ballSpeedY;
-                        block.status = 0;
-                        checkWinCondition();
+    function step() {
+        const newGrid = [];
+
+        for (let i = 0; i < gridSize; i++) {
+            newGrid[i] = [];
+            for (let j = 0; j < gridSize; j++) {
+                const cell = grid[i][j];
+                const neighbors = getNeighbors(i, j);
+                const aliveNeighbors = neighbors.filter(n => n.style.backgroundColor !== emptyColor);
+                const sameColorNeighbors = aliveNeighbors.filter(n => n.style.backgroundColor === cell.style.backgroundColor);
+
+                if (cell.style.backgroundColor !== emptyColor) {
+                    // Survives only if it has exactly 2 neighbors of the same color
+                    newGrid[i][j] = (sameColorNeighbors.length === 2) ? cell.style.backgroundColor : emptyColor;
+                } else {
+                    // Birth condition: exactly 3 neighbors, takes majority color
+                    if (aliveNeighbors.length === 3) {
+                        const colorCounts = {};
+                        aliveNeighbors.forEach(n => {
+                            const color = n.style.backgroundColor;
+                            colorCounts[color] = (colorCounts[color] || 0) + 1;
+                        });
+
+                        const majorityColor = Object.keys(colorCounts).reduce((a, b) => colorCounts[a] > colorCounts[b] ? a : b);
+                        newGrid[i][j] = majorityColor;
+                    } else {
+                        newGrid[i][j] = emptyColor;
                     }
                 }
             }
         }
-    }
 
-    // Check if player wins
-    function checkWinCondition() {
-        let remainingBlocks = 0;
-        for (let col = 0; col < blockColumnCount; col++) {
-            for (let row = 0; row < blockRowCount; row++) {
-                if (blocks[col][row].status === 1) {
-                    remainingBlocks++;
-                }
+        // Update grid
+        for (let i = 0; i < gridSize; i++) {
+            for (let j = 0; j < gridSize; j++) {
+                grid[i][j].style.backgroundColor = newGrid[i][j];
             }
-        }
-        if (remainingBlocks === 0) {
-            win = true;
-            gameOver = true;
         }
     }
 
-    // Update game elements
-    function update() {
-        if (!gameOver) {
-            ballX += ballSpeedX;
-            ballY += ballSpeedY;
-
-            // Ball-wall collision
-            if (ballX + ballRadius > canvas.width || ballX - ballRadius < 0) {
-                ballSpeedX = -ballSpeedX;
-            }
-            if (ballY + ballRadius > canvas.height || ballY - ballRadius < 0) {
-                ballSpeedY = -ballSpeedY;
-            }
-
-            // Ball-paddle collision (game over condition)
-            if (
-                ballY + ballRadius > canvas.height - paddleHeight - 10 &&
-                ballX > paddleX &&
-                ballX < paddleX + paddleWidth
-            ) {
-                gameOver = true;
-            }
-
-            collisionDetection();
-        }
-    }
-
-    // Render game elements
-    function render() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawBall();
-        drawPaddle();
-        drawBlocks();
-
-        if (gameOver) {
-            ctx.font = '24px Arial';
-            ctx.fillStyle = '#fff';
-            ctx.textAlign = 'center';
-            if (win) {
-                ctx.fillText('You Win!', canvas.width / 2, canvas.height / 2);
-            } else {
-                ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2);
-            }
-            return;
-        }
-
-        update();
-        requestAnimationFrame(render);
-    }
-
-    // Mouse movement controls the paddle
-    document.addEventListener('mousemove', (e) => {
-        const relativeX = e.clientX - canvas.offsetLeft;
-        if (relativeX > 0 && relativeX < canvas.width) {
-            paddleX = relativeX - paddleWidth / 2;
+    document.getElementById('startStop').addEventListener('click', () => {
+        running = !running;
+        if (running) {
+            interval = setInterval(step, speed);
+            document.getElementById('startStop').innerText = 'Stop';
+        } else {
+            clearInterval(interval);
+            document.getElementById('startStop').innerText = 'Start';
         }
     });
 
-    // Start the game
-    render();
+    document.getElementById('reset').addEventListener('click', () => {
+        clearInterval(interval);
+        running = false;
+        document.getElementById('startStop').innerText = 'Start';
+        grid.forEach(row => row.forEach(cell => cell.style.backgroundColor = emptyColor));
+    });
+
+    document.getElementById('speed').addEventListener('input', (event) => {
+        speed = event.target.value;
+        if (running) {
+            clearInterval(interval);
+            interval = setInterval(step, speed);
+        }
+    });
 </script>
+
 </body>
 </html>

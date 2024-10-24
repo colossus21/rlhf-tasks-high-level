@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gobble Tic-Tac-Toe</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+        }
+
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .piece {
+            display: inline-block;
+            border-radius: 50%;
+            cursor: grab;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .small {
+            width: 30px;
+            height: 30px;
+        }
+
+        .medium {
+            width: 50px;
+            height: 50px;
+        }
+
+        .large {
+            width: 70px;
+            height: 70px;
+        }
+
+        .x {
+            background-color: lightcoral;
+        }
+
+        .o {
+            background-color: lightblue;
+        }
+
+        .player-area {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            width: 320px;
+        }
+
+        .player {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .draggable {
+            border: 2px solid transparent;
+        }
+
+        .draggable:hover {
+            border-color: #555;
+        }
+
+    </style>
+</head>
+<body>
+<h1>Gobble Tic-Tac-Toe</h1>
+<div id="player-turn">Player 1's turn (X)</div>
+
+<div id="game-board">
+    <div class="cell" data-cell></div>
+    <div class="cell" data-cell></div>
+    <div class="cell" data-cell></div>
+    <div class="cell" data-cell></div>
+    <div class="cell" data-cell></div>
+    <div class="cell" data-cell></div>
+    <div class="cell" data-cell></div>
+    <div class="cell" data-cell></div>
+    <div class="cell" data-cell></div>
+</div>
+
+<div class="player-area">
+    <div class="player" id="player1">
+        <h3>Player 1 (X)</h3>
+        <div class="piece x small draggable" draggable="true" id="x-small1"></div>
+        <div class="piece x small draggable" draggable="true" id="x-small2"></div>
+        <div class="piece x medium draggable" draggable="true" id="x-medium1"></div>
+        <div class="piece x medium draggable" draggable="true" id="x-medium2"></div>
+        <div class="piece x large draggable" draggable="true" id="x-large1"></div>
+        <div class="piece x large draggable" draggable="true" id="x-large2"></div>
+    </div>
+
+    <div class="player" id="player2">
+        <h3>Player 2 (O)</h3>
+        <div class="piece o small draggable" draggable="true" id="o-small1"></div>
+        <div class="piece o small draggable" draggable="true" id="o-small2"></div>
+        <div class="piece o medium draggable" draggable="true" id="o-medium1"></div>
+        <div class="piece o medium draggable" draggable="true" id="o-medium2"></div>
+        <div class="piece o large draggable" draggable="true" id="o-large1"></div>
+        <div class="piece o large draggable" draggable="true" id="o-large2"></div>
+    </div>
+</div>
+
+<script>
+    const cells = document.querySelectorAll('[data-cell]');
+    const pieces = document.querySelectorAll('.draggable');
+    const playerTurnDisplay = document.getElementById('player-turn');
+    let currentPlayer = 'x';
+
+    pieces.forEach(piece => {
+        piece.addEventListener('dragstart', dragStart);
+    });
+
+    cells.forEach(cell => {
+        cell.addEventListener('dragover', dragOver);
+        cell.addEventListener('drop', dropPiece);
+    });
+
+    function dragStart(e) {
+        e.dataTransfer.setData('pieceId', e.target.id);
+    }
+
+    function dragOver(e) {
+        e.preventDefault();
+    }
+
+    function dropPiece(e) {
+        const pieceId = e.dataTransfer.getData('pieceId');
+        const piece = document.getElementById(pieceId);
+        const cellPiece = e.target.querySelector('.piece');
+
+        if (!cellPiece || canGobble(cellPiece, piece)) {
+            e.target.innerHTML = '';
+            e.target.appendChild(piece);
+            togglePlayer();
+        }
+    }
+
+    function canGobble(existingPiece, newPiece) {
+        const sizeOrder = ['small', 'medium', 'large'];
+        const existingSize = existingPiece.classList.contains('small') ? 'small' :
+            existingPiece.classList.contains('medium') ? 'medium' : 'large';
+        const newSize = newPiece.classList.contains('small') ? 'small' :
+            newPiece.classList.contains('medium') ? 'medium' : 'large';
+
+        // New piece can only gobble if it's bigger
+        return sizeOrder.indexOf(newSize) > sizeOrder.indexOf(existingSize);
+    }
+
+    function togglePlayer() {
+        currentPlayer = currentPlayer === 'x' ? 'o' : 'x';
+        playerTurnDisplay.textContent = `Player ${currentPlayer === 'x' ? '1 (X)' : '2 (O)'}'s turn`;
+    }
+</script>
+</body>
+</html>

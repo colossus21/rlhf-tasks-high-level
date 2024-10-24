@@ -1,169 +1,157 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Never Ending Breakout</title>
+    <title>Colored Game of Life</title>
     <style>
-        body { margin: 0; }
-        canvas { display: block; }
+        body {
+            font-family: sans-serif;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+        .controls {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
-<canvas id="myCanvas" width="480" height="320"></canvas>
+<h1>Colored Game of Life</h1>
+
+<canvas id="gameCanvas" width="500" height="500"></canvas>
+
+<div class="controls">
+    <button id="startButton">Start</button>
+    <button id="stopButton">Stop</button>
+    <button id="resetButton">Reset</button>
+    <span>Speed:</span>
+    <input type="range" id="speedSlider" min="1" max="100" value="50">
+</div>
 
 <script>
-    const canvas = document.getElementById("myCanvas");
-    const ctx = canvas.getContext("2d");
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
+    const resetButton = document.getElementById('resetButton');
+    const speedSlider = document.getElementById('speedSlider');
 
-    const ballRadius = 10;
-    let x = canvas.width / 2;
-    let y = canvas.height - 30;
-    let dx = 2;
-    let dy = -2;
+    const gridSize = 10; // Size of each cell
+    const gridWidth = Math.floor(canvas.width / gridSize);
+    const gridHeight = Math.floor(canvas.height / gridSize);
 
-    const paddleHeight = 10;
-    const paddleWidth = 75;
-    let paddleX = (canvas.width - paddleWidth) / 2;
+    const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange']; // Available colors
+    let grid = Array(gridHeight).fill(null).map(() => Array(gridWidth).fill(0)); // 0 represents an empty cell
+    let isRunning = false;
 
-    let rightPressed = false;
-    let leftPressed = false;
-
-    const brickRowCount = 3;
-    const brickColumnCount = 5;
-    const brickWidth = 75;
-    const brickHeight = 20;
-    const brickPadding = 10;
-    const brickOffsetTop = 30;
-    const brickOffsetLeft = 30;
-
-    let bricks = [];
-    for (let c = 0; c < brickColumnCount; c++) {
-        bricks[c] = [];
-        for (let r = 0; r < brickRowCount; r++) {
-            bricks[c][r] = { x: 0, y: 0, status: 1 };
+    // Initialize the grid randomly
+    function initializeGrid() {
+        for (let y = 0; y < gridHeight; y++) {
+            for (let x = 0; x < gridWidth; x++) {
+                grid[y][x] = Math.random() < 0.5 ? 0 : Math.floor(Math.random() * colors.length) + 1; // Assign random colors
+            }
         }
     }
 
-    let score = 0;
-    let gameOverFlag = false;
-
-    document.addEventListener("mousemove", mouseMoveHandler, false);
-
-    function mouseMoveHandler(e) {
-        const relativeX = e.clientX - canvas.offsetLeft;
-        if (relativeX > 0 && relativeX < canvas.width) {
-            paddleX = relativeX - paddleWidth / 2;
-        }
-    }
-
-    function drawBall() {
-        ctx.beginPath();
-        ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-        ctx.fillStyle = "#0095DD";
-        ctx.fill();
-        ctx.closePath();
-    }
-
-    function drawPaddle() {
-        ctx.beginPath();
-        ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-        ctx.fillStyle = "#0095DD";
-        ctx.fill();
-        ctx.closePath();
-    }
-
-    function drawBricks() {
-        for (let c = 0; c < brickColumnCount; c++) {
-            for (let r = 0; r < brickRowCount; r++) {
-                if (bricks[c][r].status === 1) {
-                    const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
-                    const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
-                    bricks[c][r].x = brickX;
-                    bricks[c][r].y = brickY;
-                    ctx.beginPath();
-                    ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                    ctx.fillStyle = "#0095DD";
-                    ctx.fill();
-                    ctx.closePath();
+    // Draw the grid
+    function drawGrid() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let y = 0; y < gridHeight; y++) {
+            for (let x = 0; x < gridWidth; x++) {
+                if (grid[y][x] !== 0) {
+                    ctx.fillStyle = colors[grid[y][x] - 1];
+                    ctx.fillRect(x * gridSize, y * gridSize, gridSize, gridSize);
                 }
             }
         }
     }
 
-    function drawScore() {
-        ctx.font = "16px Arial";
-        ctx.fillStyle = "#0095DD";
-        ctx.fillText("Score: " + score, 8, 20);
+    // Get the number of live neighbors with the same color
+    function getNeighbors(x, y, color) {
+        let count = 0;
+        for (let i = -1; i <= 1; i++) {
+            for (let j = -1; j <= 1; j++) {
+                if (i === 0 && j === 0) continue;
+                const newX = (x + i + gridWidth) % gridWidth;
+                const newY = (y + j + gridHeight) % gridHeight;
+                if (grid[newY][newX] === color) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
-    function collisionDetection() {
-        for (let c = 0; c < brickColumnCount; c++) {
-            for (let r = 0; r < brickRowCount; r++) {
-                const b = bricks[c][r];
-                if (b.status === 1) {
-                    if (
-                        x > b.x &&
-                        x < b.x + brickWidth &&
-                        y > b.y &&
-                        y < b.y + brickHeight
-                    ) {
-                        dy = -dy;
-                        b.status = 0;
-                        score++;
-                        if (score === brickRowCount * brickColumnCount) {
-                            alert("YOU WIN, CONGRATULATIONS!");
-                            document.location.reload();
+    // Update the grid based on the rules
+    function updateGrid() {
+        let newGrid = Array(gridHeight).fill(null).map(() => Array(gridWidth).fill(0));
+        for (let y = 0; y < gridHeight; y++) {
+            for (let x = 0; x < gridWidth; x++) {
+                const cellColor = grid[y][x];
+                const liveNeighbors = getNeighbors(x, y, cellColor);
+
+                if (cellColor !== 0) { // If the cell is alive
+                    if (liveNeighbors === 2) { // Survival rule
+                        newGrid[y][x] = cellColor;
+                    }
+                } else { // If the cell is dead
+                    const neighborColors = {};
+                    for (let i = -1; i <= 1; i++) {
+                        for (let j = -1; j <= 1; j++) {
+                            if (i === 0 && j === 0) continue;
+                            const newX = (x + i + gridWidth) % gridWidth;
+                            const newY = (y + j + gridHeight) % gridHeight;
+                            const neighborColor = grid[newY][newX];
+                            if (neighborColor !== 0) {
+                                neighborColors[neighborColor] = (neighborColors[neighborColor] || 0) + 1;
+                            }
                         }
+                    }
+                    let majorityColor = 0;
+                    let maxCount = 0;
+                    for (const color in neighborColors) {
+                        if (neighborColors[color] > maxCount) {
+                            majorityColor = parseInt(color);
+                            maxCount = neighborColors[color];
+                        }
+                    }
+                    if (Object.keys(neighborColors).length === 3 && maxCount === 1) { // Birth rule with majority color
+                        newGrid[y][x] = majorityColor;
                     }
                 }
             }
         }
+        grid = newGrid;
     }
 
-    function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawBricks();
-        drawBall();
-        drawPaddle();
-        drawScore();
-        collisionDetection();
-
-        if (
-            x + dx > canvas.width - ballRadius ||
-            x + dx < ballRadius
-        ) {
-            dx = -dx;
-        }
-        if (y + dy < ballRadius) {
-            dy = -dy;
-        }
-        // No game over when ball hits bottom, just bounces back
-        else if (y + dy > canvas.height - ballRadius) {
-            dy = -dy;
-        }
-
-        // Check for collision with paddle
-        if (
-            y + dy > canvas.height - ballRadius - paddleHeight &&
-            x > paddleX &&
-            x < paddleX + paddleWidth
-        ) {
-            alert("GAME OVER");
-            document.location.reload();
-            //clearInterval(interval); // Needed for Chrome to end game
-            gameOverFlag = true;
-        }
-
-        x += dx;
-        y += dy;
-
-        if(!gameOverFlag) {
-            requestAnimationFrame(draw);
+    // Game loop
+    function gameLoop() {
+        if (isRunning) {
+            updateGrid();
+            drawGrid();
+            setTimeout(gameLoop, 1000 / speedSlider.value);
         }
     }
 
-    draw();
+    // Event listeners
+    startButton.addEventListener('click', () => {
+        isRunning = true;
+        gameLoop();
+    });
 
+    stopButton.addEventListener('click', () => {
+        isRunning = false;
+    });
+
+    resetButton.addEventListener('click', () => {
+        isRunning = false;
+        initializeGrid();
+        drawGrid();
+    });
+
+    // Initialize the game
+    initializeGrid();
+    drawGrid();
 </script>
 
 </body>

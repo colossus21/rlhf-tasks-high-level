@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Colored Game of Life</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+        .controls {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Colored Game of Life</h1>
+
+<canvas id="gameCanvas" width="500" height="500"></canvas>
+
+<div class="controls">
+    <button id="startButton">Start</button>
+    <button id="stopButton">Stop</button>
+    <button id="resetButton">Reset</button>
+    <span>Speed:</span>
+    <input type="range" id="speedSlider" min="1" max="100" value="50">
+</div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
+    const resetButton = document.getElementById('resetButton');
+    const speedSlider = document.getElementById('speedSlider');
+
+    const gridSize = 10; // Size of each cell
+    const gridWidth = Math.floor(canvas.width / gridSize);
+    const gridHeight = Math.floor(canvas.height / gridSize);
+
+    const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange']; // Available colors
+    let grid = Array(gridHeight).fill(null).map(() => Array(gridWidth).fill(0)); // 0 represents an empty cell
+    let isRunning = false;
+
+    // Initialize the grid randomly
+    function initializeGrid() {
+        for (let y = 0; y < gridHeight; y++) {
+            for (let x = 0; x < gridWidth; x++) {
+                grid[y][x] = Math.random() < 0.5 ? 0 : Math.floor(Math.random() * colors.length) + 1; // Assign random colors
+            }
+        }
+    }
+
+    // Draw the grid
+    function drawGrid() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let y = 0; y < gridHeight; y++) {
+            for (let x = 0; x < gridWidth; x++) {
+                if (grid[y][x] !== 0) {
+                    ctx.fillStyle = colors[grid[y][x] - 1];
+                    ctx.fillRect(x * gridSize, y * gridSize, gridSize, gridSize);
+                }
+            }
+        }
+    }
+
+    // Get the number of live neighbors with the same color
+    function getNeighbors(x, y, color) {
+        let count = 0;
+        for (let i = -1; i <= 1; i++) {
+            for (let j = -1; j <= 1; j++) {
+                if (i === 0 && j === 0) continue;
+                const newX = (x + i + gridWidth) % gridWidth;
+                const newY = (y + j + gridHeight) % gridHeight;
+                if (grid[newY][newX] === color) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    // Update the grid based on the rules
+    function updateGrid() {
+        let newGrid = Array(gridHeight).fill(null).map(() => Array(gridWidth).fill(0));
+        for (let y = 0; y < gridHeight; y++) {
+            for (let x = 0; x < gridWidth; x++) {
+                const cellColor = grid[y][x];
+                const liveNeighbors = getNeighbors(x, y, cellColor);
+
+                if (cellColor !== 0) { // If the cell is alive
+                    if (liveNeighbors === 2) { // Survival rule
+                        newGrid[y][x] = cellColor;
+                    }
+                } else { // If the cell is dead
+                    const neighborColors = {};
+                    for (let i = -1; i <= 1; i++) {
+                        for (let j = -1; j <= 1; j++) {
+                            if (i === 0 && j === 0) continue;
+                            const newX = (x + i + gridWidth) % gridWidth;
+                            const newY = (y + j + gridHeight) % gridHeight;
+                            const neighborColor = grid[newY][newX];
+                            if (neighborColor !== 0) {
+                                neighborColors[neighborColor] = (neighborColors[neighborColor] || 0) + 1;
+                            }
+                        }
+                    }
+                    let majorityColor = 0;
+                    let maxCount = 0;
+                    for (const color in neighborColors) {
+                        if (neighborColors[color] > maxCount) {
+                            majorityColor = parseInt(color);
+                            maxCount = neighborColors[color];
+                        }
+                    }
+                    if (Object.keys(neighborColors).length === 3 && maxCount === 1) { // Birth rule with majority color
+                        newGrid[y][x] = majorityColor;
+                    }
+                }
+            }
+        }
+        grid = newGrid;
+    }
+
+    // Game loop
+    function gameLoop() {
+        if (isRunning) {
+            updateGrid();
+            drawGrid();
+            setTimeout(gameLoop, 1000 / speedSlider.value);
+        }
+    }
+
+    // Event listeners
+    startButton.addEventListener('click', () => {
+        isRunning = true;
+        gameLoop();
+    });
+
+    stopButton.addEventListener('click', () => {
+        isRunning = false;
+    });
+
+    resetButton.addEventListener('click', () => {
+        isRunning = false;
+        initializeGrid();
+        drawGrid();
+    });
+
+    // Initialize the game
+    initializeGrid();
+    drawGrid();
+</script>
+
+</body>
+</html>

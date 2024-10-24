@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shape Road</title>
+    <style>
+        body {
+            background-color: #222;
+            overflow: hidden;
+        }
+
+        #game {
+            position: relative;
+            width: 500px;
+            height: 400px;
+            margin: 50px auto;
+            border: 2px solid white;
+        }
+
+        .player {
+            position: absolute;
+            background-color: white;
+            width: 20px;
+            height: 20px;
+        }
+
+        .car {
+            position: absolute;
+            background-color: yellow;
+            height: 15px;
+        }
+
+        .level1 .car {
+            width: 40px;
+        }
+
+        .level2 .car {
+            width: 60px;
+        }
+
+        .level3 .car {
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game"></div>
+
+<script>
+    const game = document.getElementById('game');
+    let player = document.createElement('div');
+    player.className = 'player';
+    game.appendChild(player);
+
+    let playerX = 240; // Initial player position
+    let playerY = 380;
+    player.style.left = playerX + 'px';
+    player.style.top = playerY + 'px';
+
+    let level = 1;
+    let cars = [];
+    let gameSpeed = 2; // Initial game speed
+    let score = 0;
+
+    function createCar(lane) {
+        const car = document.createElement('div');
+        car.className = 'car level' + level;
+        car.style.top = lane * 40 + 10 + 'px';
+        car.style.left = Math.random() * 460 + 'px';
+        game.appendChild(car);
+        cars.push({
+            element: car,
+            x: car.offsetLeft,
+            speed: Math.random() * gameSpeed + 1
+        });
+    }
+
+    function updateCars() {
+        for (let i = 0; i < cars.length; i++) {
+            cars[i].x -= cars[i].speed;
+            cars[i].element.style.left = cars[i].x + 'px';
+            if (cars[i].x < -40) {
+                cars[i].element.remove();
+                cars.splice(i, 1);
+                i--;
+                createCar(Math.floor(Math.random() * 10)); // Create a new car in a random lane
+            }
+            // Collision detection
+            if (
+                playerX < cars[i].x + cars[i].element.offsetWidth &&
+                playerX + 20 > cars[i].x &&
+                playerY < cars[i].element.offsetTop + cars[i].element.offsetHeight &&
+                playerY + 20 > cars[i].element.offsetTop
+            ) {
+                alert('Game Over! Score: ' + score);
+                resetGame();
+            }
+        }
+    }
+
+    function gameLoop() {
+        updateCars();
+        if (playerY < 0) {
+            score += 10;
+            levelUp();
+        }
+        requestAnimationFrame(gameLoop);
+    }
+
+    function levelUp() {
+        level++;
+        if (level > 3) {
+            alert('You Win!');
+            resetGame();
+        } else {
+            playerY = 380;
+            gameSpeed += 1;
+            cars.forEach(car => {
+                car.element.remove();
+            });
+            cars = [];
+            for (let i = 0; i < level * 2; i++) {
+                createCar(Math.floor(Math.random() * 10));
+            }
+        }
+    }
+
+    function resetGame() {
+        level = 1;
+        gameSpeed = 2;
+        score = 0;
+        playerX = 240;
+        playerY = 380;
+        player.style.left = playerX + 'px';
+        player.style.top = playerY + 'px';
+        cars.forEach(car => {
+            car.element.remove();
+        });
+        cars = [];
+        for (let i = 0; i < 2; i++) {
+            createCar(Math.floor(Math.random() * 10));
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'w' && playerY > 0) {
+            playerY -= 40;
+        } else if (e.key === 's' && playerY < 380) {
+            playerY += 40;
+        } else if (e.key === 'a' && playerX > 0) {
+            playerX -= 40;
+        } else if (e.key === 'd' && playerX < 460) {
+            playerX += 40;
+        }
+        player.style.left = playerX + 'px';
+        player.style.top = playerY + 'px';
+    });
+
+    // Initialize game
+    for (let i = 0; i < 2; i++) {
+        createCar(Math.floor(Math.random() * 10));
+    }
+
+    gameLoop();
+</script>
+
+</body>
+</html>

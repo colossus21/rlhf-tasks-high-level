@@ -1,0 +1,76 @@
+For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The game must be implemented in a single HTML file with required JavaScript code.
+Assumption 1:
+The HTML file contains a canvas element with id 'gameCanvas' and all necessary JavaScript code.
+
+Requirement 2:
+The initial game state must set up a dark background color value.
+Assumption 2:
+The canvas context fillStyle property is set to '#000000' or a similar dark color value.
+
+Requirement 3:
+The player character must have white color and square dimensions defined.
+Assumption 3:
+Player object properties include color: '#FFFFFF' and equal width/height values.
+
+Requirement 4:
+The obstacles (cars) must have yellow color and rectangle dimensions defined.
+Assumption 4:
+Car objects have color: '#FFFF00' and width greater than height in their properties.
+
+Requirement 5:
+The game must handle WASD keyboard inputs for player movement.
+Assumption 5:
+Event listeners exist for 'keydown' events handling 'w', 'a', 's', 'd' keys.
+
+Requirement 6:
+The game must maintain different level configurations.
+Assumption 6:
+A levels array or object exists containing distinct configuration data for at least 3 levels.
+
+Requirement 7:
+The game must have collision detection logic between player and car objects.
+Assumption 7:
+A collision detection function exists that takes player and car coordinates/dimensions as input.
+
+Requirement 8:
+The game must track the current game state (playing, game over).
+Assumption 8:
+A game state variable exists and updates based on collision detection.
+
+Requirement 9:
+The game must have a mechanism to restart the game.
+Assumption 9:
+A restart function exists that resets game state variables to initial values.
+
+Requirement 10:
+The game must track and store the current level number.
+Assumption 10:
+A level counter variable exists and updates when level completion conditions are met.
+
+Requirement 11:
+The game must enforce player boundaries within the canvas.
+Assumption 11:
+Player position update function includes boundary checking logic.
+
+Requirement 12:
+The game must have win condition logic for each level.
+Assumption 12:
+A function exists to check if player has reached the goal area coordinates.
+
+Requirement 13:
+The game must store initial positions for player and cars for each level.
+Assumption 13:
+Level configuration includes starting coordinates for player and car objects.
+
+Requirement 14:
+The game must reset player position when starting a new level.
+Assumption 14:
+A function exists to reset player position to level-specific starting coordinates.
+
+Requirement 15:
+The game must maintain a data structure for active car objects.
+Assumption 15:
+An array or similar structure exists to track current car objects and their properties.

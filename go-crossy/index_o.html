@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crossy Road Game</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212; /* Dark background */
+        }
+        #gameCanvas {
+            background-color: #333;
+            display: block;
+            border: 2px solid #fff;
+        }
+    </style>
+</head>
+<body>
+<canvas id="gameCanvas" width="500" height="500"></canvas>
+
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const playerSize = 20;
+    const carHeight = 20;
+    const carMinSpeed = 2;
+    const carMaxSpeed = 6;
+
+    let level = 1;
+    let cars = [];
+    let player = { x: canvas.width / 2 - playerSize / 2, y: canvas.height - playerSize, size: playerSize, speed: 5 };
+
+    const roadLanes = [
+        { y: 100, speed: 0 }, // Safe lane (Top)
+        { y: 150, speed: randomSpeed() },
+        { y: 200, speed: randomSpeed() },
+        { y: 250, speed: randomSpeed() },
+        { y: 300, speed: 0 }, // Safe lane (Middle)
+        { y: 350, speed: randomSpeed() },
+        { y: 400, speed: randomSpeed() },
+        { y: 450, speed: randomSpeed() }
+    ];
+
+    function randomSpeed() {
+        return Math.random() * (carMaxSpeed - carMinSpeed) + carMinSpeed;
+    }
+
+    function createCars() {
+        cars = [];
+        roadLanes.forEach((lane, index) => {
+            if (lane.speed > 0) {
+                for (let i = 0; i < 3; i++) {
+                    let carWidth = Math.random() * 50 + 30; // Random car width
+                    cars.push({
+                        x: Math.random() * canvas.width,
+                        y: lane.y,
+                        width: carWidth,
+                        height: carHeight,
+                        speed: lane.speed
+                    });
+                }
+            }
+        });
+    }
+
+    function resetPlayer() {
+        player.x = canvas.width / 2 - playerSize / 2;
+        player.y = canvas.height - playerSize;
+    }
+
+    function updatePlayerMovement() {
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "w" && player.y > 0) player.y -= player.speed;
+            if (e.key === "s" && player.y + player.size < canvas.height) player.y += player.speed;
+            if (e.key === "a" && player.x > 0) player.x -= player.speed;
+            if (e.key === "d" && player.x + player.size < canvas.width) player.x += player.speed;
+        });
+    }
+
+    function detectCollision() {
+        cars.forEach(car => {
+            if (
+                player.x < car.x + car.width &&
+                player.x + player.size > car.x &&
+                player.y < car.y + car.height &&
+                player.y + player.size > car.y
+            ) {
+                alert("You got hit! Try again.");
+                resetPlayer();
+            }
+        });
+    }
+
+    function checkWin() {
+        if (player.y <= 0) {
+            level++;
+            alert("Level complete! Moving to level " + level);
+            resetPlayer();
+            increaseDifficulty();
+        }
+    }
+
+    function increaseDifficulty() {
+        roadLanes.forEach(lane => {
+            if (lane.speed > 0) {
+                lane.speed += 0.5; // Increase speed each level
+            }
+        });
+        createCars();
+    }
+
+    function update() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw player
+        ctx.fillStyle = "white";
+        ctx.fillRect(player.x, player.y, player.size, player.size);
+
+        // Draw cars
+        ctx.fillStyle = "yellow";
+        cars.forEach(car => {
+            ctx.fillRect(car.x, car.y, car.width, car.height);
+            car.x += car.speed;
+            if (car.x > canvas.width) car.x = -car.width; // Wrap cars around
+        });
+
+        detectCollision();
+        checkWin();
+
+        requestAnimationFrame(update);
+    }
+
+    function initGame() {
+        createCars();
+        updatePlayerMovement();
+        update();
+    }
+
+    initGame();
+</script>
+</body>
+</html>

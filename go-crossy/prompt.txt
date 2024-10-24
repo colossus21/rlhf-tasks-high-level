@@ -1,0 +1,1 @@
+Create a crossy road inspired game but only using shapes in a single HTML - player has to cross the road without getting hit by cars. Game has a dark background, player is a white square and the cars of various velocities moving would be yellow rectangles along the road. The player moves using WASD and create at least 3 levels.

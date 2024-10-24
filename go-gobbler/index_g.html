@@ -5,64 +5,85 @@
     <style>
         body {
             font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
         }
-        #board {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-template-rows: repeat(3, 100px);
-            gap: 5px;
-            margin: 20px auto;
+
+        table {
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        td {
+            width: 50px;
+            height: 50px;
             border: 2px solid #333;
+            text-align: center;
+            font-size: 2em;
+            cursor: pointer;
+            position: relative; /* To allow positioning of pieces inside */
         }
-        .cell {
-            width: 100px;
-            height: 100px;
-            border: 1px solid #333;
+
+        .piece {
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: transform 0.2s ease; /* Smooth transition for scaling */
         }
-        .piece {
-            border-radius: 50%;
+
+        .piece.x {
+            color: blue;
+        }
+
+        .piece.o {
+            color: red;
+        }
+
+        .small {
+            font-size: 0.5em;
+        }
+
+        .medium {
+            font-size: 0.8em;
+        }
+
+        .large {
+            font-size: 1em;
+        }
+
+        .piece.dragging {
+            opacity: 0.7;
+            transform: scale(1.2); /* Make it slightly bigger while dragging */
+            z-index: 10; /* Ensure it's on top while dragging */
+        }
+
+        #pieces {
+            display: flex;
+            gap: 10px;
+        }
+
+        .piece-container {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #333;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: grab;
-            position: absolute;
         }
-        .X {
-            background-color: #f00;
-            color: #fff;
-        }
-        .O {
-            background-color: #00f;
-            color: #fff;
-        }
-        .S {
-            width: 30px;
-            height: 30px;
-            font-size: 16px;
-        }
-        .M {
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
-        }
-        .L {
-            width: 70px;
-            height: 70px;
-            font-size: 32px;
-        }
-        #pieces {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
-        .piece-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+
+        #turn {
+            font-size: 1.2em;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -70,75 +91,174 @@
 
 <h1>Gobble-Tac-Toe</h1>
 
-<div id="board"></div>
+<table>
+    <tr>
+        <td data-row="0" data-col="0"></td>
+        <td data-row="0" data-col="1"></td>
+        <td data-row="0" data-col="2"></td>
+    </tr>
+    <tr>
+        <td data-row="1" data-col="0"></td>
+        <td data-row="1" data-col="1"></td>
+        <td data-row="1" data-col="2"></td>
+    </tr>
+    <tr>
+        <td data-row="2" data-col="0"></td>
+        <td data-row="2" data-col="1"></td>
+        <td data-row="2" data-col="2"></td>
+    </tr>
+</table>
 
 <div id="pieces">
-    <div class="piece-container">
-        <h2>Player X</h2>
-        <div class="piece X S" draggable="true">X</div>
-        <div class="piece X S" draggable="true">X</div>
-        <div class="piece X M" draggable="true">X</div>
-        <div class="piece X M" draggable="true">X</div>
-        <div class="piece X L" draggable="true">X</div>
-        <div class="piece X L" draggable="true">X</div>
-    </div>
-    <div class="piece-container">
-        <h2>Player O</h2>
-        <div class="piece O S" draggable="true">O</div>
-        <div class="piece O S" draggable="true">O</div>
-        <div class="piece O M" draggable="true">O</div>
-        <div class="piece O M" draggable="true">O</div>
-        <div class="piece O L" draggable="true">O</div>
-        <div class="piece O L" draggable="true">O</div>
-    </div>
+    <div class="piece-container" data-player="x" data-size="small"><div class="piece x small">X</div></div>
+    <div class="piece-container" data-player="x" data-size="small"><div class="piece x small">X</div></div>
+    <div class="piece-container" data-player="x" data-size="medium"><div class="piece x medium">X</div></div>
+    <div class="piece-container" data-player="x" data-size="medium"><div class="piece x medium">X</div></div>
+    <div class="piece-container" data-player="x" data-size="large"><div class="piece x large">X</div></div>
+    <div class="piece-container" data-player="x" data-size="large"><div class="piece x large">X</div></div>
+
+    <div class="piece-container" data-player="o" data-size="small"><div class="piece o small">O</div></div>
+    <div class="piece-container" data-player="o" data-size="small"><div class="piece o small">O</div></div>
+    <div class="piece-container" data-player="o" data-size="medium"><div class="piece o medium">O</div></div>
+    <div class="piece-container" data-player="o" data-size="medium"><div class="piece o medium">O</div></div>
+    <div class="piece-container" data-player="o" data-size="large"><div class="piece o large">O</div></div>
+    <div class="piece-container" data-player="o" data-size="large"><div class="piece o large">O</div></div>
 </div>
 
+<div id="turn">Player X's turn</div>
+
 <script>
-    const board = document.getElementById('board');
-    const cells = [];
-    let currentPlayer = 'X';
+    let currentPlayer = 'x';
+    let gameOver = false;
 
-    // Create board cells
-    for (let i = 0; i < 9; i++) {
-        const cell = document.createElement('div');
-        cell.classList.add('cell');
-        cell.id = i;
-        cells.push(cell);
-        board.appendChild(cell);
+    const board = []; // 2D array to represent the board state
 
-        cell.addEventListener('dragover', (event) => {
-            event.preventDefault();
-        });
-
-        cell.addEventListener('drop', (event) => {
-            event.preventDefault();
-            const pieceId = event.dataTransfer.getData('text');
-            const piece = document.getElementById(pieceId);
-            const existingPiece = cell.querySelector('.piece');
-
-            if (existingPiece) {
-                // Gobble logic
-                const existingSize = existingPiece.classList[2];
-                const newSize = piece.classList[2];
-                if (newSize > existingSize) {
-                    cell.removeChild(existingPiece);
-                    cell.appendChild(piece);
-                }
-            } else {
-                cell.appendChild(piece);
-            }
-
-            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        });
+    // Initialize the board array
+    for (let i = 0; i < 3; i++) {
+        board[i] = [];
+        for (let j = 0; j < 3; j++) {
+            board[i][j] = null;
+        }
     }
 
-    // Make pieces draggable
-    const pieces = document.querySelectorAll('.piece');
+    const pieces = document.querySelectorAll('.piece-container');
+    const cells = document.querySelectorAll('td');
+    const turnDisplay = document.getElementById('turn');
+
     pieces.forEach(piece => {
-        piece.addEventListener('dragstart', (event) => {
-            event.dataTransfer.setData('text', event.target.id);
-        });
+        piece.addEventListener('dragstart', dragStart);
     });
+
+    cells.forEach(cell => {
+        cell.addEventListener('dragover', dragOver);
+        cell.addEventListener('drop', drop);
+    });
+
+    function dragStart(event) {
+        event.dataTransfer.setData('text/plain', event.target.dataset.player + '|' + event.target.dataset.size);
+        event.target.classList.add('dragging');
+    }
+
+    function dragOver(event) {
+        event.preventDefault();
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData('text/plain').split('|');
+        const player = data[0];
+        const size = data[1];
+
+        const row = event.target.dataset.row;
+        const col = event.target.dataset.col;
+
+        // Check if the cell is already occupied
+        if (board[row][col]) {
+            // If occupied, check if the current piece can gobble the existing piece
+            const existingPieceSize = board[row][col].size;
+            if (size === 'large' || (size === 'medium' && existingPieceSize === 'small') || (size === 'small' && existingPieceSize === 'medium')) {
+                // Gobble the existing piece
+                event.target.innerHTML = '';
+            } else {
+                return; // Cannot place the piece here
+            }
+        }
+
+        const piece = document.createElement('div');
+        piece.classList.add('piece', player, size);
+        piece.textContent = player.toUpperCase();
+        event.target.appendChild(piece);
+
+        // Update the board array
+        board[row][col] = { player: player, size: size };
+
+        // Remove the dragged piece from the pieces container
+        const draggedPiece = document.querySelector('.piece-container.dragging');
+        draggedPiece.remove();
+
+        // Check for a win
+        if (checkForWin()) {
+            gameOver = true;
+            turnDisplay.textContent = `Player ${currentPlayer.toUpperCase()} wins!`;
+            return;
+        }
+
+        // Check for a draw
+        if (checkForDraw()) {
+            gameOver = true;
+            turnDisplay.textContent = "It's a draw!";
+            return;
+        }
+
+        // Switch player
+        currentPlayer = currentPlayer === 'x' ? 'o' : 'x';
+        turnDisplay.textContent = `Player ${currentPlayer.toUpperCase()}'s turn`;
+    }
+
+    function checkForWin() {
+        // Check rows
+        for (let i = 0; i < 3; i++) {
+            if (board[i][0] && board[i][0].player === currentPlayer &&
+                board[i][1] && board[i][1].player === currentPlayer &&
+                board[i][2] && board[i][2].player === currentPlayer) {
+                return true;
+            }
+        }
+
+        // Check columns
+        for (let j = 0; j < 3; j++) {
+            if (board[0][j] && board[0][j].player === currentPlayer &&
+                [1][j].player === currentPlayer &&
+                board[2][j] && board[2][j].player === currentPlayer) {
+                return true;
+            }
+        }
+
+        // Check diagonals
+        if (board[0][0] && board[0][0].player === currentPlayer &&
+            board[1][1] && board[1][1].player === currentPlayer &&
+            board[2][2] && board[2][2].player === currentPlayer) {
+            return true;
+        }
+        if (board[0][2] && board[0][2].player === currentPlayer &&
+            board[1][1] && board[1][1].player === currentPlayer &&
+            board[2][0] && board[2][0].player === currentPlayer) {
+            return true;
+        }
+
+        return false;
+    }
+
+    function checkForDraw() {
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (!board[i][j]) {
+                    return false; // There are still empty cells
+                }
+            }
+        }
+        return true; // All cells are filled
+    }
 </script>
 
 </body>

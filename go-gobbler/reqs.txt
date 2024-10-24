@@ -1,1 +1,76 @@
 For the following requirements and assumptions pairs, please create test cases in JEST with JSDom - provide a single JS file and consider completing all tests, start the test name with R1, R2...etc. Make sure all tests are written and not mocked:
+
+Requirement 1:
+The game must be implemented as a single HTML file with the required DOM structure.
+Assumption 1:
+The document will contain all necessary elements with appropriate IDs and data attributes.
+
+Requirement 2:
+The game must maintain a 3x3 grid structure in the DOM.
+Assumption 2:
+The grid will be implemented using HTML elements with unique identifiers for each cell that can be queried.
+
+Requirement 3:
+The game must track each player's piece inventory: 2 small, 2 medium, and 2 large pieces of either crosses or circles.
+Assumption 3:
+The game state will maintain a data structure tracking available pieces for each player.
+
+Requirement 4:
+The game must maintain the current turn state between cross and circle players.
+Assumption 4:
+There will be a mechanism to track and validate the current player's turn.
+
+Requirement 5:
+The game must enforce valid piece placement based on cell occupancy and piece sizes.
+Assumption 5:
+There will be validation functions to check if a move is legal based on piece size and cell status.
+
+Requirement 6:
+Cross pieces must only be able to gobble larger circle pieces, and circle pieces must only be able to gobble larger cross pieces.
+Assumption 6:
+There will be validation functions to check piece type and size relationships before allowing gobbling.
+
+Requirement 7:
+The game must track the state of the board including piece types and sizes in each cell.
+Assumption 7:
+Each cell will maintain data attributes indicating occupying piece type and size.
+
+Requirement 8:
+The game must correctly identify win conditions (three in a row of the same player).
+Assumption 8:
+There will be functions to check all possible winning combinations based on current board state.
+
+Requirement 9:
+The game must correctly identify draw conditions when no more valid moves are possible.
+Assumption 9:
+There will be functions to determine if the game state represents a draw.
+
+Requirement 10:
+The game must track and enforce the following size hierarchy: small pieces can gobble medium and large pieces, medium pieces can gobble large pieces.
+Assumption 10:
+There will be functions to validate size relationships between pieces.
+
+Requirement 11:
+The game must maintain accurate count of remaining pieces for each player.
+Assumption 11:
+There will be functions to track and update piece counts in the game state.
+
+Requirement 12:
+The game must prevent same-sized pieces from gobbling each other.
+Assumption 12:
+There will be validation functions to prevent same-size piece placement regardless of type.
+
+Requirement 13:
+The game must update the game state correctly when pieces are gobbled.
+Assumption 13:
+There will be functions to handle piece removal and state updates when gobbling occurs.
+
+Requirement 14:
+The game must reset to initial state when reset is triggered.
+Assumption 14:
+There will be functions to reset all game state variables and DOM elements to their initial values.
+
+Requirement 15:
+The game must maintain valid state of player inventories as pieces are placed or gobbled.
+Assumption 15:
+There will be functions to update and validate the available pieces state for each player.

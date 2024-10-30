@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Color Sequence Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        #game-container {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            width: 400px;
+            margin: 20px auto;
+        }
+
+        .square {
+            width: 80px;
+            height: 80px;
+            border: 3px solid rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.2s ease;
+        }
+
+        .square:hover {
+            opacity: 0.9;
+        }
+
+        .highlight {
+            opacity: 1;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .red { background-color: #ff4444; }
+        .blue { background-color: #4444ff; }
+        .green { background-color: #44cc44; }
+        .yellow { background-color: #cccc44; }
+        .purple { background-color: #9944cc; }
+        .orange { background-color: #ff8844; }
+        .pink { background-color: #ff44aa; }
+        .brown { background-color: #aa6644; }
+
+        #sequence-display {
+            margin: 20px 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        #score-display {
+            font-size: 20px;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        #high-score {
+            font-size: 16px;
+            color: #888;
+            margin: 10px 0;
+        }
+
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+<div id="game-container">
+    <h1>Color Sequence Game</h1>
+    <div id="score-display">Score: 0</div>
+    <div id="high-score">High Score: 0</div>
+    <div id="game-board"></div>
+    <div id="sequence-display">Press Start to begin!</div>
+    <button id="start-button">Start Game</button>
+</div>
+
+<script>
+    const gameBoard = document.getElementById('game-board');
+    const sequenceDisplay = document.getElementById('sequence-display');
+    const startButton = document.getElementById('start-button');
+    const scoreDisplay = document.getElementById('score-display');
+    const highScoreDisplay = document.getElementById('high-score');
+
+    const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'brown'];
+    let sequence = [];
+    let currentSequenceIndex = 0;
+    let showingSequence = false;
+    let score = 0;
+    let highScore = localStorage.getItem('highScore') || 0;
+    let gameStarted = false;
+
+    function updateScore() {
+        score = sequence.length - 5;  // -5 because we start with 5 colors
+        scoreDisplay.textContent = `Score: ${score}`;
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem('highScore', highScore);
+            highScoreDisplay.textContent = `High Score: ${highScore}`;
+        }
+    }
+
+    function createGameBoard() {
+        gameBoard.innerHTML = '';  // Clear existing board
+        for (let i = 0; i < 8; i++) {
+            const square = document.createElement('div');
+            square.classList.add('square', colors[i]);
+            square.addEventListener('click', handleSquareClick);
+            gameBoard.appendChild(square);
+        }
+    }
+
+    function generateSequence() {
+        sequence = [];
+        for (let i = 0; i < 5; i++) {
+            sequence.push(Math.floor(Math.random() * 8));
+        }
+    }
+
+    async function showSequence() {
+        showingSequence = true;
+        sequenceDisplay.textContent = 'Watch carefully!';
+        const squares = Array.from(gameBoard.children);
+
+        // Disable clicks during sequence display
+        squares.forEach(square => square.style.pointerEvents = 'none');
+
+        for (let i = 0; i < sequence.length; i++) {
+            squares[sequence[i]].classList.add('highlight');
+            await new Promise(resolve => setTimeout(resolve, 800));
+            squares[sequence[i]].classList.remove('highlight');
+            await new Promise(resolve => setTimeout(resolve, 200));
+        }
+
+        // Re-enable clicks after sequence
+        squares.forEach(square => square.style.pointerEvents = 'auto');
+        showingSequence = false;
+        sequenceDisplay.textContent = "Your turn!";
+    }
+
+    function handleSquareClick(event) {
+        if (showingSequence || !gameStarted) return;
+
+        const squares = Array.from(gameBoard.children);
+        const clickedSquareIndex = squares.indexOf(event.target);
+
+        // Visual feedback for click
+        event.target.classList.add('highlight');
+        setTimeout(() => event.target.classList.remove('highlight'), 200);
+
+        if (clickedSquareIndex === sequence[currentSequenceIndex]) {
+            currentSequenceIndex++;
+
+            if (currentSequenceIndex === sequence.length) {
+                currentSequenceIndex = 0;
+                sequence.push(Math.floor(Math.random() * 8));
+                updateScore();
+                sequenceDisplay.textContent = 'Correct! Watch the next sequence...';
+                setTimeout(showSequence, 1000);
+            }
+        } else {
+            gameStarted = false;
+            sequenceDisplay.textContent = 'Game Over! Press Start to try again.';
+            startButton.disabled = false;
+
+            // Visual feedback for game over
+            squares.forEach(square => {
+                square.classList.add('highlight');
+                setTimeout(() => square.classList.remove('highlight'), 500);
+            });
+
+            // Reset game state
+            currentSequenceIndex = 0;
+            score = 0;
+            scoreDisplay.textContent = 'Score: 0';
+        }
+    }
+
+    startButton.addEventListener('click', () => {
+        gameStarted = true;
+        score = 0;
+        scoreDisplay.textContent = 'Score: 0';
+        highScoreDisplay.textContent = `High Score: ${highScore}`;
+        createGameBoard();
+        generateSequence();
+        startButton.disabled = true;
+        setTimeout(showSequence, 1000);
+    });
+
+    // Initialize high score display
+    highScoreDisplay.textContent = `High Score: ${highScore}`;
+</script>
+</body>
+</html>

@@ -6,12 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="94ef8d18-f607-4510-bcc1-62d85bb39a8e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go-gobbler/__tests__/test_g.js" beforeDir="false" afterPath="$PROJECT_DIR$/go-gobbler/__tests__/test_g.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go-gobbler/__tests__/test_o.js" beforeDir="false" afterPath="$PROJECT_DIR$/go-gobbler/__tests__/test_o.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go-gobbler/index_g.html" beforeDir="false" afterPath="$PROJECT_DIR$/go-gobbler/index_g.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go-gobbler/index_o.html" beforeDir="false" afterPath="$PROJECT_DIR$/go-gobbler/index_o.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go-gobbler/prompt.txt" beforeDir="false" afterPath="$PROJECT_DIR$/go-gobbler/prompt.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go-gobbler/reqs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/go-gobbler/reqs.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +29,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/Personal Projects/Google/go-2048&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Personal Projects/Google/m-216311&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -47,13 +41,16 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\Personal Projects\Google\go-2048" />
-      <recent name="E:\Personal Projects\Google\go-battleship-mini" />
-      <recent name="E:\Personal Projects\Google\190793-roulette" />
-      <recent name="E:\Personal Projects\Google" />
-      <recent name="E:\Personal Projects\Google\190793-conway-color" />
+      <recent name="E:\Personal Projects\Google\m-216311" />
+      <recent name="E:\Personal Projects\Google\m-21625" />
+      <recent name="E:\Personal Projects\Google\m-216153" />
+      <recent name="E:\Personal Projects\Google\m-216153\node_modules" />
+      <recent name="E:\Personal Projects\Google\m-react-ts\src\tasks" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Personal Projects\Google\m-216311\__tests__" />
+      <recent name="E:\Personal Projects\Google\m-216311" />
+      <recent name="E:\Personal Projects\Google\m-react-ts\src" />
       <recent name="E:\Personal Projects\Google\190793-checkers-game" />
       <recent name="E:\Personal Projects\Google\190793-checkers-game\__tests__" />
     </key>
@@ -86,7 +83,15 @@
       <workItem from="1729535927699" duration="3682000" />
       <workItem from="1729586028598" duration="27139000" />
       <workItem from="1729670805737" duration="6894000" />
-      <workItem from="1729759685717" duration="18480000" />
+      <workItem from="1729759685717" duration="21755000" />
+      <workItem from="1729798302940" duration="676000" />
+      <workItem from="1729866286643" duration="8727000" />
+      <workItem from="1729920629212" duration="856000" />
+      <workItem from="1730121842043" duration="127000" />
+      <workItem from="1730125415198" duration="9524000" />
+      <workItem from="1730182159014" duration="4808000" />
+      <workItem from="1730200062824" duration="16196000" />
+      <workItem from="1730270103426" duration="6921000" />
     </task>
     <servers />
   </component>

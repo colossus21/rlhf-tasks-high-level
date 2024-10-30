@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turtle Graphics</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+        input, button, label {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="500" height="500"></canvas>
+<label for="commands">Commands:</label>
+<input type="text" id="commands" value="F-F-F-F">
+<label for="stepLength">Step Length:</label>
+<input type="number" id="stepLength" value="50">
+<label for="turnAngle">Turn Angle:</label>
+<input type="number" id="turnAngle" value="90">
+<button id="draw">Draw</button>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    let x, y;
+    let angle;
+    let stack = [];
+
+    function init() {
+        x = canvas.width / 2;
+        y = canvas.height / 2;
+        angle = 0;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+    }
+
+    function draw(commands, stepLength, turnAngle) {
+        init();
+
+        for (let i = 0; i < commands.length; i++) {
+            let command = commands[i];
+            switch (command) {
+                case 'F':
+                    ctx.lineTo(x + stepLength * Math.cos(angle), y + stepLength * Math.sin(angle));
+                    ctx.stroke();
+                    x += stepLength * Math.cos(angle);
+                    y += stepLength * Math.sin(angle);
+                    break;
+                case 'f':
+                    x += stepLength * Math.cos(angle);
+                    y += stepLength * Math.sin(angle);
+                    ctx.moveTo(x, y);
+                    break;
+                case 'R':
+                    angle += turnAngle * Math.PI / 180;
+                    break;
+                case 'L':
+                    angle -= turnAngle * Math.PI / 180;
+                    break;
+                case '[':
+                    stack.push({ x: x, y: y, angle: angle });
+                    break;
+                case ']':
+                    let state = stack.pop();
+                    x = state.x;
+                    y = state.y;
+                    angle = state.angle;
+                    ctx.moveTo(x, y);
+                    break;
+            }
+        }
+    }
+
+    document.getElementById('draw').addEventListener('click', () => {
+        const commands = document.getElementById('commands').value;
+        const stepLength = parseFloat(document.getElementById('stepLength').value);
+        const turnAngle = parseFloat(document.getElementById('turnAngle').value);
+        draw(commands, stepLength, turnAngle);
+    });
+</script>
+</body>
+</html>

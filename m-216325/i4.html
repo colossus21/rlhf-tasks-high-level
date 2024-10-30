@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Sequence Game</title>
+    <style>
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Adjust for 2x4 grid */
+            grid-gap: 10px;
+            width: 300px; /* Adjust as needed */
+            margin: 20px auto;
+        }
+
+        .square {
+            width: 100%;
+            padding-bottom: 100%; /* Maintain square aspect ratio */
+            border: 1px solid black;
+        }
+
+        /* Add classes for different colors */
+        .red { background-color: red; }
+        .blue { background-color: blue; }
+        .green { background-color: green; }
+        .yellow { background-color: yellow; }
+
+        #sequence-display {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+<h1>Color Sequence Game</h1>
+<div id="game-board"></div>
+<p id="sequence-display"></p>
+<button id="start-button">Start Game</button>
+
+<script>
+    const gameBoard = document.getElementById('game-board');
+    const sequenceDisplay = document.getElementById('sequence-display');
+    const startButton = document.getElementById('start-button');
+
+    const colors = ['red', 'blue', 'green', 'yellow']; // Add more colors as desired
+    let sequence = [];
+    let currentSequenceIndex = 0;
+
+    function createBoard() {
+        for (let i = 0; i < 8; i++) { // 2x4 grid = 8 squares
+            const square = document.createElement('div');
+            square.classList.add('square');
+            square.classList.add(colors[i % colors.length]); // Assign colors cyclically
+            square.addEventListener('click', handleSquareClick);
+            gameBoard.appendChild(square);
+        }
+    }
+
+    function generateSequence() {
+        sequence = []; // Start with a fresh sequence
+        for (let i = 0; i < 4; i++) { // Example: sequence of length 4
+            sequence.push(colors[Math.floor(Math.random() * colors.length)]);
+        }
+        sequenceDisplay.textContent = sequence.join(' ');
+    }
+
+    function handleSquareClick(event) {
+        const clickedColor = event.target.classList[1];
+        if (clickedColor === sequence[currentSequenceIndex]) {
+            currentSequenceIndex++;
+            if (currentSequenceIndex === sequence.length) {
+                alert('You win!');
+                // Start a new, longer sequence
+                currentSequenceIndex = 0;
+                generateSequence();
+            }
+        } else {
+            alert('Game over! Incorrect sequence.');
+            currentSequenceIndex = 0; // Reset for a new game
+            generateSequence(); // Reset the sequence for the new game
+        }
+    }
+
+    startButton.addEventListener('click', () => {
+        createBoard();
+        generateSequence();
+        startButton.disabled = true; // Disable after starting the game
+    });
+</script>
+</body>
+</html>

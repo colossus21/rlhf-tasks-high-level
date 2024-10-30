@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turtle Graphics</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+        input, button, label {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="500" height="500"></canvas>
+<label for="commandString">Command String:</label>
+<input type="text" id="commandString" value="FF[LF]F[RF]F">
+<button id="drawButton">Draw</button>
+
+<script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    ctx.strokeStyle = "black";
+    ctx.globalAlpha = 1;
+
+    const commands = {
+        F: () => {
+            x += stepSize * Math.cos(angle);
+            y += stepSize * Math.sin(angle);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        },
+        f: () => {
+            x += stepSize * Math.cos(angle);
+            y += stepSize * Math.sin(angle);
+            ctx.moveTo(x, y);
+        },
+        R: () => {
+            angle += angleIncrement;
+        },
+        L: () => {
+            angle -= angleIncrement;
+        },
+        "[": () => {
+            positionStack.push({ x: x, y: y, angle: angle });
+        },
+        "]": () => {
+            const savedState = positionStack.pop();
+            x = savedState.x;
+            y = savedState.y;
+            angle = savedState.angle;
+            ctx.moveTo(x, y);
+        },
+    };
+
+    let x, y;
+    let angle;
+    const angleIncrement = Math.PI / 2;
+    const stepSize = 10;
+    const positionStack = [];
+
+    function draw(commandString) {
+        x = canvas.width / 2;
+        y = canvas.height / 2;
+        angle = 0;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+
+        for (let i = 0; i < commandString.length; i++) {
+            const command = commandString[i];
+            if (commands[command]) {
+                commands[command]();
+            }
+        }
+
+        ctx.stroke();
+    }
+
+    document.getElementById("drawButton").addEventListener("click", () => {
+        const commandString = document.getElementById("commandString").value;
+        draw(commandString);
+    });
+</script>
+</body>
+</html>

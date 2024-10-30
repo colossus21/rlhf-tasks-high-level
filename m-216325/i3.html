@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Sequence Game</title>
+    <style>
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Adjust for 2x4 grid */
+            gap: 10px;
+            width: 300px; /* Adjust as needed */
+            margin: 20px auto;
+        }
+
+        .square {
+            width: 50px;
+            height: 50px;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+
+        /* Add styles for different colors */
+        .red { background-color: red; }
+        .blue { background-color: blue; }
+        .green { background-color: green; }
+        .yellow { background-color: yellow; }
+
+        #sequence-display {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+<h1>Color Sequence Game</h1>
+<div id="game-board"></div>
+<div id="sequence-display"></div>
+<button id="start-button">Start Game</button>
+
+<script>
+    const gameBoard = document.getElementById('game-board');
+    const sequenceDisplay = document.getElementById('sequence-display');
+    const startButton = document.getElementById('start-button');
+
+    const colors = ['red', 'blue', 'green', 'yellow']; // Add more colors as needed
+    let sequence = [];
+    let currentSequenceIndex = 0;
+
+    function createGameBoard() {
+        for (let i = 0; i < 8; i++) { // 8 squares for 2x4 grid
+            const square = document.createElement('div');
+            square.classList.add('square');
+            square.classList.add(colors[i % colors.length]); // Cycle through colors
+            square.addEventListener('click', handleSquareClick);
+            gameBoard.appendChild(square);
+        }
+    }
+
+    function generateSequence() {
+        sequence = [];
+        for (let i = 0; i < 5; i++) { // Initial sequence length of 5
+            sequence.push(Math.floor(Math.random() * 8)); // Random square index (0-7)
+        }
+    }
+
+    function displaySequence() {
+        sequenceDisplay.textContent = "Sequence: " + sequence.join(' ');
+    }
+
+    function handleSquareClick(event) {
+        const clickedSquareIndex = Array.from(gameBoard.children).indexOf(event.target);
+
+        if (clickedSquareIndex === sequence[currentSequenceIndex]) {
+            currentSequenceIndex++;
+            if (currentSequenceIndex === sequence.length) {
+                alert('You won this round! Generating a longer sequence...');
+                generateSequence();
+                sequence.push(Math.floor(Math.random() * 8)); // Increase sequence length
+                currentSequenceIndex = 0;
+                displaySequence();
+            }
+        } else {
+            alert('Game Over! Incorrect sequence.');
+            // Reset game or handle game over logic
+            currentSequenceIndex = 0;
+            generateSequence();
+            displaySequence();
+        }
+    }
+
+    startButton.addEventListener('click', () => {
+        createGameBoard();
+        generateSequence();
+        displaySequence();
+        startButton.disabled = true;
+    });
+</script>
+</body>
+</html>

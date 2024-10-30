@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Sequence Game</title>
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Creates 4 equal columns */
+            grid-template-rows: repeat(2, 1fr); /* Creates 2 equal rows */
+            gap: 10px; /* Spacing between grid items */
+            width: 300px;  /* Adjust as needed */
+            margin: 50px auto;
+        }
+
+        .box {
+            width: 100%;
+            height: 100px; /* Adjust as needed */
+            border: 1px solid black;
+            cursor: pointer;
+        }
+
+        /* Example colors, expand as needed */
+        .red { background-color: red; }
+        .blue { background-color: blue; }
+        .green { background-color: green; }
+        .yellow { background-color: yellow; }
+        .purple { background-color: purple; }
+        .orange { background-color: orange; }
+        .pink { background-color: pink; }
+        .brown { background-color: brown; }
+
+        /* Highlight animation */
+        .highlight {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+<div class="container"></div>
+
+<script>
+    const container = document.querySelector(".container");
+    const colors = ["red", "blue", "green", "yellow", "purple", "orange", "pink", "brown"];
+    let sequence = [];
+    let playerSequence = [];
+
+    // Function to generate a random sequence
+    function generateSequence(length) {
+        return Array.from({ length }, () => colors[Math.floor(Math.random() * colors.length)]);
+    }
+
+    // Function to display the sequence to the player
+    function displaySequence(seq) {
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i < seq.length) {
+                highlightBox(seq[i]);
+                i++;
+            } else {
+                clearInterval(interval);
+                playerTurn();
+            }
+        }, 1000);
+    }
+
+    // Function to highlight a box with a given color
+    function highlightBox(color) {
+        const box = document.querySelector(`.${color}`);
+        box.classList.add('highlight');
+        setTimeout(() => {
+            box.classList.remove('highlight');
+        }, 500);
+    }
+
+    // Initialize game by generating a sequence and displaying it
+    function initGame() {
+        // Clear existing boxes
+        container.innerHTML = '';
+
+        // Generate random colors and assign to boxes
+        const boxColors = generateSequence(8);
+        for (let i = 0; i < 8; i++) {
+            const box = document.createElement('div');
+            box.classList.add('box');
+            box.classList.add(boxColors[i]);
+            box.addEventListener('click', () => { handleClick(boxColors[i]); });
+            container.appendChild(box);
+        }
+
+        sequence = generateSequence(5); // Start with a sequence of 5
+        displaySequence(sequence);
+    }
+
+    function handleClick(color) {
+        playerSequence.push(color);
+        // Check if the click is correct
+        if (playerSequence[playerSequence.length - 1] !== sequence[playerSequence.length - 1]) {
+            alert("Game Over!");
+            initGame();
+        } else if (playerSequence.length === sequence.length) {
+            alert("You Win!");
+            initGame();
+        }
+    }
+
+    // Start the game
+    initGame();
+</script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Sequence Game</title>
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Creates 4 equal columns */
+            grid-template-rows: repeat(2, 1fr); /* Creates 2 equal rows */
+            width: 300px; /* Adjust size as needed */
+            height: 150px;
+            gap: 10px; /* Spacing between squares */
+            margin: 50px auto; /* Center on the page */
+        }
+
+        .square {
+            background-color: #ccc; /* Default color */
+            border: 1px solid black;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container"></div>
+
+<script>
+    const container = document.querySelector('.container');
+    const colors = ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'brown'];
+    let sequence = [];
+    let currentSequenceIndex = 0;
+
+    // Function to generate random sequence
+    function generateSequence() {
+        sequence = [];
+        for (let i = 0; i < 4; i++) { // Change 4 to adjust sequence length
+            sequence.push(colors[Math.floor(Math.random() * colors.length)]);
+        }
+    }
+
+    // Function to display the sequence to the user (flashing effect)
+    function displaySequence() {
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i < sequence.length) {
+                highlightSquare(sequence[i]);
+                setTimeout(() => {
+                    clearHighlight(sequence[i]);
+                }, 500); // Adjust highlight duration
+                i++;
+            } else {
+                clearInterval(interval);
+            }
+        }, 1000); // Adjust interval between flashes
+    }
+
+    // Create squares and add event listeners
+    function createBoard() {
+        for (let i = 0; i < 8; i++) {
+            const square = document.createElement('div');
+            square.classList.add('square');
+            square.style.backgroundColor = colors[i];
+            square.addEventListener('click', () => handleSquareClick(colors[i]));
+            container.appendChild(square);
+        }
+    }
+
+    function highlightSquare(color) {
+        const square = document.querySelector(`.square[style*="background-color: ${color}"]`);
+        square.style.borderColor = "white";
+    }
+
+    function clearHighlight(color) {
+        const square = document.querySelector(`.square[style*="background-color: ${color}"]`);
+        square.style.borderColor = "black";
+    }
+
+    function handleSquareClick(color) {
+        if (color === sequence[currentSequenceIndex]) {
+            currentSequenceIndex++;
+            if (currentSequenceIndex === sequence.length) {
+                alert('You won!');
+                currentSequenceIndex = 0;
+                generateSequence();
+                setTimeout(() => displaySequence(), 1000); // Show next sequence after delay
+            }
+        } else {
+            alert('Game Over!');
+            currentSequenceIndex = 0;
+            generateSequence();
+            setTimeout(() => displaySequence(), 1000); // Show next sequence after delay
+        }
+    }
+
+    // Initialize game
+    createBoard();
+    generateSequence();
+    displaySequence();
+</script>
+</body>
+</html>

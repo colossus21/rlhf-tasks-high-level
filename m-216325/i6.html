@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Sequence Memory Game</title>
+    <style>
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 columns */
+            gap: 10px;
+            width: 300px; /* Adjust as needed */
+            margin: 20px auto;
+        }
+
+        .color-tile {
+            width: 50px; /* Adjust as needed */
+            height: 50px;
+            cursor: pointer;
+        }
+
+        .red { background-color: red; }
+        .blue { background-color: blue; }
+        .green { background-color: green; }
+        .yellow { background-color: yellow; }
+        .purple { background-color: purple; }
+        .orange { background-color: orange; }
+        .cyan { background-color: cyan; }
+        .magenta { background-color: magenta; }
+
+        .active {
+            opacity: 0.6;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        #start-button {
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+<h1 style="text-align: center;">Color Sequence Memory</h1>
+<button id="start-button">Start Game</button>
+<div id="message"></div>
+<div id="game-board"></div>
+
+<script>
+    const gameBoard = document.getElementById('game-board');
+    const startButton = document.getElementById('start-button');
+    const message = document.getElementById('message');
+    const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'cyan', 'magenta'];
+    let sequence = [];
+    let userSequence = [];
+    let currentLevel = 0;
+
+    // Function to create the game board
+    function createBoard() {
+        if (gameBoard.children.length === 0) { // Check if the board is already created
+            for (let i = 0; i < 8; i++) {
+                const tile = document.createElement('div');
+                tile.classList.add('color-tile', colors[i]);
+                tile.dataset.color = colors[i];
+                gameBoard.appendChild(tile);
+            }
+        }
+    }
+
+    // Function to generate a random sequence
+    function generateSequence() {
+        sequence.push(colors[Math.floor(Math.random() * colors.length)]);
+    }
+
+    // Function to display the sequence to the user
+    function displaySequence() {
+        let index = 0;
+        message.textContent = 'Watch the sequence!';
+        const interval = setInterval(() => {
+            if (index < sequence.length) {
+                const color = sequence[index];
+                const tile = document.querySelector(`.color-tile.${color}`);
+                tile.classList.add('active');
+                setTimeout(() => {
+                    tile.classList.remove('active');
+                }, 500);
+                index++;
+            } else {
+                clearInterval(interval);
+                message.textContent = 'Your turn!';
+            }
+        }, 1000);
+    }
+
+    // Function to start the game
+    function startGame() {
+        resetGame();
+        createBoard();
+        generateSequence();
+        setTimeout(displaySequence, 500); // Give a brief pause before displaying the sequence
+    }
+
+    // Function to reset the game
+    function resetGame() {
+        sequence = [];
+        userSequence = [];
+        currentLevel = 0;
+        message.textContent = '';
+    }
+
+    // Event listener for tile clicks
+    gameBoard.addEventListener('click', (event) => {
+        if (!event.target.classList.contains('color-tile')) return;
+
+        const clickedColor = event.target.dataset.color;
+        userSequence.push(clickedColor);
+
+        if (clickedColor !== sequence[userSequence.length - 1]) {
+            message.textContent = 'Game Over! Click "Start Game" to try again.';
+            return;
+        }
+
+        if (userSequence.length === sequence.length) {
+            currentLevel++;
+            userSequence = [];
+            message.textContent = `Great job! Get ready for level ${currentLevel + 1}`;
+            setTimeout(() => {
+                generateSequence();
+                displaySequence();
+            }, 1000);
+        }
+    });
+
+    // Attach event listener to the start button
+    startButton.addEventListener('click', startGame);
+
+    // Initial setup
+    resetGame();
+</script>
+</body>
+</html>

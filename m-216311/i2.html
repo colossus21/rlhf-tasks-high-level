@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turtle Graphics</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+        input, button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="500" height="500"></canvas>
+<input type="text" id="input" value="F-F-F-F">
+<button id="draw">Draw</button>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    let x = canvas.width / 2;
+    let y = canvas.height / 2;
+    let angle = 0;
+    let step = 10;
+    let stack = [];
+
+    function drawLine() {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        x += step * Math.cos(angle);
+        y += step * Math.sin(angle);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+    }
+
+    function moveForward() {
+        x += step * Math.cos(angle);
+        y += step * Math.sin(angle);
+    }
+
+    function turnRight() {
+        angle -= Math.PI / 2;
+    }
+
+    function turnLeft() {
+        angle += Math.PI / 2;
+    }
+
+    function savePosition() {
+        stack.push({ x: x, y: y, angle: angle });
+    }
+
+    function loadPosition() {
+        if (stack.length > 0) {
+            const savedState = stack.pop();
+            x = savedState.x;
+            y = savedState.y;
+            angle = savedState.angle;
+        }
+    }
+
+    function interpret(commands) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        x = canvas.width / 2;
+        y = canvas.height / 2;
+        angle = 0;
+        stack = [];
+
+        for (let i = 0; i < commands.length; i++) {
+            const command = commands[i];
+            switch (command) {
+                case 'F':
+                    drawLine();
+                    break;
+                case 'f':
+                    moveForward();
+                    break;
+                case 'R':
+                    turnRight();
+                    break;
+                case 'L':
+                    turnLeft();
+                    break;
+                case '[':
+                    savePosition();
+                    break;
+                case ']':
+                    loadPosition();
+                    break;
+            }
+        }
+    }
+
+    const inputField = document.getElementById('input');
+    const drawButton = document.getElementById('draw');
+
+    drawButton.addEventListener('click', () => {
+        const commands = inputField.value;
+        interpret(commands);
+    });
+</script>
+</body>
+</html>

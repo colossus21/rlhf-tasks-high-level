@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Pricing E-Commerce</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .product {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+            width: 200px;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="product-list"></div>
+<script>
+    let products = [
+        { id: 1, name: 'Product A', basePrice: 100, stock: 5 },
+        { id: 2, name: 'Product B', basePrice: 200, stock: 0 },
+        { id: 3, name: 'Product C', basePrice: 300, stock: 3 },
+        { id: 4, name: 'Product D', basePrice: 100, stock: 5 },
+        { id: 5, name: 'Product F', basePrice: 200, stock: 0 },
+        { id: 6, name: 'Product E', basePrice: 300, stock: 35 }
+    ];
+
+    const MAX_INVENTORY = 30;
+    const DISCOUNT_THRESHOLD = 0.7;
+
+    function calculatePrice(product) {
+        let price = product.basePrice;
+
+        if (product.stock > MAX_INVENTORY * DISCOUNT_THRESHOLD) {
+            price *= 0.9; // Apply 10% discount
+        } else if (product.stock < 2) {
+            price *= 0.9;
+        }
+
+        return price;
+    }
+
+    function displayProducts() {
+        const productListElement = document.getElementById('product-list');
+        productListElement.innerHTML = '';
+
+        products.forEach(product => {
+            const productElement = document.createElement('div');
+            productElement.className = 'product';
+
+            const price = calculatePrice(product);
+
+            productElement.innerHTML = `
+            <h2>${product.name}</h2>
+            <p>Price: $${price.toFixed(2)}</p>
+            <p>Stock: ${product.stock > 0 ? product.stock : 'Out of Stock'}</p>
+            <button ${product.stock === 0 ? 'disabled' : ''} onclick="addToCart(${product.id})">Add to Cart</button>
+        `;
+
+            productListElement.appendChild(productElement);
+        });
+    }
+
+    let cart = [];
+
+    function addToCart(productId) {
+        const product = products.find(p => p.id === productId);
+
+        if (product && product.stock > 0) {
+            cart.push(product);
+            product.stock--;
+            displayProducts();
+        } else {
+            alert('Product is out of stock!');
+        }
+    }
+
+    displayProducts();
+</script>
+</body>
+</html>

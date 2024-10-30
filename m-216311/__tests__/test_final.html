@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Turtle Graphics Tests</title>
+    <style>
+        .test-result { padding: 10px; margin: 5px; }
+        .pass { background-color: #d4edda; }
+        .fail { background-color: #f8d7da; }
+    </style>
+</head>
+<body>
+<h1>Turtle Graphics Tests</h1>
+<div id="results"></div>
+<canvas id="testCanvas" width="500" height="500" style="display: none;"></canvas>
+
+<script>
+    // Testable version of the Turtle class
+    class Turtle {
+        constructor(canvas) {
+            this.canvas = canvas;
+            this.ctx = canvas.getContext('2d');
+            this.commandLog = []; // For testing command execution
+            this.reset();
+        }
+
+        reset() {
+            this.x = this.canvas.width / 2;
+            this.y = this.canvas.height / 2;
+            this.angle = 0;
+            this.positionStack = [];
+            this.stepSize = 10;
+            this.angleIncrement = Math.PI / 2;
+            this.commandLog = [];
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+
+        getState() {
+            return {
+                x: this.x,
+                y: this.y,
+                angle: this.angle,
+                stackSize: this.positionStack.length,
+                commandLog: [...this.commandLog]
+            };
+        }
+
+        forward(drawing) {
+            const startX = this.x;
+            const startY = this.y;
+            this.x += this.stepSize * Math.cos(this.angle);
+            this.y += this.stepSize * Math.sin(this.angle);
+
+            if (drawing) {
+                this.ctx.beginPath();
+                this.ctx.moveTo(startX, startY);
+                this.ctx.lineTo(this.x, this.y);
+                this.ctx.stroke();
+            } else {
+                this.ctx.moveTo(this.x, this.y);
+            }
+
+            this.commandLog.push({ command: drawing ? 'F' : 'f', from: {x: startX, y: startY}, to: {x: this.x, y: this.y} });
+        }
+
+        right() {
+            this.angle += this.angleIncrement;
+            this.commandLog.push({ command: 'R', angle: this.angle });
+        }
+
+        left() {
+            this.angle -= this.angleIncrement;
+            this.commandLog.push({ command: 'L', angle: this.angle });
+        }
+
+        savePosition() {
+            this.positionStack.push({ x: this.x, y: this.y, angle: this.angle });
+            this.commandLog.push({ command: '[', stack: [...this.positionStack] });
+        }
+
+        loadPosition() {
+            if (this.positionStack.length > 0) {
+                const savedState = this.positionStack.pop();
+                this.x = savedState.x;
+                this.y = savedState.y;
+                this.angle = savedState.angle;
+                this.ctx.moveTo(this.x, this.y);
+                this.commandLog.push({ command: ']', position: {...savedState} });
+            }
+        }
+
+        draw(commandString) {
+            this.reset();
+
+            for (const command of commandString) {
+                switch(command) {
+                    case 'F': this.forward(true); break;
+                    case 'f': this.forward(false); break;
+                    case 'R': this.right(); break;
+                    case 'L': this.left(); break;
+                    case '[': this.savePosition(); break;
+                    case ']': this.loadPosition(); break;
+                }
+            }
+
+            return this.getState();
+        }
+    }
+
+    // Test Framework
+    class TestSuite {
+        constructor() {
+            this.results = [];
+        }
+
+        assert(condition, message) {
+            if (!condition) {
+                throw new Error(message);
+            }
+        }
+
+        assertApprox(actual, expected, tolerance = 0.0001) {
+            if (Math.abs(actual - expected) > tolerance) {
+                throw new Error(`Expected ${expected} but got ${actual}`);
+            }
+        }
+
+        runTest(name, testFn) {
+            try {
+                testFn();
+                this.results.push({ name, passed: true });
+            } catch (error) {
+                this.results.push({ name, passed: false, error: error.message });
+            }
+        }
+
+        displayResults() {
+            const resultsDiv = document.getElementById('results');
+            const totalTests = this.results.length;
+            const passedTests = this.results.filter(r => r.passed).length;
+
+            resultsDiv.innerHTML = `
+                    <h2>Test Results: ${passedTests}/${totalTests} passed</h2>
+                    ${this.results.map(r => `
+                        <div class="test-result ${r.passed ? 'pass' : 'fail'}">
+                            ${r.passed ? '✓' : '✗'} ${r.name}
+                            ${r.passed ? '' : `<br>Error: ${r.error}`}
+                        </div>
+                    `).join('')}
+                `;
+        }
+    }
+
+    // Tests
+    const canvas = document.getElementById('testCanvas');
+    const turtle = new Turtle(canvas);
+    const tests = new TestSuite();
+
+    // Initial State Tests
+    tests.runTest('Initial state test', () => {
+        turtle.reset();
+        const state = turtle.getState();
+        tests.assert(state.x === canvas.width / 2, 'Initial x position incorrect');
+        tests.assert(state.y === canvas.height / 2, 'Initial y position incorrect');
+        tests.assert(state.angle === 0, 'Initial angle incorrect');
+        tests.assert(state.stackSize === 0, 'Initial stack size incorrect');
+    });
+
+    // Basic Movement Tests
+    tests.runTest('Forward movement test', () => {
+        turtle.reset();
+        turtle.forward(true);
+        const state = turtle.getState();
+        tests.assertApprox(state.x, canvas.width / 2 + turtle.stepSize, 0.0001);
+        tests.assert(state.commandLog.length === 1, 'Command log should have one entry');
+    });
+
+    tests.runTest('Forward without drawing test', () => {
+        turtle.reset();
+        turtle.forward(false);
+        const state = turtle.getState();
+        tests.assertApprox(state.x, canvas.width / 2 + turtle.stepSize, 0.0001);
+        tests.assert(state.commandLog[0].command === 'f', 'Should log non-drawing forward command');
+    });
+
+    // Rotation Tests
+    tests.runTest('Right turn test', () => {
+        turtle.reset();
+        turtle.right();
+        const state = turtle.getState();
+        tests.assertApprox(state.angle, Math.PI / 2, 0.0001);
+    });
+
+    tests.runTest('Left turn test', () => {
+        turtle.reset();
+        turtle.left();
+        const state = turtle.getState();
+        tests.assertApprox(state.angle, -Math.PI / 2, 0.0001);
+    });
+
+    // Stack Operation Tests
+    tests.runTest('Save and load position test', () => {
+        turtle.reset();
+        const initialState = turtle.getState();
+        turtle.savePosition();
+        turtle.forward(true);
+        turtle.loadPosition();
+        const finalState = turtle.getState();
+        tests.assertApprox(finalState.x, initialState.x, 0.0001);
+        tests.assertApprox(finalState.y, initialState.y, 0.0001);
+    });
+
+    tests.runTest('Empty stack load test', () => {
+        turtle.reset();
+        turtle.loadPosition(); // Should not throw
+        const state = turtle.getState();
+        tests.assert(state.stackSize === 0, 'Stack should remain empty');
+    });
+
+    // Command String Tests
+    tests.runTest('Simple command string test', () => {
+        const result = turtle.draw('FF');
+        tests.assert(result.commandLog.length === 2, 'Should execute two forward commands');
+    });
+
+    tests.runTest('Invalid command test', () => {
+        const result = turtle.draw('FXF');
+        tests.assert(result.commandLog.length === 2, 'Should ignore invalid commands');
+    });
+
+    // Edge Cases
+    tests.runTest('Empty command string test', () => {
+        const result = turtle.draw('');
+        tests.assert(result.commandLog.length === 0, 'Should handle empty command string');
+    });
+
+    tests.runTest('Unmatched brackets test', () => {
+        const result = turtle.draw('F[F');
+        tests.assert(result.stackSize === 1, 'Should handle unmatched opening bracket');
+
+        turtle.reset();
+        const result2 = turtle.draw('F]F');
+        tests.assert(result2.stackSize === 0, 'Should handle unmatched closing bracket');
+    });
+
+    // Run all tests and display results
+    tests.displayResults();
+</script>
+</body>
+</html>

@@ -24,35 +24,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/Personal Projects/Google/m-216311&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;E:\\Tools\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "E:/Personal Projects/Google/eval-244242/src",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "E:\\Personal Projects\\Google\\eval-244242\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Personal Projects\Google\eval-244242\src" />
       <recent name="E:\Personal Projects\Google\m-216311" />
       <recent name="E:\Personal Projects\Google\m-21625" />
       <recent name="E:\Personal Projects\Google\m-216153" />
       <recent name="E:\Personal Projects\Google\m-216153\node_modules" />
-      <recent name="E:\Personal Projects\Google\m-react-ts\src\tasks" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Personal Projects\Google\eval-244242\src\components" />
       <recent name="E:\Personal Projects\Google\m-216311\__tests__" />
       <recent name="E:\Personal Projects\Google\m-216311" />
       <recent name="E:\Personal Projects\Google\m-react-ts\src" />
       <recent name="E:\Personal Projects\Google\190793-checkers-game" />
-      <recent name="E:\Personal Projects\Google\190793-checkers-game\__tests__" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -91,7 +91,8 @@
       <workItem from="1730125415198" duration="9524000" />
       <workItem from="1730182159014" duration="4808000" />
       <workItem from="1730200062824" duration="16196000" />
-      <workItem from="1730270103426" duration="6921000" />
+      <workItem from="1730270103426" duration="8269000" />
+      <workItem from="1730394947228" duration="3056000" />
     </task>
     <servers />
   </component>

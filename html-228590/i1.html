@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pong Game</title>
+    <style>
+        #pongCanvas {
+            background-color: black;
+            display: block;
+            margin: 50px auto;
+        }
+        #score, #lives {
+            color: white;
+            font-size: 20px;
+            text-align: center;
+        }
+        #restartButton {
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+<canvas id="pongCanvas" width="600" height="400"></canvas>
+<div id="score">Score: 0</div>
+<div id="lives">Lives: 5</div>
+<button id="restartButton">Restart</button>
+
+<script>
+    const canvas = document.getElementById("pongCanvas");
+    const ctx = canvas.getContext("2d");
+    const scoreDisplay = document.getElementById("score");
+    const livesDisplay = document.getElementById("lives");
+    const restartButton = document.getElementById("restartButton");
+
+    let ballX = canvas.width / 2;
+    let ballY = canvas.height / 2;
+    let ballSpeedX = 5;
+    let ballSpeedY = 5;
+    let paddleHeight = 80;
+    let paddleWidth = 10;
+    let playerY = (canvas.height - paddleHeight) / 2;
+    let computerY = (canvas.height - paddleHeight) / 2;
+    let score = 0;
+    let lives = 5;
+    let gamePaused = false;
+
+    // Event Listeners
+    document.addEventListener("keydown", keyDownHandler);
+    restartButton.addEventListener("click", restartGame);
+    document.addEventListener("keydown", pauseGame);
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBall();
+        drawPaddle(0, playerY, paddleWidth, paddleHeight);
+        drawPaddle(canvas.width - paddleWidth, computerY, paddleWidth, paddleHeight);
+        update();
+    }
+
+    function drawBall() {
+        ctx.beginPath();
+        ctx.arc(ballX, ballY, 10, 0, Math.PI * 2);
+        ctx.fillStyle = "white";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function drawPaddle(x, y, width, height) {
+        ctx.fillStyle = "white";
+        ctx.fillRect(x, y, width, height);
+    }
+
+    function update() {
+        if (gamePaused) return;
+
+        ballX += ballSpeedX;
+        ballY += ballSpeedY;
+
+        if (ballY + ballSpeedY > canvas.height || ballY + ballSpeedY < 0) {
+            ballSpeedY = -ballSpeedY;
+        }
+
+        if (ballX + ballSpeedX < paddleWidth) {
+            if (ballY > playerY && ballY < playerY + paddleHeight) {
+                ballSpeedX = -ballSpeedX;
+                score++;
+                scoreDisplay.textContent = "Score: " + score;
+            } else {
+                lives--;
+                livesDisplay.textContent = "Lives: " + lives;
+                resetBall();
+                if (lives === 0) {
+                    alert("Game Over");
+                    restartGame();
+                }
+            }
+        }
+
+        if (ballX + ballSpeedX > canvas.width - paddleWidth) {
+            if (ballY > computerY && ballY < computerY + paddleHeight) {
+                ballSpeedX = -ballSpeedX;
+            } else {
+                resetBall();
+            }
+        }
+
+        if (ballY > computerY + paddleHeight / 2) {
+            computerY += 5;
+        } else if (ballY < computerY + paddleHeight / 2) {
+            computerY -= 5;
+        }
+    }
+</script>
+</body>
+</html>

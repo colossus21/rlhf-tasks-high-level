@@ -3,6 +3,7 @@
     "start": "servor --reload"
   },
   "dependencies": {
+    "@mui/material": "^6.1.6",
     "servor": "^4.0.2"
   }
 }

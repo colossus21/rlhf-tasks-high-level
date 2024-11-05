@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pong Game</title>
+    <style>
+        #pongCanvas {
+            background-color: black;
+            display: block;
+            margin: 50px auto;
+        }
+        #score, #lives {
+            color: white;
+            font-family: monospace;
+            font-size: 20px;
+            position: absolute;
+            top: 20px;
+        }
+        #score {
+            left: 20px;
+        }
+        #lives {
+            right: 20px;
+        }
+        #restartButton {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* Initially hidden */
+        }
+    </style>
+</head>
+<body>
+<canvas id="pongCanvas" width="600" height="400"></canvas>
+<div id="score">Score: 0</div>
+<div id="lives">Lives: 5</div>
+<button id="restartButton">Restart</button>
+
+<script>
+    const canvas = document.getElementById('pongCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreDisplay = document.getElementById('score');
+    const livesDisplay = document.getElementById('lives');
+    const restartButton = document.getElementById('restartButton');
+    // Game variables
+    let ballX = canvas.width / 2;
+    let ballY = canvas.height / 2;
+    let ballSpeedX = 5;
+    let ballSpeedY = 5;
+    let paddleHeight = 80;
+    let paddleWidth = 10;
+    let playerY = (canvas.height - paddleHeight) / 2;
+    let computerY = (canvas.height - paddleHeight) / 2;
+    let playerScore = 0;
+    let lives = 5;
+    let gamePaused = false;
+    // Update game elements
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBall();
+        drawPaddles();
+        updateScoreAndLives();
+    }
+    // ... (rest of the JavaScript code for ball, paddle, collision, AI, controls, game over, restart logic. See next response for the complete code.)
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pong Game</title>
+    <style>
+        #pongCanvas {
+            background-color: black;
+            display: block;
+            margin: 50px auto;
+        }
+        #score, #lives {
+            color: white;
+            font-size: 20px;
+            position: absolute;
+            top: 20px;
+        }
+        #score {
+            left: 20px;
+        }
+        #lives {
+            right: 20px;
+        }
+        #restartButton {
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+<canvas id="pongCanvas" width="600" height="400"></canvas>
+<div id="score">Score: 0</div>
+<div id="lives">Lives: 5</div>
+<button id="restartButton">Restart</button>
+
+<script>
+    const canvas = document.getElementById('pongCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreDisplay = document.getElementById('score');
+    const livesDisplay = document.getElementById('lives');
+    const restartButton = document.getElementById('restartButton');
+    let ballX = canvas.width / 2;
+    let ballY = canvas.height / 2;
+    let ballSpeedX = 5;
+    let ballSpeedY = 5;
+    let paddleHeight = 80;
+    let paddleWidth = 10;
+    let playerY = canvas.height / 2 - paddleHeight / 2;
+    let computerY = canvas.height / 2 - paddleHeight / 2;
+    let playerScore = 0;
+    let lives = 5;
+    let gamePaused = false;
+    // Draw functions... (similar to previous examples, but adjusted for scoring, lives, and game over conditions)
+    // Update game state... (includes collision detection, score updates, AI for computer paddle, and lives management)
+    // Event listeners for keyboard controls and restart button...
+    // Initialize game...
+    // Function to reset the game...
+    // Game loop (using requestAnimationFrame)...
+    // Helper function to pause/resume the game
+    function togglePause() {
+        gamePaused = !gamePaused;
+        if (!gamePaused) {
+            requestAnimationFrame(gameLoop);
+        }
+    }
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+            togglePause();
+        }
+    });
+</script>
+</body>
+</html>

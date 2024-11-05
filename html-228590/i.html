@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pong Game</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        #gameCanvas {
+            background-color: #000;
+        }
+
+        #scoreboard {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #000;
+        }
+
+        #restartButton {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        .victory {
+            color: green;
+        }
+
+        .gameover {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<canvas id="gameCanvas" width="800" height="600"></canvas>
+<div id="scoreboard">
+    Score: <span id="score">0</span> | Lives: <span id="lives">5</span>
+</div>
+<button id="restartButton">Restart</button>
+<div id="message"></div>
+
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const scoreDisplay = document.getElementById("score");
+    const livesDisplay = document.getElementById("lives");
+    const restartButton = document.getElementById("restartButton");
+    const message = document.getElementById("message");
+
+    // Game variables
+    let ballX, ballY, ballSpeedX, ballSpeedY;
+    let paddle1Y, paddle2Y;
+    let playerScore, lives;
+    let gameRunning, paused;
+    let animationId;
+    let lastPauseTime = 0;
+    let gameStartTime;
+    let baseSpeed;
+
+    // Paddle settings
+    const PADDLE_HEIGHT = 100;
+    const PADDLE_WIDTH = 10;
+    const PADDLE_SPEED = 8;
+
+    // Ball settings
+    const BALL_SIZE = 10;
+    const INITIAL_BALL_SPEED = 5;
+    const BALL_SPEED_INCREMENT = 0.5;
+    const SPEED_INCREASE_INTERVAL = 10000; // 10 seconds
+    const AUTO_SPEED_INCREMENT = 0.2;
+
+    // Initialize game
+    function initGame() {
+        cancelAnimationFrame(animationId);
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        baseSpeed = INITIAL_BALL_SPEED;
+        ballSpeedX = baseSpeed;
+        ballSpeedY = baseSpeed;
+        paddle1Y = canvas.height / 2 - PADDLE_HEIGHT / 2;
+        paddle2Y = canvas.height / 2 - PADDLE_HEIGHT / 2;
+        playerScore = 0;
+        lives = 5;
+        gameRunning = true;
+        paused = false;
+        message.textContent = "";
+        message.className = "";
+        gameStartTime = Date.now();
+        updateScoreboard();
+        gameLoop();
+    }
+
+    // Game loop
+    function gameLoop() {
+        if (!gameRunning) return;
+        if (paused) {
+            animationId = requestAnimationFrame(gameLoop);
+            return;
+        }
+
+        // Increase speed over time
+        const currentTime = Date.now();
+        const elapsedTime = currentTime - gameStartTime;
+        const speedIncrements = Math.floor(elapsedTime / SPEED_INCREASE_INTERVAL);
+        baseSpeed = INITIAL_BALL_SPEED + (speedIncrements * AUTO_SPEED_INCREMENT);
+
+        moveEverything();
+        drawEverything();
+
+        animationId = requestAnimationFrame(gameLoop);
+    }
+
+    function moveEverything() {
+        // Ball movement
+        ballX += ballSpeedX;
+        ballY += ballSpeedY;
+
+        // Ball collision with top and bottom
+        if (ballY <= 0 || ballY >= canvas.height - BALL_SIZE) {
+            ballSpeedY = -ballSpeedY;
+        }
+
+        // Ball collision with paddles
+        if (ballX <= PADDLE_WIDTH) {
+            if (ballY + BALL_SIZE > paddle1Y && ballY < paddle1Y + PADDLE_HEIGHT) {
+                ballSpeedX = Math.abs(baseSpeed);
+                const relativeIntersectY = (paddle1Y + (PADDLE_HEIGHT / 2)) - ballY;
+                ballSpeedY = -(relativeIntersectY / (PADDLE_HEIGHT / 2)) * baseSpeed;
+            } else if (ballX < 0) {
+                loseLife();
+            }
+        }
+
+        if (ballX >= canvas.width - PADDLE_WIDTH - BALL_SIZE) {
+            if (ballY + BALL_SIZE > paddle2Y && ballY < paddle2Y + PADDLE_HEIGHT) {
+                ballSpeedX = -Math.abs(baseSpeed);
+                const relativeIntersectY = (paddle2Y + (PADDLE_HEIGHT / 2)) - ballY;
+                ballSpeedY = -(relativeIntersectY / (PADDLE_HEIGHT / 2)) * baseSpeed;
+                playerScore++;
+                updateScoreboard();
+                if (playerScore >= 10) {
+                    endGame("Victory!", true);
+                }
+            } else if (ballX > canvas.width) {
+                resetBall();
+            }
+        }
+
+        // Computer paddle movement
+        const paddleCenter = paddle2Y + PADDLE_HEIGHT / 2;
+        const ballFutureY = ballY + (ballSpeedY * ((canvas.width - ballX) / ballSpeedX));
+        if (paddleCenter < ballFutureY - 35) {
+            paddle2Y += PADDLE_SPEED;
+        } else if (paddleCenter > ballFutureY + 35) {
+            paddle2Y -= PADDLE_SPEED;
+        }
+
+        // Clamp paddle position within canvas bounds
+        paddle1Y = Math.max(Math.min(paddle1Y, canvas.height - PADDLE_HEIGHT), 0);
+        paddle2Y = Math.max(Math.min(paddle2Y, canvas.height - PADDLE_HEIGHT), 0);
+    }
+
+    function drawEverything() {
+        // Clear the canvas
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw ball
+        ctx.fillStyle = "white";
+        ctx.fillRect(ballX, ballY, BALL_SIZE, BALL_SIZE);
+
+        // Draw paddles
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT);
+        ctx.fillRect(canvas.width - PADDLE_WIDTH, paddle2Y, PADDLE_WIDTH, PADDLE_HEIGHT);
+    }
+
+    function handleKeyDown(evt) {
+        if (evt.key === " ") {
+            const currentTime = Date.now();
+            if (currentTime - lastPauseTime > 300) { // 300ms delay between pause toggles
+                togglePause();
+                lastPauseTime = currentTime;
+            }
+        }
+
+        if (!paused) {
+            switch (evt.key) {
+                case "ArrowUp":
+                    paddle1Y -= PADDLE_SPEED;
+                    break;
+                case "ArrowDown":
+                    paddle1Y += PADDLE_SPEED;
+                    break;
+            }
+        }
+    }
+
+    function togglePause() {
+        paused = !paused;
+        message.textContent = paused ? "PAUSED" : "";
+        message.className = "";
+    }
+
+    function loseLife() {
+        lives--;
+        updateScoreboard();
+        if (lives === 0) {
+            endGame("Game Over", false);
+        } else {
+            resetBall();
+        }
+    }
+
+    function endGame(msg, isVictory) {
+        gameRunning = false;
+        message.textContent = msg;
+        message.className = isVictory ? "victory" : "gameover";
+    }
+
+    function resetBall() {
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        ballSpeedX = -baseSpeed;
+        ballSpeedY = (Math.random() * 2 - 1) * baseSpeed;
+    }
+
+    function updateScoreboard() {
+        scoreDisplay.textContent = playerScore;
+        livesDisplay.textContent = lives;
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    restartButton.addEventListener("click", initGame);
+
+    initGame();
+</script>
+</body>
+</html>

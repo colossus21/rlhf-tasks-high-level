@@ -1,0 +1,5 @@
+.radio-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Adjust 100px as needed */
+    grid-gap: 1rem;
+}

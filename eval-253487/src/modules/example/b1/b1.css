@@ -1,0 +1,5 @@
+.horizontal-radio-group .slds-radio_button-group .slds-form-element__control {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem; /* optional spacing between buttons */
+}

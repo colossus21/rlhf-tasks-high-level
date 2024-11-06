@@ -1,0 +1,37 @@
+{
+    "lwc": { "modules": [{ "dir": "$rootDir/src/modules" }] },
+    "routes": [
+        {
+            "id": "a1",
+            "path": "/a1",
+            "rootComponent": "example/a1"
+        },
+        {
+            "id": "a2",
+            "path": "/a2",
+            "rootComponent": "example/a2"
+        },
+        {
+            "id": "a3",
+            "path": "/a3",
+            "rootComponent": "example/a3"
+        },
+        {
+            "id": "b1",
+            "path": "/b1",
+            "rootComponent": "example/b1"
+        }
+    ],
+    "assets": [
+        {
+            "alias": "assetsDir",
+            "dir": "$rootDir/src/assets",
+            "urlPath": "/public/assets"
+        },
+        {
+            "alias": "favicon",
+            "file": "$rootDir/src/assets/favicon.ico",
+            "urlPath": "/favicon.ico"
+        }
+    ]
+}

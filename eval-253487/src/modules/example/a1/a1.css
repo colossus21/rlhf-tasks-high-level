@@ -1,0 +1,23 @@
+.radio-group {
+    display: inline-flex; /* or just flex for block-level alignment */
+    align-items: center; /* vertically aligns the radio buttons and labels */
+    gap: 1rem; /* Adjust spacing between radio options */
+}
+
+.radio-option {
+    display: flex; /* Ensures label and input are on the same line */
+    align-items: center; /* Vertically aligns within each option */
+    white-space: nowrap; /* Prevents long labels from wrapping */
+}
+
+.radio-option input {
+    margin-right: 0.5rem; /* Adjusts space between input and label */
+}
+
+/* Optional: For responsive adjustments */
+@media (max-width: 768px) {
+    .radio-group {
+        flex-direction: column; /* Stack vertically on smaller screens */
+        align-items: flex-start;
+    }
+}

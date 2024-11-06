@@ -1,0 +1,34 @@
+<html>
+<head>
+    <title>V1</title>
+</head>
+<body>
+<label for="ice-cream-flavor">Choose a flavor:</label>
+<input type="text" id="ice-cream-flavor" list="flavors">
+<datalist id="flavors">
+    <option value="Chocolate">
+    <option value="Vanilla">
+    <option value="Strawberry">
+    <option value="Mint Chip">
+</datalist>
+
+<script>
+    const iceCreamInput = document.getElementById('ice-cream-flavor');
+    const flavorsList = document.getElementById('flavors');
+
+    iceCreamInput.addEventListener('blur', () => {  // Validate after input loses focus
+        let isValid = false;
+        for (const option of flavorsList.options) {
+            if (option.value === iceCreamInput.value) {
+                isValid = true;
+                break;
+            }
+        }
+        if (!isValid) {
+            alert('Please choose a flavor from the list.');
+            iceCreamInput.focus(); //Optional: bring focus back to input
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders fetched data correctly 1`] = `
+<div>
+  <div>
+    Success
+  </div>
+</div>
+`;
+
+exports[`renders loading message initially 1`] = `
+<div>
+  <div>
+    Loading...
+  </div>
+</div>
+`;

@@ -29,7 +29,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "E:/Personal Projects/Google/eval-253231",
+    "last_opened_file_path": "E:/Personal Projects/Google",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -41,11 +41,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Personal Projects\Google" />
       <recent name="E:\Personal Projects\Google\eval-253231" />
       <recent name="E:\Personal Projects\Google\eval-253487\src\modules\example\b1" />
       <recent name="E:\Personal Projects\Google\eval-253487\src\modules\example" />
       <recent name="E:\Personal Projects\Google\eval-252752\src\components" />
-      <recent name="E:\Personal Projects\Google\eval-252684" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\Personal Projects\Google\eval-244242\src\components" />
@@ -98,7 +98,8 @@
       <workItem from="1730727169185" duration="19617000" />
       <workItem from="1730818097696" duration="12818000" />
       <workItem from="1730885520573" duration="20711000" />
-      <workItem from="1731006003514" duration="3101000" />
+      <workItem from="1731006003514" duration="3420000" />
+      <workItem from="1731058490334" duration="13024000" />
     </task>
     <servers />
   </component>
